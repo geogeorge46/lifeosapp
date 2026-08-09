@@ -58,33 +58,57 @@ export default function TabLayout() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#000" }}>
+    <View style={{ flex: 1, backgroundColor: "#F0F4F8" }}>
       <Tabs
         screenOptions={{
           headerShown: false,
           tabBarStyle: {
-            backgroundColor: "#0d0d0d",
-            borderTopColor: "#1e1e1e",
-            height: 60,
+            position: "absolute",
+            bottom: 20,
+            left: 16,
+            right: 16,
+            backgroundColor: "rgba(255, 255, 255, 0.94)",
+            borderWidth: 1,
+            borderColor: "rgba(226, 232, 240, 0.8)",
+            height: 68,
+            borderRadius: 24,
             paddingBottom: 8,
             paddingTop: 8,
+            shadowColor: "#0F172A",
+            shadowOffset: { width: 0, height: 10 },
+            shadowOpacity: 0.08,
+            shadowRadius: 16,
+            elevation: 8,
           },
-          tabBarActiveTintColor: "#3b82f6",
-          tabBarInactiveTintColor: "#666",
+          tabBarActiveTintColor: "#E05646",
+          tabBarInactiveTintColor: "#94A3B8",
+          tabBarLabelStyle: {
+            fontSize: 10,
+            fontWeight: "700",
+            marginTop: 2,
+          }
         }}
       >
         <Tabs.Screen
           name="day"
           options={{
             title: "Today",
-            tabBarIcon: ({ color }) => <Home size={22} color={color} />,
+            tabBarIcon: ({ color, focused }) => (
+              <View style={{ alignItems: "center", justifyContent: "center", width: 36, height: 36, borderRadius: 12, backgroundColor: focused ? "rgba(224, 86, 70, 0.08)" : "transparent" }}>
+                <Home size={20} color={color} strokeWidth={focused ? 2.5 : 2} />
+              </View>
+            ),
           }}
         />
         <Tabs.Screen
           name="calendar"
           options={{
             title: "Calendar",
-            tabBarIcon: ({ color }) => <Calendar size={22} color={color} />,
+            tabBarIcon: ({ color, focused }) => (
+              <View style={{ alignItems: "center", justifyContent: "center", width: 36, height: 36, borderRadius: 12, backgroundColor: focused ? "rgba(224, 86, 70, 0.08)" : "transparent" }}>
+                <Calendar size={20} color={color} strokeWidth={focused ? 2.5 : 2} />
+              </View>
+            ),
           }}
         />
         {/* Placeholder tab to leave space for the floating capture button */}
@@ -92,21 +116,29 @@ export default function TabLayout() {
           name="dummy-spacer"
           options={{
             title: "",
-            tabBarButton: () => <View style={{ width: 60 }} />,
+            tabBarButton: () => <View style={{ width: 64 }} />,
           }}
         />
         <Tabs.Screen
           name="inbox"
           options={{
             title: "Inbox",
-            tabBarIcon: ({ color }) => <Inbox size={22} color={color} />,
+            tabBarIcon: ({ color, focused }) => (
+              <View style={{ alignItems: "center", justifyContent: "center", width: 36, height: 36, borderRadius: 12, backgroundColor: focused ? "rgba(224, 86, 70, 0.08)" : "transparent" }}>
+                <Inbox size={20} color={color} strokeWidth={focused ? 2.5 : 2} />
+              </View>
+            ),
           }}
         />
         <Tabs.Screen
           name="more"
           options={{
             title: "More",
-            tabBarIcon: ({ color }) => <Menu size={22} color={color} />,
+            tabBarIcon: ({ color, focused }) => (
+              <View style={{ alignItems: "center", justifyContent: "center", width: 36, height: 36, borderRadius: 12, backgroundColor: focused ? "rgba(224, 86, 70, 0.08)" : "transparent" }}>
+                <Menu size={20} color={color} strokeWidth={focused ? 2.5 : 2} />
+              </View>
+            ),
           }}
         />
         {/* Hide secondary screens from tab bar navigation */}
@@ -134,31 +166,31 @@ export default function TabLayout() {
       <View
         style={{
           position: "absolute",
-          bottom: 12,
+          bottom: 42,
           left: "50%",
-          transform: [{ translateX: -28 }],
+          transform: [{ translateX: -26 }],
           zIndex: 100,
         }}
       >
         <TouchableOpacity
           onPress={() => setModalVisible(true)}
           style={{
-            width: 56,
-            height: 56,
-            borderRadius: 28,
-            backgroundColor: "#2563eb",
+            width: 52,
+            height: 52,
+            borderRadius: 26,
+            backgroundColor: "#E05646",
             alignItems: "center",
             justifyContent: "center",
             elevation: 8,
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: 4 },
-            shadowOpacity: 0.3,
-            shadowRadius: 4,
+            shadowColor: "#E05646",
+            shadowOffset: { width: 0, height: 6 },
+            shadowOpacity: 0.35,
+            shadowRadius: 10,
             borderWidth: 3,
-            borderColor: "#0d0d0d",
+            borderColor: "#FFFFFF",
           }}
         >
-          <Plus color="#fff" size={28} />
+          <Plus color="#FFFFFF" size={24} strokeWidth={3} />
         </TouchableOpacity>
       </View>
 
@@ -173,24 +205,29 @@ export default function TabLayout() {
           style={{
             flex: 1,
             justifyContent: "flex-end",
-            backgroundColor: "rgba(0,0,0,0.7)",
+            backgroundColor: "rgba(15, 23, 42, 0.3)",
           }}
         >
           <View
             style={{
-              backgroundColor: "#161616",
-              borderTopLeftRadius: 20,
-              borderTopRightRadius: 20,
+              backgroundColor: "#FFFFFF",
+              borderTopLeftRadius: 32,
+              borderTopRightRadius: 32,
               padding: 24,
-              minHeight: 300,
+              minHeight: 320,
               borderTopWidth: 1,
-              borderTopColor: "#2a2a2a",
+              borderTopColor: "#E2E8F0",
+              shadowColor: "#0F172A",
+              shadowOffset: { width: 0, height: -10 },
+              shadowOpacity: 0.08,
+              shadowRadius: 16,
+              elevation: 24,
             }}
           >
-            <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 16 }}>
-              <Text style={{ color: "#fff", fontSize: 18, fontWeight: "600" }}>Brain Dump Capture</Text>
-              <TouchableOpacity onPress={() => setModalVisible(false)}>
-                <Text style={{ color: "#999", fontSize: 16 }}>Cancel</Text>
+            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+              <Text style={{ color: "#0F172A", fontSize: 18, fontWeight: "800", letterSpacing: -0.5 }}>Brain Dump Capture</Text>
+              <TouchableOpacity onPress={() => setModalVisible(false)} style={{ paddingHorizontal: 12, paddingVertical: 6, backgroundColor: "#F8FAFC", borderWidth: 1, borderColor: "#E2E8F0", borderRadius: 12 }}>
+                <Text style={{ color: "#64748B", fontSize: 12, fontWeight: "700" }}>Cancel</Text>
               </TouchableOpacity>
             </View>
 
@@ -199,61 +236,68 @@ export default function TabLayout() {
                 value={inputText}
                 onChangeText={setInputText}
                 placeholder="What are you thinking about? (Type or hold Mic...)"
-                placeholderTextColor="#666"
+                placeholderTextColor="#94A3B8"
                 multiline
                 style={{
-                  backgroundColor: "#222",
-                  color: "#fff",
-                  borderRadius: 12,
-                  padding: 16,
-                  height: 100,
+                  backgroundColor: "#F8FAFC",
+                  color: "#0F172A",
+                  borderRadius: 20,
+                  padding: 18,
+                  height: 120,
                   textAlignVertical: "top",
-                  fontSize: 16,
+                  fontSize: 14,
+                  fontWeight: "600",
                   marginBottom: 20,
                   borderWidth: 1,
-                  borderColor: "#333",
+                  borderColor: "#E2E8F0",
+                  textAlign: "left",
                 }}
               />
             ) : (
               <View
                 style={{
-                  backgroundColor: "#222",
-                  borderRadius: 12,
+                  backgroundColor: "#FEF2F2",
+                  borderRadius: 20,
                   padding: 20,
                   alignItems: "center",
                   justifyContent: "center",
-                  height: 100,
+                  height: 120,
                   marginBottom: 20,
                   borderWidth: 1,
-                  borderColor: "#3b82f6",
+                  borderColor: "#FCA5A5",
                 }}
               >
-                <Text style={{ color: "#3b82f6", fontSize: 16, fontWeight: "500" }}>
+                <Text style={{ color: "#E05646", fontSize: 14, fontWeight: "800", textAlign: "center" }}>
                   🎙️ Voice recording captured successfully!
                 </Text>
                 <TouchableOpacity onPress={() => setRecordingUri(null)} style={{ marginTop: 8 }}>
-                  <Text style={{ color: "#ef4444", fontSize: 14 }}>Delete and record again</Text>
+                  <Text style={{ color: "#EF4444", fontSize: 12, fontWeight: "700" }}>Delete and record again</Text>
                 </TouchableOpacity>
               </View>
             )}
 
-            <View style={{ flexDirection: "row", justifyContent: "space-around", alignItems: "center" }}>
+            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
               {/* Mic Action */}
               {!recordingUri && (
                 <TouchableOpacity
                   onPress={isRecording ? handleStopRecording : handleStartRecording}
                   style={{
-                    width: 60,
-                    height: 60,
-                    borderRadius: 30,
-                    backgroundColor: isRecording ? "#ef4444" : "#222",
+                    width: 52,
+                    height: 52,
+                    borderRadius: 16,
+                    backgroundColor: isRecording ? "#EF4444" : "#F8FAFC",
                     alignItems: "center",
                     justifyContent: "center",
                     borderWidth: 1,
-                    borderColor: isRecording ? "#ef4444" : "#333",
+                    borderColor: isRecording ? "#EF4444" : "#E2E8F0",
+                    shadowColor: isRecording ? "#EF4444" : "#0F172A",
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.1,
+                    shadowRadius: 4,
+                    elevation: 2,
                   }}
                 >
-                  {isRecording ? <Square color="#fff" size={24} /> : <Mic color="#fff" size={24} />}
+                  {isRecording ? <Square color="#FFFFFF" size={18} /> : <Mic color="#0F172A" size={18} />}
                 </TouchableOpacity>
               )}
 
@@ -263,21 +307,27 @@ export default function TabLayout() {
                 disabled={isSubmitting || (!inputText.trim() && !recordingUri)}
                 style={{
                   flex: 1,
-                  height: 50,
-                  backgroundColor: (inputText.trim() || recordingUri) ? "#2563eb" : "#333",
-                  borderRadius: 12,
+                  height: 52,
+                  backgroundColor: (inputText.trim() || recordingUri) ? "#E05646" : "#F8FAFC",
+                  borderWidth: (inputText.trim() || recordingUri) ? 0 : 1,
+                  borderColor: "#E2E8F0",
+                  borderRadius: 16,
                   flexDirection: "row",
                   alignItems: "center",
                   justifyContent: "center",
-                  marginLeft: !recordingUri ? 16 : 0,
+                  shadowColor: (inputText.trim() || recordingUri) ? "#E05646" : "transparent",
+                  shadowOffset: { width: 0, height: 4 },
+                  shadowOpacity: 0.2,
+                  shadowRadius: 6,
+                  elevation: (inputText.trim() || recordingUri) ? 4 : 0,
                 }}
               >
                 {isSubmitting ? (
-                  <ActivityIndicator color="#fff" />
+                  <ActivityIndicator color="#FFFFFF" />
                 ) : (
                   <>
-                    <Save color="#fff" size={20} style={{ marginRight: 8 }} />
-                    <Text style={{ color: "#fff", fontSize: 16, fontWeight: "600" }}>Save to Inbox</Text>
+                    <Save color={(inputText.trim() || recordingUri) ? "#FFFFFF" : "#94A3B8"} size={18} style={{ marginRight: 8 }} />
+                    <Text style={{ color: (inputText.trim() || recordingUri) ? "#FFFFFF" : "#94A3B8", fontSize: 14, fontWeight: "700" }}>Save to Inbox</Text>
                   </>
                 )}
               </TouchableOpacity>
