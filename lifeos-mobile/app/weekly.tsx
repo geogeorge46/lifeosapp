@@ -139,29 +139,29 @@ export default function WeeklyReviewScreen() {
   const successRatio = totalActions > 0 ? Math.round((totalCompleted / totalActions) * 100) : 100;
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#000" }} edges={["top", "left", "right"]}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#F0F4F8" }} edges={["top", "left", "right"]}>
       {/* Header Date Range Navigation */}
-      <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 24, paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: "#111" }}>
-        <TouchableOpacity onPress={() => router.back()} style={{ padding: 8, backgroundColor: "#111", borderRadius: 999 }}>
-          <ChevronLeft size={16} color="#fff" />
+      <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 24, paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: "#E2E8F0", backgroundColor: "#F0F4F8" }}>
+        <TouchableOpacity onPress={() => router.back()} style={{ padding: 8, backgroundColor: "#FFFFFF", borderRadius: 999, borderWidth: 1, borderColor: "#E2E8F0", shadowColor: "#0F172A", shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 2, elevation: 1 }}>
+          <ChevronLeft size={16} color="#0F172A" />
         </TouchableOpacity>
         
         <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
           <TouchableOpacity onPress={handlePrevWeek} style={{ padding: 4 }}>
-            <ChevronLeft size={18} color="#888" />
+            <ChevronLeft size={18} color="#64748B" />
           </TouchableOpacity>
           
           <View style={{ alignItems: "center" }}>
-            <Text style={{ color: "#fff", fontSize: 16, fontWeight: "700" }}>
+            <Text style={{ color: "#0F172A", fontSize: 16, fontWeight: "800", letterSpacing: -0.5 }}>
               {monday.toLocaleDateString("en-US", { month: "short", day: "numeric" })} – {sunday.toLocaleDateString("en-US", { month: "short", day: "numeric" })}
             </Text>
-            <Text style={{ color: "#555", fontSize: 10, fontWeight: "600", marginTop: 2, textTransform: "uppercase", letterSpacing: 1 }}>
+            <Text style={{ color: "#64748B", fontSize: 10, fontWeight: "700", marginTop: 2, textTransform: "uppercase", letterSpacing: 1 }}>
               Weekly Recap Audits
             </Text>
           </View>
           
           <TouchableOpacity onPress={handleNextWeek} style={{ padding: 4 }}>
-            <ChevronRight size={18} color="#888" />
+            <ChevronRight size={18} color="#64748B" />
           </TouchableOpacity>
         </View>
 
@@ -170,56 +170,56 @@ export default function WeeklyReviewScreen() {
 
       {isLoading ? (
         <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-          <ActivityIndicator size="large" color="#8b5cf6" />
+          <ActivityIndicator size="large" color="#E05646" />
         </View>
       ) : (
         <ScrollView contentContainerStyle={{ padding: 24 }}>
           {/* Productivity Stats Grid */}
           <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 12, marginBottom: 24 }}>
             {/* Completed */}
-            <View style={{ flex: 1, minWidth: "45%", backgroundColor: "#0d0d0d", borderWidth: 1, borderColor: "#1a1a1a", borderRadius: 16, padding: 16 }}>
+            <View style={{ flex: 1, minWidth: "45%", backgroundColor: "#FFFFFF", borderWidth: 1, borderColor: "#E2E8F0", borderRadius: 20, padding: 16, shadowColor: "#0F172A", shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.03, shadowRadius: 8, elevation: 2 }}>
               <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
                 <CheckCircle2 size={16} color="#10b981" />
-                <Text style={{ color: "#555", fontSize: 9, fontWeight: "bold", textTransform: "uppercase" }}>Completed</Text>
+                <Text style={{ color: "#64748B", fontSize: 9, fontWeight: "bold", textTransform: "uppercase" }}>Completed</Text>
               </View>
-              <Text style={{ color: "#fff", fontSize: 24, fontWeight: "800" }}>{totalCompleted}</Text>
+              <Text style={{ color: "#0F172A", fontSize: 24, fontWeight: "800" }}>{totalCompleted}</Text>
             </View>
 
             {/* Success Ratio */}
-            <View style={{ flex: 1, minWidth: "45%", backgroundColor: "#0d0d0d", borderWidth: 1, borderColor: "#1a1a1a", borderRadius: 16, padding: 16 }}>
+            <View style={{ flex: 1, minWidth: "45%", backgroundColor: "#FFFFFF", borderWidth: 1, borderColor: "#E2E8F0", borderRadius: 20, padding: 16, shadowColor: "#0F172A", shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.03, shadowRadius: 8, elevation: 2 }}>
               <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-                <Activity size={16} color="#3b82f6" />
-                <Text style={{ color: "#555", fontSize: 9, fontWeight: "bold", textTransform: "uppercase" }}>Success Rate</Text>
+                <Activity size={16} color="#202E4E" />
+                <Text style={{ color: "#64748B", fontSize: 9, fontWeight: "bold", textTransform: "uppercase" }}>Success Rate</Text>
               </View>
-              <Text style={{ color: "#fff", fontSize: 24, fontWeight: "800" }}>{successRatio}%</Text>
+              <Text style={{ color: "#0F172A", fontSize: 24, fontWeight: "800" }}>{successRatio}%</Text>
             </View>
 
             {/* Postponed */}
-            <View style={{ flex: 1, minWidth: "45%", backgroundColor: "#0d0d0d", borderWidth: 1, borderColor: "#1a1a1a", borderRadius: 16, padding: 16 }}>
+            <View style={{ flex: 1, minWidth: "45%", backgroundColor: "#FFFFFF", borderWidth: 1, borderColor: "#E2E8F0", borderRadius: 20, padding: 16, shadowColor: "#0F172A", shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.03, shadowRadius: 8, elevation: 2 }}>
               <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-                <AlertTriangle size={16} color="#f59e0b" />
-                <Text style={{ color: "#555", fontSize: 9, fontWeight: "bold", textTransform: "uppercase" }}>Postponed</Text>
+                <AlertTriangle size={16} color="#E05646" />
+                <Text style={{ color: "#64748B", fontSize: 9, fontWeight: "bold", textTransform: "uppercase" }}>Postponed</Text>
               </View>
-              <Text style={{ color: "#fff", fontSize: 24, fontWeight: "800" }}>{totalRescheduled}</Text>
+              <Text style={{ color: "#0F172A", fontSize: 24, fontWeight: "800" }}>{totalRescheduled}</Text>
             </View>
 
             {/* Canceled */}
-            <View style={{ flex: 1, minWidth: "45%", backgroundColor: "#0d0d0d", borderWidth: 1, borderColor: "#1a1a1a", borderRadius: 16, padding: 16 }}>
+            <View style={{ flex: 1, minWidth: "45%", backgroundColor: "#FFFFFF", borderWidth: 1, borderColor: "#E2E8F0", borderRadius: 20, padding: 16, shadowColor: "#0F172A", shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.03, shadowRadius: 8, elevation: 2 }}>
               <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
                 <XCircle size={16} color="#ef4444" />
-                <Text style={{ color: "#555", fontSize: 9, fontWeight: "bold", textTransform: "uppercase" }}>Dropped</Text>
+                <Text style={{ color: "#64748B", fontSize: 9, fontWeight: "bold", textTransform: "uppercase" }}>Dropped</Text>
               </View>
-              <Text style={{ color: "#fff", fontSize: 24, fontWeight: "800" }}>{totalDropped}</Text>
+              <Text style={{ color: "#0F172A", fontSize: 24, fontWeight: "800" }}>{totalDropped}</Text>
             </View>
           </View>
 
           {/* Friction Warning Banner */}
           {totalFrictionTasks > 0 && (
-            <View style={{ backgroundColor: "#1e1302", borderWidth: 1, borderColor: "#78350f", borderRadius: 16, padding: 16, marginBottom: 24, flexDirection: "row", alignItems: "center", gap: 14 }}>
-              <AlertTriangle size={20} color="#f59e0b" />
+            <View style={{ backgroundColor: "#FEF3C7", borderWidth: 1, borderColor: "#FCD34D", borderRadius: 20, padding: 16, marginBottom: 24, flexDirection: "row", alignItems: "center", gap: 14 }}>
+              <AlertTriangle size={20} color="#D97706" />
               <View style={{ flex: 1 }}>
-                <Text style={{ color: "#fef3c7", fontSize: 13, fontWeight: "bold" }}>Procrastination Friction Detected</Text>
-                <Text style={{ color: "#d97706", fontSize: 11, marginTop: 2, lineHeight: 15 }}>
+                <Text style={{ color: "#92400E", fontSize: 13, fontWeight: "800" }}>Procrastination Friction Detected</Text>
+                <Text style={{ color: "#B45309", fontSize: 11, marginTop: 2, lineHeight: 15, fontWeight: "600" }}>
                   You rescheduled {totalFrictionTasks} task{totalFrictionTasks > 1 ? "s" : ""} 3 or more times this week. Review them in the Insights tab.
                 </Text>
               </View>
@@ -227,7 +227,7 @@ export default function WeeklyReviewScreen() {
           )}
 
           {/* Navigation Segments Tab Bar */}
-          <View style={{ flexDirection: "row", backgroundColor: "#0a0a0a", borderWidth: 1, borderColor: "#151515", borderRadius: 14, padding: 4, marginBottom: 20 }}>
+          <View style={{ flexDirection: "row", backgroundColor: "#F8FAFC", borderWidth: 1, borderColor: "#E2E8F0", borderRadius: 16, padding: 4, marginBottom: 20 }}>
             {(["COMPLETED", "INSIGHTS", "CANCELED", "BACKLOG"] as TabType[]).map((tab) => {
               const isActive = activeTab === tab;
               let label = "Done";
@@ -242,12 +242,19 @@ export default function WeeklyReviewScreen() {
                   style={{
                     flex: 1,
                     paddingVertical: 10,
-                    borderRadius: 10,
+                    borderRadius: 12,
                     alignItems: "center",
-                    backgroundColor: isActive ? "#111" : "transparent",
+                    backgroundColor: isActive ? "#FFFFFF" : "transparent",
+                    borderWidth: isActive ? 1 : 0,
+                    borderColor: isActive ? "#E2E8F0" : "transparent",
+                    shadowColor: isActive ? "#0F172A" : "transparent",
+                    shadowOffset: isActive ? { width: 0, height: 1 } : { width: 0, height: 0 },
+                    shadowOpacity: isActive ? 0.05 : 0,
+                    shadowRadius: 2,
+                    elevation: isActive ? 1 : 0,
                   }}
                 >
-                  <Text style={{ color: isActive ? "#fff" : "#666", fontSize: 10, fontWeight: "700" }}>{label}</Text>
+                  <Text style={{ color: isActive ? "#0F172A" : "#64748B", fontSize: 10, fontWeight: "700" }}>{label}</Text>
                 </TouchableOpacity>
               );
             })}
@@ -261,15 +268,15 @@ export default function WeeklyReviewScreen() {
                 {report?.completed.length === 0 ? (
                   <View style={{ paddingVertical: 32, alignItems: "center" }}>
                     <FrownIcon />
-                    <Text style={{ color: "#555", fontSize: 12, fontWeight: "bold", marginTop: 12 }}>No Completed Tasks</Text>
+                    <Text style={{ color: "#64748B", fontSize: 12, fontWeight: "bold", marginTop: 12 }}>No Completed Tasks</Text>
                   </View>
                 ) : (
                   report?.completed.map((o) => (
-                    <View key={o.id} style={{ backgroundColor: "#0d0d0d", borderWidth: 1, borderColor: "#1a1a1a", borderRadius: 14, padding: 16, flexDirection: "row", alignItems: "center", gap: 12 }}>
+                    <View key={o.id} style={{ backgroundColor: "#FFFFFF", borderWidth: 1, borderColor: "#E2E8F0", borderRadius: 20, padding: 16, flexDirection: "row", alignItems: "center", gap: 12, shadowColor: "#0F172A", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.02, shadowRadius: 4, elevation: 1 }}>
                       <CheckCircle2 size={16} color="#10b981" />
                       <View style={{ flex: 1 }}>
-                        <Text style={{ color: "#fff", fontSize: 13, fontWeight: "600" }}>{o.task.title}</Text>
-                        <Text style={{ color: "#555", fontSize: 10, marginTop: 4 }}>
+                        <Text style={{ color: "#0F172A", fontSize: 13, fontWeight: "700" }}>{o.task.title}</Text>
+                        <Text style={{ color: "#64748B", fontSize: 10, marginTop: 4, fontWeight: "500" }}>
                           Completed on {new Date(o.completedAt!).toLocaleDateString([], { month: "short", day: "numeric" })}
                         </Text>
                       </View>
@@ -284,15 +291,15 @@ export default function WeeklyReviewScreen() {
               <View style={{ gap: 10 }}>
                 {report?.dropped.length === 0 ? (
                   <View style={{ paddingVertical: 32, alignItems: "center" }}>
-                    <Text style={{ color: "#555", fontSize: 12, fontWeight: "bold", textAlign: "center" }}>No Canceled Tasks. Clean Slate!</Text>
+                    <Text style={{ color: "#64748B", fontSize: 12, fontWeight: "bold", textAlign: "center" }}>No Canceled Tasks. Clean Slate!</Text>
                   </View>
                 ) : (
                   report?.dropped.map((o) => (
-                    <View key={o.id} style={{ backgroundColor: "#0d0d0d", borderWidth: 1, borderColor: "#1a1a1a", borderRadius: 14, padding: 16, flexDirection: "row", alignItems: "center", gap: 12 }}>
+                    <View key={o.id} style={{ backgroundColor: "#FFFFFF", borderWidth: 1, borderColor: "#E2E8F0", borderRadius: 20, padding: 16, flexDirection: "row", alignItems: "center", gap: 12, shadowColor: "#0F172A", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.02, shadowRadius: 4, elevation: 1 }}>
                       <XCircle size={16} color="#ef4444" />
                       <View style={{ flex: 1 }}>
-                        <Text style={{ color: "#fff", fontSize: 13, fontWeight: "600", textDecorationLine: "line-through" }}>{o.task.title}</Text>
-                        <Text style={{ color: "#555", fontSize: 10, marginTop: 4 }}>
+                        <Text style={{ color: "#0F172A", fontSize: 13, fontWeight: "700", textDecorationLine: "line-through" }}>{o.task.title}</Text>
+                        <Text style={{ color: "#64748B", fontSize: 10, marginTop: 4, fontWeight: "500" }}>
                           Dropped on {new Date(o.scheduledDate).toLocaleDateString([], { month: "short", day: "numeric" })}
                         </Text>
                       </View>
@@ -307,9 +314,9 @@ export default function WeeklyReviewScreen() {
               <View style={{ gap: 12 }}>
                 {report?.rescheduled.length === 0 ? (
                   <View style={{ paddingVertical: 32, alignItems: "center", gap: 8 }}>
-                    <Sparkles size={24} color="#eab308" />
-                    <Text style={{ color: "#888", fontSize: 13, fontWeight: "bold" }}>Perfect Momentum</Text>
-                    <Text style={{ color: "#555", fontSize: 10 }}>No tasks were postponed this week. Zero delay!</Text>
+                    <Sparkles size={24} color="#D97706" />
+                    <Text style={{ color: "#0F172A", fontSize: 13, fontWeight: "800" }}>Perfect Momentum</Text>
+                    <Text style={{ color: "#64748B", fontSize: 10, fontWeight: "500" }}>No tasks were postponed this week. Zero delay!</Text>
                   </View>
                 ) : (
                   report?.rescheduled.map((stat) => {
@@ -318,50 +325,55 @@ export default function WeeklyReviewScreen() {
                       <View
                         key={stat.taskId}
                         style={{
-                          backgroundColor: "#0d0d0d",
+                          backgroundColor: "#FFFFFF",
                           borderWidth: 1,
-                          borderColor: isFriction ? "#78350f" : "#1a1a1a",
-                          borderRadius: 16,
+                          borderColor: isFriction ? "#E05646" : "#E2E8F0",
+                          borderRadius: 20,
                           padding: 16,
+                          shadowColor: "#0F172A",
+                          shadowOffset: { width: 0, height: 4 },
+                          shadowOpacity: 0.03,
+                          shadowRadius: 8,
+                          elevation: 2,
                         }}
                       >
                         <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
                           <View style={{ flex: 1, paddingRight: 10 }}>
-                            <Text style={{ color: "#fff", fontSize: 14, fontWeight: "700" }}>{stat.title}</Text>
+                            <Text style={{ color: "#0F172A", fontSize: 14, fontWeight: "700" }}>{stat.title}</Text>
                           </View>
-                          <View style={{ backgroundColor: isFriction ? "#ef444415" : "#f59e0b10", borderWidth: 1, borderColor: isFriction ? "#ef4444" : "#f59e0b", paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8 }}>
-                            <Text style={{ color: isFriction ? "#ef4444" : "#f59e0b", fontSize: 10, fontWeight: "bold" }}>
+                          <View style={{ backgroundColor: isFriction ? "#FEE2E2" : "#FEF3C7", paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8 }}>
+                            <Text style={{ color: isFriction ? "#EF4444" : "#D97706", fontSize: 10, fontWeight: "bold" }}>
                               {stat.postponeCount}x Postponed
                             </Text>
                           </View>
                         </View>
 
                         {isFriction && (
-                          <View style={{ backgroundColor: "#2d0606", borderRadius: 8, padding: 10, marginBottom: 12 }}>
-                            <Text style={{ color: "#fca5a5", fontSize: 10, fontWeight: "bold" }}>💡 Optimization Insight:</Text>
-                            <Text style={{ color: "#ef4444", fontSize: 10, marginTop: 2, lineHeight: 14 }}>
+                          <View style={{ backgroundColor: "#FEE2E2", borderRadius: 12, padding: 12, marginBottom: 12 }}>
+                            <Text style={{ color: "#EF4444", fontSize: 10, fontWeight: "bold" }}>💡 Optimization Insight:</Text>
+                            <Text style={{ color: "#991B1B", fontSize: 10, marginTop: 4, lineHeight: 15, fontWeight: "500" }}>
                               This task is encountering resistance. Try breaking it down into smaller sub-tasks, allocating it a specific calendar timeblock, or drop/cancel it if it is no longer relevant.
                             </Text>
                           </View>
                         )}
 
-                        <Text style={{ color: "#444", fontSize: 9, fontWeight: "bold", textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 8 }}>
+                        <Text style={{ color: "#64748B", fontSize: 9, fontWeight: "800", textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 8 }}>
                           Rescheduling Path
                         </Text>
                         
                         <View style={{ gap: 8 }}>
                           {stat.history.map((log, idx) => (
                             <View key={idx} style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-                              <Calendar size={12} color="#444" />
-                              <Text style={{ color: "#888", fontSize: 11 }}>
+                              <Calendar size={12} color="#94A3B8" />
+                              <Text style={{ color: "#64748B", fontSize: 11, fontWeight: "500" }}>
                                 {new Date(log.fromDate).toLocaleDateString([], { month: "short", day: "numeric" })}
                               </Text>
-                              <ArrowRight size={12} color="#444" />
-                              <Text style={{ color: "#fff", fontSize: 11, fontWeight: "600" }}>
+                              <ArrowRight size={12} color="#94A3B8" />
+                              <Text style={{ color: "#0F172A", fontSize: 11, fontWeight: "700" }}>
                                 {new Date(log.toDate).toLocaleDateString([], { month: "short", day: "numeric" })}
                               </Text>
                               {log.reason && (
-                                <Text style={{ color: "#555", fontSize: 11, fontStyle: "italic" }}>
+                                <Text style={{ color: "#94A3B8", fontSize: 11, fontStyle: "italic", fontWeight: "500" }}>
                                   ({log.reason})
                                 </Text>
                               )}
@@ -381,25 +393,25 @@ export default function WeeklyReviewScreen() {
                 {report?.uncompleted.length === 0 ? (
                   <View style={{ paddingVertical: 32, alignItems: "center", gap: 8 }}>
                     <Sparkles size={24} color="#10b981" />
-                    <Text style={{ color: "#888", fontSize: 13, fontWeight: "bold" }}>Backlog Cleared!</Text>
-                    <Text style={{ color: "#555", fontSize: 10 }}>All past tasks have been reviewed and completed.</Text>
+                    <Text style={{ color: "#0F172A", fontSize: 13, fontWeight: "800" }}>Backlog Cleared!</Text>
+                    <Text style={{ color: "#64748B", fontSize: 10, fontWeight: "500" }}>All past tasks have been reviewed and completed.</Text>
                   </View>
                 ) : (
                   report?.uncompleted.map((o) => {
                     const isReschedulingThis = reschedulingId === o.id;
 
                     return (
-                      <View key={o.id} style={{ backgroundColor: "#0d0d0d", borderWidth: 1, borderColor: "#1a1a1a", borderRadius: 16, padding: 16 }}>
+                      <View key={o.id} style={{ backgroundColor: "#FFFFFF", borderWidth: 1, borderColor: "#E2E8F0", borderRadius: 20, padding: 16, shadowColor: "#0F172A", shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.03, shadowRadius: 8, elevation: 2 }}>
                         <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
                           <View style={{ flex: 1, paddingRight: 8 }}>
-                            <Text style={{ color: "#fff", fontSize: 14, fontWeight: "700" }}>{o.task.title}</Text>
-                            <Text style={{ color: "#555", fontSize: 11, marginTop: 4 }}>
+                            <Text style={{ color: "#0F172A", fontSize: 14, fontWeight: "700" }}>{o.task.title}</Text>
+                            <Text style={{ color: "#64748B", fontSize: 11, marginTop: 4, fontWeight: "500" }}>
                               Scheduled on {new Date(o.scheduledDate).toLocaleDateString([], { month: "short", day: "numeric" })}
                             </Text>
                           </View>
                           {o.rescheduleCount && o.rescheduleCount > 0 ? (
-                            <View style={{ backgroundColor: "#ef444410", paddingHorizontal: 6, paddingVertical: 2, borderRadius: 6 }}>
-                              <Text style={{ color: "#ef4444", fontSize: 8, fontWeight: "bold" }}>
+                            <View style={{ backgroundColor: "#FEE2E2", paddingHorizontal: 6, paddingVertical: 2, borderRadius: 6 }}>
+                              <Text style={{ color: "#EF4444", fontSize: 8, fontWeight: "bold" }}>
                                 {o.rescheduleCount}x Rescheduled
                               </Text>
                             </View>
@@ -408,34 +420,40 @@ export default function WeeklyReviewScreen() {
 
                         {isReschedulingThis ? (
                           <View style={{ marginTop: 8 }}>
-                            <Text style={{ color: "#888", fontSize: 11, marginBottom: 6 }}>Enter New Date (YYYY-MM-DD):</Text>
+                            <Text style={{ color: "#64748B", fontSize: 11, marginBottom: 6, fontWeight: "700" }}>Enter New Date (YYYY-MM-DD):</Text>
                             <View style={{ flexDirection: "row", gap: 8 }}>
                               <TextInput
                                 value={rescheduleDateInput}
                                 onChangeText={setRescheduleDateInput}
                                 placeholder="YYYY-MM-DD"
-                                placeholderTextColor="#444"
+                                placeholderTextColor="#94A3B8"
                                 style={{
                                   flex: 1,
-                                  backgroundColor: "#111",
+                                  backgroundColor: "#F8FAFC",
                                   borderWidth: 1,
-                                  borderColor: "#222",
-                                  borderRadius: 10,
-                                  color: "#fff",
+                                  borderColor: "#E2E8F0",
+                                  borderRadius: 12,
+                                  color: "#0F172A",
                                   paddingHorizontal: 12,
                                   paddingVertical: 8,
                                   fontSize: 13,
+                                  textAlign: "left",
                                 }}
                               />
                               <TouchableOpacity
                                 onPress={() => handleSaveReschedule(o.id)}
                                 disabled={isSubmittingReschedule}
                                 style={{
-                                  backgroundColor: "#8b5cf6",
+                                  backgroundColor: "#E05646",
                                   paddingHorizontal: 16,
-                                  borderRadius: 10,
+                                  borderRadius: 12,
                                   alignItems: "center",
                                   justifyContent: "center",
+                                  shadowColor: "#E05646",
+                                  shadowOffset: { width: 0, height: 2 },
+                                  shadowOpacity: 0.1,
+                                  shadowRadius: 4,
+                                  elevation: 2,
                                 }}
                               >
                                 <Text style={{ color: "#fff", fontSize: 12, fontWeight: "bold" }}>Save</Text>
@@ -443,16 +461,16 @@ export default function WeeklyReviewScreen() {
                               <TouchableOpacity
                                 onPress={() => setReschedulingId(null)}
                                 style={{
-                                  backgroundColor: "#111",
+                                  backgroundColor: "#F8FAFC",
                                   borderWidth: 1,
-                                  borderColor: "#222",
+                                  borderColor: "#E2E8F0",
                                   paddingHorizontal: 12,
-                                  borderRadius: 10,
+                                  borderRadius: 12,
                                   alignItems: "center",
                                   justifyContent: "center",
                                 }}
                               >
-                                <Text style={{ color: "#aaa", fontSize: 12, fontWeight: "bold" }}>Cancel</Text>
+                                <Text style={{ color: "#64748B", fontSize: 12, fontWeight: "bold" }}>Cancel</Text>
                               </TouchableOpacity>
                             </View>
                           </View>
@@ -462,45 +480,45 @@ export default function WeeklyReviewScreen() {
                               onPress={() => handleDoToday(o.id)}
                               style={{
                                 flex: 1.2,
-                                backgroundColor: "#10b98115",
+                                backgroundColor: "#ECFDF5",
                                 borderWidth: 1,
-                                borderColor: "#10b98130",
+                                borderColor: "#D1FAE5",
                                 paddingVertical: 8,
-                                borderRadius: 10,
+                                borderRadius: 12,
                                 alignItems: "center",
                               }}
                             >
-                              <Text style={{ color: "#10b981", fontSize: 11, fontWeight: "700" }}>Do Today</Text>
+                              <Text style={{ color: "#059669", fontSize: 11, fontWeight: "700" }}>Do Today</Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity
                               onPress={() => startRescheduling(o)}
                               style={{
                                 flex: 1.2,
-                                backgroundColor: "#8b5cf615",
+                                backgroundColor: "#F5F3FF",
                                 borderWidth: 1,
-                                borderColor: "#8b5cf630",
+                                borderColor: "#DDD6FE",
                                 paddingVertical: 8,
-                                borderRadius: 10,
+                                borderRadius: 12,
                                 alignItems: "center",
                               }}
                             >
-                              <Text style={{ color: "#8b5cf6", fontSize: 11, fontWeight: "700" }}>Reschedule</Text>
+                              <Text style={{ color: "#7C3AED", fontSize: 11, fontWeight: "700" }}>Reschedule</Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity
                               onPress={() => handleCancelOccurrence(o.id)}
                               style={{
                                 flex: 1,
-                                backgroundColor: "#ef444415",
+                                backgroundColor: "#FEF2F2",
                                 borderWidth: 1,
-                                borderColor: "#ef444430",
+                                borderColor: "#FEE2E2",
                                 paddingVertical: 8,
-                                borderRadius: 10,
+                                borderRadius: 12,
                                 alignItems: "center",
                               }}
                             >
-                              <Text style={{ color: "#ef4444", fontSize: 11, fontWeight: "700" }}>Drop</Text>
+                              <Text style={{ color: "#DC2626", fontSize: 11, fontWeight: "700" }}>Drop</Text>
                             </TouchableOpacity>
                           </View>
                         )}
@@ -519,8 +537,8 @@ export default function WeeklyReviewScreen() {
 
 function FrownIcon() {
   return (
-    <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: "#111", alignItems: "center", justifyContent: "center" }}>
-      <Text style={{ color: "#555", fontSize: 18 }}>😕</Text>
+    <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: "#FFFFFF", borderStyle: "solid", borderWidth: 1, borderColor: "#E2E8F0", alignItems: "center", justifyContent: "center", shadowColor: "#0F172A", shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 2, elevation: 1 }}>
+      <Text style={{ color: "#64748B", fontSize: 18 }}>😕</Text>
     </View>
   );
 }

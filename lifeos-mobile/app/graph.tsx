@@ -126,34 +126,34 @@ export default function RelationshipGraphScreen() {
   });
 
   return (
-    <SafeAreaView className="flex-1 bg-black px-4 pt-4" edges={["top", "left", "right"]}>
+    <SafeAreaView className="flex-1 bg-[#F0F4F8] px-4 pt-4" edges={["top", "left", "right"]}>
       {/* Header */}
       <View className="flex-row items-center justify-between mb-4">
         <TouchableOpacity
           onPress={() => router.back()}
-          className="p-2.5 bg-neutral-900 border border-neutral-800 rounded-xl"
+          className="p-2.5 bg-white border border-[#E2E8F0] rounded-xl shadow-sm"
         >
-          <ArrowLeft size={16} color="#fff" />
+          <ArrowLeft size={16} color="#0F172A" />
         </TouchableOpacity>
-        <Text className="text-lg font-bold text-white">Relationship Graph</Text>
+        <Text className="text-lg font-extrabold text-[#0F172A]">Relationship Graph</Text>
         <View style={{ width: 40 }} />
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false} className="flex-1">
         {/* Visual SVG Map */}
-        <View className="bg-neutral-900 border border-neutral-800 rounded-3xl p-4 items-center mb-6">
+        <View className="bg-white border border-[#E2E8F0] rounded-3xl p-4 items-center mb-6 shadow-sm shadow-[#0F172A]/5">
           <View className="flex-row items-center space-x-1.5 self-start mb-3">
-            <Network size={14} color="#818CF8" />
-            <Text className="text-xs font-bold text-neutral-400 uppercase tracking-wider">
+            <Network size={14} color="#E05646" />
+            <Text className="text-xs font-bold text-[#64748B] uppercase tracking-wider">
               Interactive Network Map
             </Text>
           </View>
 
           {people.length === 0 ? (
             <View className="py-20 items-center justify-center">
-              <HelpCircle size={32} color="#525252" />
-              <Text className="text-xs font-bold text-neutral-500 mt-2">No contacts saved yet</Text>
-              <Text className="text-[9px] text-neutral-600 mt-1">Create contacts first to map relationships.</Text>
+              <HelpCircle size={32} color="#94A3B8" />
+              <Text className="text-xs font-bold text-[#0F172A] mt-2">No contacts saved yet</Text>
+              <Text className="text-[9px] text-[#64748B] mt-1">Create contacts first to map relationships.</Text>
             </View>
           ) : (
             <View style={{ width: svgSize, height: svgSize, position: "relative" }}>
@@ -174,7 +174,7 @@ export default function RelationshipGraphScreen() {
                       y1={posA.y}
                       x2={posB.x}
                       y2={posB.y}
-                      stroke={isHighlighted ? "#818CF8" : "#262626"}
+                      stroke={isHighlighted ? "#E05646" : "#E2E8F0"}
                       strokeWidth={isHighlighted ? 2.5 : 1.2}
                       opacity={isHighlighted ? 0.9 : 0.4}
                     />
@@ -196,8 +196,8 @@ export default function RelationshipGraphScreen() {
                         cx={pos.x}
                         cy={pos.y}
                         r={18}
-                        fill={isSelected ? "#312E81" : "#171717"}
-                        stroke={isSelected ? "#818CF8" : "#404040"}
+                        fill={isSelected ? "#E05646" : "#FFFFFF"}
+                        stroke={isSelected ? "#E05646" : "#E2E8F0"}
                         strokeWidth={2}
                       />
                       {/* Initials Text */}
@@ -206,7 +206,7 @@ export default function RelationshipGraphScreen() {
                         y={pos.y + 4}
                         fontSize="10"
                         fontWeight="bold"
-                        fill={isSelected ? "#818CF8" : "#A3A3A3"}
+                        fill={isSelected ? "#FFFFFF" : "#64748B"}
                         textAnchor="middle"
                       >
                         {initials}
@@ -217,7 +217,7 @@ export default function RelationshipGraphScreen() {
                         y={pos.y + 28}
                         fontSize="8"
                         fontWeight="bold"
-                        fill={isSelected ? "#FFFFFF" : "#737373"}
+                        fill={isSelected ? "#0F172A" : "#64748B"}
                         textAnchor="middle"
                       >
                         {person.name.split(" ")[0]}
@@ -229,46 +229,46 @@ export default function RelationshipGraphScreen() {
             </View>
           )}
 
-          <Text className="text-[9px] text-neutral-500 text-center mt-2 italic">
+          <Text className="text-[9px] text-[#64748B] text-center mt-2 italic font-medium">
             💡 Tap contacts on the circle map above to inspect paths and linkages.
           </Text>
         </View>
 
         {/* Selected Node Connection Path Inspector */}
         {selectedPersonId && (
-          <View className="bg-neutral-900 border border-neutral-800 rounded-3xl p-5 mb-6">
+          <View className="bg-white border border-[#E2E8F0] rounded-3xl p-5 mb-6 shadow-sm shadow-[#0F172A]/5">
             <View className="flex-row items-center space-x-1.5 mb-3">
-              <Info size={14} color="#818CF8" />
-              <Text className="text-xs font-bold text-neutral-400 uppercase tracking-wider">
+              <Info size={14} color="#E05646" />
+              <Text className="text-xs font-bold text-[#64748B] uppercase tracking-wider">
                 Connection Inspector for {people.find((p) => p.id === selectedPersonId)?.name}
               </Text>
             </View>
 
             {isLoading ? (
-              <ActivityIndicator size="small" color="#818cf8" className="py-4" />
+              <ActivityIndicator size="small" color="#E05646" className="py-4" />
             ) : Object.keys(connections).length === 0 ? (
-              <Text className="text-xs text-neutral-500 italic">No connection paths to other contacts mapped yet.</Text>
+              <Text className="text-xs text-[#64748B] italic">No connection paths to other contacts mapped yet.</Text>
             ) : (
               <View className="space-y-3">
                 {Object.entries(connections).map(([targetId, path]) => {
                   const targetName = people.find((p) => p.id === targetId)?.name || "Unknown";
                   return (
-                    <View key={targetId} className="bg-neutral-950 p-3 rounded-2xl border border-neutral-850">
+                    <View key={targetId} className="bg-[#F8FAFC] p-3 rounded-2xl border border-[#E2E8F0]">
                       <View className="flex-row items-center justify-between">
-                        <Text className="text-xs font-bold text-white">{targetName}</Text>
-                        <View className="bg-indigo-950/80 px-2 py-0.5 rounded border border-indigo-900">
-                          <Text className="text-[8px] font-extrabold text-indigo-400 uppercase">
+                        <Text className="text-xs font-bold text-[#0F172A]">{targetName}</Text>
+                        <View className="bg-indigo-50 px-2 py-0.5 rounded border border-indigo-100">
+                          <Text className="text-[8px] font-extrabold text-indigo-700 uppercase">
                             {path.length} {path.length === 1 ? "degree" : "degrees"}
                           </Text>
                         </View>
                       </View>
                       <View className="flex-row flex-wrap items-center mt-2 gap-1.5">
-                        <Text className="text-[10px] text-neutral-500 font-bold">You</Text>
+                        <Text className="text-[10px] text-[#64748B] font-bold">You</Text>
                         {path.map((step, sIdx) => (
                           <React.Fragment key={sIdx}>
-                            <Text className="text-[10px] text-neutral-600">➔</Text>
-                            <View className="bg-neutral-900 border border-neutral-800 px-1.5 py-0.5 rounded">
-                              <Text className="text-[9px] text-neutral-300">
+                            <Text className="text-[10px] text-[#94A3B8]">➔</Text>
+                            <View className="bg-white border border-[#E2E8F0] px-1.5 py-0.5 rounded">
+                              <Text className="text-[9px] text-[#0F172A] font-bold">
                                 {step.name} ({step.relation})
                               </Text>
                             </View>
@@ -285,35 +285,35 @@ export default function RelationshipGraphScreen() {
 
         {/* Establish New Link Builder */}
         {people.length > 1 && (
-          <View className="bg-neutral-900 border border-neutral-800 rounded-3xl p-5 mb-6">
-            <Text className="text-base font-bold text-white mb-3">Establish Linkage Connection</Text>
+          <View className="bg-white border border-[#E2E8F0] rounded-3xl p-5 mb-6 shadow-sm shadow-[#0F172A]/5">
+            <Text className="text-base font-extrabold text-[#0F172A] mb-3">Establish Linkage Connection</Text>
 
             {/* Person A Selector */}
-            <Text className="text-xs text-neutral-400 mb-1">Subject Contact (Person A)</Text>
+            <Text className="text-xs text-[#64748B] mb-1 font-bold">Subject Contact (Person A)</Text>
             <TouchableOpacity
               onPress={() => setShowPersonAPicker(true)}
-              className="bg-neutral-950 border border-neutral-850 rounded-xl mb-3 px-4 py-3.5 flex-row justify-between items-center"
+              className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl mb-3 px-4 py-3.5 flex-row justify-between items-center"
             >
-              <Text className="text-white text-sm">
+              <Text className="text-[#0F172A] text-sm font-bold">
                 {people.find((p) => p.id === personAId)?.name || "Select first contact..."}
               </Text>
-              <Text className="text-neutral-500 text-xs">▼</Text>
+              <Text className="text-[#64748B] text-xs">▼</Text>
             </TouchableOpacity>
 
             {/* Person B Selector */}
-            <Text className="text-xs text-neutral-400 mb-1">Object Contact (Person B)</Text>
+            <Text className="text-xs text-[#64748B] mb-1 font-bold">Object Contact (Person B)</Text>
             <TouchableOpacity
               onPress={() => setShowPersonBPicker(true)}
-              className="bg-neutral-950 border border-neutral-850 rounded-xl mb-3 px-4 py-3.5 flex-row justify-between items-center"
+              className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl mb-3 px-4 py-3.5 flex-row justify-between items-center"
             >
-              <Text className="text-white text-sm">
+              <Text className="text-[#0F172A] text-sm font-bold">
                 {people.find((p) => p.id === personBId)?.name || "Select second contact..."}
               </Text>
-              <Text className="text-neutral-500 text-xs">▼</Text>
+              <Text className="text-[#64748B] text-xs">▼</Text>
             </TouchableOpacity>
 
             {/* Relation Type Pills Grid */}
-            <Text className="text-xs text-neutral-400 mb-2">Relationship Connection Type</Text>
+            <Text className="text-xs text-[#64748B] mb-2 font-bold">Relationship Connection Type</Text>
             <View className="flex-row flex-wrap gap-2 mb-4">
               {[
                 { label: "Friend", value: "friend" },
@@ -332,10 +332,10 @@ export default function RelationshipGraphScreen() {
                     key={item.value}
                     onPress={() => setRelationType(item.value)}
                     className={`px-3 py-1.5 rounded-lg border ${
-                      isSel ? "bg-indigo-600 border-indigo-500" : "bg-neutral-950 border-neutral-850"
+                      isSel ? "bg-[#202E4E] border-[#202E4E]" : "bg-[#F8FAFC] border-[#E2E8F0]"
                     }`}
                   >
-                    <Text className="text-xs font-bold text-white">{item.label}</Text>
+                    <Text className={`text-xs font-bold ${isSel ? "text-white" : "text-[#64748B]"}`}>{item.label}</Text>
                   </TouchableOpacity>
                 );
               })}
@@ -343,9 +343,9 @@ export default function RelationshipGraphScreen() {
 
             <TouchableOpacity
               onPress={handleAddLink}
-              className="bg-indigo-600 py-3.5 rounded-2xl flex-row items-center justify-center shadow-lg"
+              className="bg-[#E05646] py-3.5 rounded-2xl flex-row items-center justify-center shadow-md shadow-[#E05646]/20"
             >
-              <Plus size={16} color="#fff" />
+              <Plus size={16} color="#FFFFFF" />
               <Text className="text-white text-sm font-bold ml-1.5">Establish Connection</Text>
             </TouchableOpacity>
           </View>
@@ -353,39 +353,39 @@ export default function RelationshipGraphScreen() {
 
         {/* Existing Connections Management List */}
         <View className="mb-6">
-          <Text className="text-xs font-bold text-neutral-400 uppercase tracking-wider mb-3">
+          <Text className="text-xs font-bold text-[#64748B] uppercase tracking-wider mb-3">
             Linkage Registry Directory ({uniqueRelationships.length})
           </Text>
 
           {uniqueRelationships.length === 0 ? (
-            <View className="bg-neutral-950 border border-neutral-900 border-dashed rounded-2xl py-8 px-4 flex items-center justify-center">
-              <Text className="text-xs font-bold text-neutral-500 text-center">No linkage records registered</Text>
-              <Text className="text-[9px] text-neutral-600 text-center mt-1">Connect contacts above to start build your social graph.</Text>
+            <View className="bg-white border border-[#E2E8F0] border-dashed rounded-2xl py-8 px-4 flex items-center justify-center shadow-sm">
+              <Text className="text-xs font-bold text-[#0F172A] text-center">No linkage records registered</Text>
+              <Text className="text-[9px] text-[#64748B] text-center mt-1">Connect contacts above to start build your social graph.</Text>
             </View>
           ) : (
             uniqueRelationships.map((rel) => (
               <View
                 key={rel.id}
-                className="bg-neutral-900 border border-neutral-800 rounded-2xl p-4 mb-2.5 flex-row items-center justify-between"
+                className="bg-white border border-[#E2E8F0] rounded-2xl p-4 mb-2.5 flex-row items-center justify-between shadow-sm shadow-[#0F172A]/5"
               >
                 <View className="flex-1 mr-3">
                   <View className="flex-row items-center flex-wrap gap-1.5">
-                    <Text className="text-white text-xs font-bold">{rel.personA?.name}</Text>
-                    <View className="bg-indigo-950/80 px-2 py-0.5 rounded border border-indigo-900">
-                      <Text className="text-[8px] font-extrabold text-indigo-400 uppercase">
+                    <Text className="text-[#0F172A] text-xs font-bold">{rel.personA?.name}</Text>
+                    <View className="bg-indigo-50 px-2 py-0.5 rounded border border-indigo-100">
+                      <Text className="text-[8px] font-extrabold text-indigo-700 uppercase">
                         {rel.type}
                       </Text>
                     </View>
-                    <Text className="text-neutral-400 text-xs font-medium">of</Text>
-                    <Text className="text-white text-xs font-bold">{rel.personB?.name}</Text>
+                    <Text className="text-[#64748B] text-xs font-bold">of</Text>
+                    <Text className="text-[#0F172A] text-xs font-bold">{rel.personB?.name}</Text>
                   </View>
                 </View>
 
                 <TouchableOpacity
                   onPress={() => handleDeleteLink(rel.id)}
-                  className="p-2 bg-red-950/40 border border-red-900/60 rounded-xl"
+                  className="p-2 bg-red-50 border border-red-100 rounded-xl"
                 >
-                  <Trash2 size={12} color="#EF4444" />
+                  <Trash2 size={13} color="#EF4444" />
                 </TouchableOpacity>
               </View>
             ))
@@ -395,12 +395,12 @@ export default function RelationshipGraphScreen() {
 
       {/* Person A Selector Modal */}
       <Modal visible={showPersonAPicker} transparent animationType="slide">
-        <View className="flex-1 justify-end bg-black/75">
-          <View className="bg-neutral-900 border-t border-neutral-800 rounded-t-3xl p-6 min-h-[300px]">
+        <View className="flex-1 justify-end bg-slate-900/30">
+          <View className="bg-white border-t border-t-[#E2E8F0] rounded-t-3xl p-6 min-h-[300px] shadow-2xl">
             <View className="flex-row justify-between items-center mb-4">
-              <Text className="text-base font-bold text-white">Select Subject Contact</Text>
+              <Text className="text-base font-extrabold text-[#0F172A]">Select Subject Contact</Text>
               <TouchableOpacity onPress={() => setShowPersonAPicker(false)}>
-                <Text className="text-neutral-400 text-sm">Close</Text>
+                <Text className="text-[#64748B] text-sm font-bold">Close</Text>
               </TouchableOpacity>
             </View>
             <ScrollView className="max-h-[300px]">
@@ -411,10 +411,10 @@ export default function RelationshipGraphScreen() {
                     setPersonAId(p.id);
                     setShowPersonAPicker(false);
                   }}
-                  className="py-3.5 border-b border-neutral-850 flex-row justify-between items-center"
+                  className="py-3.5 border-b border-[#E2E8F0] flex-row justify-between items-center"
                 >
-                  <Text className="text-white text-sm font-medium">{p.name}</Text>
-                  {personAId === p.id && <Text className="text-indigo-400 font-bold">✓</Text>}
+                  <Text className="text-[#0F172A] text-sm font-bold">{p.name}</Text>
+                  {personAId === p.id && <Text className="text-[#E05646] font-bold">✓</Text>}
                 </TouchableOpacity>
               ))}
             </ScrollView>
@@ -424,12 +424,12 @@ export default function RelationshipGraphScreen() {
 
       {/* Person B Selector Modal */}
       <Modal visible={showPersonBPicker} transparent animationType="slide">
-        <View className="flex-1 justify-end bg-black/75">
-          <View className="bg-neutral-900 border-t border-neutral-800 rounded-t-3xl p-6 min-h-[300px]">
+        <View className="flex-1 justify-end bg-slate-900/30">
+          <View className="bg-white border-t border-t-[#E2E8F0] rounded-t-3xl p-6 min-h-[300px] shadow-2xl">
             <View className="flex-row justify-between items-center mb-4">
-              <Text className="text-base font-bold text-white">Select Object Contact</Text>
+              <Text className="text-base font-extrabold text-[#0F172A]">Select Object Contact</Text>
               <TouchableOpacity onPress={() => setShowPersonBPicker(false)}>
-                <Text className="text-neutral-400 text-sm">Close</Text>
+                <Text className="text-[#64748B] text-sm font-bold">Close</Text>
               </TouchableOpacity>
             </View>
             <ScrollView className="max-h-[300px]">
@@ -440,10 +440,10 @@ export default function RelationshipGraphScreen() {
                     setPersonBId(p.id);
                     setShowPersonBPicker(false);
                   }}
-                  className="py-3.5 border-b border-neutral-850 flex-row justify-between items-center"
+                  className="py-3.5 border-b border-[#E2E8F0] flex-row justify-between items-center"
                 >
-                  <Text className="text-white text-sm font-medium">{p.name}</Text>
-                  {personBId === p.id && <Text className="text-indigo-400 font-bold">✓</Text>}
+                  <Text className="text-[#0F172A] text-sm font-bold">{p.name}</Text>
+                  {personBId === p.id && <Text className="text-[#E05646] font-bold">✓</Text>}
                 </TouchableOpacity>
               ))}
             </ScrollView>

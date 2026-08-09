@@ -168,13 +168,13 @@ export default function IdeasScreen() {
   );
 
   return (
-    <SafeAreaView className="flex-1 bg-black px-4 pt-4" edges={["top", "left", "right"]}>
+    <SafeAreaView className="flex-1 bg-[#F0F4F8] px-4 pt-4" edges={["top", "left", "right"]}>
       {/* Header bar */}
       <View className="flex-row items-center justify-between mb-6">
-        <TouchableOpacity onPress={() => router.back()} className="p-2 bg-neutral-900 rounded-full border border-neutral-850">
-          <ChevronLeft size={16} color="#fff" />
+        <TouchableOpacity onPress={() => router.back()} className="p-2 bg-white rounded-full border border-[#E2E8F0] shadow-sm">
+          <ChevronLeft size={16} color="#0F172A" />
         </TouchableOpacity>
-        <Text className="text-xl font-extrabold text-white">Ideas Board</Text>
+        <Text className="text-xl font-extrabold text-[#0F172A]">Ideas Board</Text>
         <TouchableOpacity
           onPress={() => {
             setIdeaTitle("");
@@ -182,21 +182,21 @@ export default function IdeasScreen() {
             setIdeaNotes("");
             setCreateModalVisible(true);
           }}
-          className="p-2 bg-yellow-600 rounded-full"
+          className="p-2 bg-[#E05646] rounded-full shadow-sm shadow-[#E05646]/20"
         >
-          <Plus size={16} color="#fff" />
+          <Plus size={16} color="#FFFFFF" />
         </TouchableOpacity>
       </View>
 
       {/* Search Filter input */}
-      <View className="flex-row items-center bg-neutral-950 border border-neutral-850 rounded-2xl px-4 py-3 mb-4 space-x-2">
-        <Search size={14} color="#666" />
+      <View className="flex-row items-center bg-white border border-[#E2E8F0] rounded-2xl px-4 py-3 mb-4 space-x-2 shadow-sm shadow-[#0F172A]/5">
+        <Search size={14} color="#64748B" />
         <TextInput
           placeholder="Search concepts or categories..."
-          placeholderTextColor="#666"
+          placeholderTextColor="#94A3B8"
           value={search}
           onChangeText={setSearch}
-          className="flex-1 text-white text-xs"
+          className="flex-1 text-[#0F172A] text-xs font-bold"
         />
       </View>
 
@@ -204,13 +204,13 @@ export default function IdeasScreen() {
       <View className="flex-1">
         {isLoading ? (
           <View className="flex-1 justify-center items-center">
-            <ActivityIndicator size="large" color="#eab308" />
+            <ActivityIndicator size="large" color="#E05646" />
           </View>
         ) : filteredIdeas.length === 0 ? (
           <View className="flex-1 justify-center items-center py-12 px-6">
-            <Lightbulb size={48} color="#2b2b2b" />
-            <Text className="text-sm font-bold text-neutral-400 mt-4 text-center">No Ideas Logged</Text>
-            <Text className="text-[10px] text-neutral-600 mt-1 text-center max-w-[240px]">
+            <Lightbulb size={48} color="#94A3B8" />
+            <Text className="text-sm font-bold text-[#0F172A] mt-4 text-center">No Ideas Logged</Text>
+            <Text className="text-[10px] text-[#64748B] mt-1 text-center max-w-[240px]">
               Tap the (+) icon in the header to create a refined concept blueprint.
             </Text>
           </View>
@@ -222,20 +222,20 @@ export default function IdeasScreen() {
             renderItem={({ item }) => (
               <TouchableOpacity
                 onPress={() => handleOpenDetail(item)}
-                className="bg-neutral-900 border border-neutral-850 rounded-2xl p-4 mb-2.5 active:bg-neutral-850"
+                className="bg-white border border-[#E2E8F0] rounded-2xl p-4 mb-2.5 active:bg-[#F8FAFC] shadow-sm shadow-[#0F172A]/5"
               >
                 <View className="flex-row items-center justify-between mb-2">
-                  <View className="bg-yellow-950/60 border border-yellow-900 px-2 py-0.5 rounded flex-row items-center space-x-1">
-                    <Tag size={8} color="#EAB308" />
-                    <Text className="text-[8px] font-bold text-yellow-300 uppercase tracking-widest">{item.category}</Text>
+                  <View className="bg-amber-50 border border-amber-200 px-2 py-0.5 rounded flex-row items-center space-x-1">
+                    <Tag size={8} color="#D97706" />
+                    <Text className="text-[8px] font-bold text-amber-700 uppercase tracking-widest">{item.category}</Text>
                   </View>
-                  <Text className="text-[9px] text-neutral-600">
+                  <Text className="text-[9px] text-[#64748B] font-bold">
                     {new Date(item.createdAt).toLocaleDateString([], { month: "short", day: "numeric" })}
                   </Text>
                 </View>
-                <Text className="text-white text-sm font-bold leading-snug">{item.title}</Text>
+                <Text className="text-[#0F172A] text-sm font-bold leading-snug">{item.title}</Text>
                 {item.notes && (
-                  <Text className="text-neutral-400 text-xs mt-1.5 leading-relaxed" numberOfLines={2}>
+                  <Text className="text-[#64748B] text-xs mt-1.5 leading-relaxed" numberOfLines={2}>
                     {item.notes}
                   </Text>
                 )}
@@ -247,22 +247,22 @@ export default function IdeasScreen() {
 
       {/* CREATE IDEA MODAL */}
       <Modal visible={createModalVisible} transparent={true} animationType="slide">
-        <View className="flex-1 bg-black/85 justify-center items-center px-4">
-          <View className="bg-neutral-900 border border-neutral-850 p-6 rounded-3xl w-full max-h-[80%]">
-            <Text className="text-base font-extrabold text-white mb-4">Create Refined Idea Blueprint</Text>
+        <View className="flex-1 bg-slate-900/30 justify-center items-center px-4">
+          <View className="bg-white border border-[#E2E8F0] p-6 rounded-3xl w-full max-h-[80%] shadow-2xl">
+            <Text className="text-base font-extrabold text-[#0F172A] mb-4">Create Refined Idea Blueprint</Text>
             <ScrollView showsVerticalScrollIndicator={false} style={{ minHeight: 280, maxHeight: 400, marginBottom: 20 }}>
-              <Text className="text-xs font-bold text-neutral-400 uppercase mb-2">Concept Title</Text>
-              <TextInput value={ideaTitle} onChangeText={setIdeaTitle} placeholder="e.g. Location reminders widget" placeholderTextColor="#666" className="bg-neutral-950 p-4 text-white rounded-2xl border border-neutral-850 mb-4" />
+              <Text className="text-xs font-bold text-[#64748B] uppercase mb-2">Concept Title</Text>
+              <TextInput value={ideaTitle} onChangeText={setIdeaTitle} placeholder="e.g. Location reminders widget" placeholderTextColor="#94A3B8" className="bg-[#F8FAFC] p-4 text-[#0F172A] rounded-2xl border border-[#E2E8F0] mb-4" />
 
-              <Text className="text-xs font-bold text-neutral-400 uppercase mb-2">Category (e.g. AI, Geofencing)</Text>
-              <TextInput value={ideaCategory} onChangeText={setIdeaCategory} placeholder="Product" placeholderTextColor="#666" className="bg-neutral-950 p-4 text-white rounded-2xl border border-neutral-850 mb-4" />
+              <Text className="text-xs font-bold text-[#64748B] uppercase mb-2">Category (e.g. AI, Geofencing)</Text>
+              <TextInput value={ideaCategory} onChangeText={setIdeaCategory} placeholder="Product" placeholderTextColor="#94A3B8" className="bg-[#F8FAFC] p-4 text-[#0F172A] rounded-2xl border border-[#E2E8F0] mb-4" />
 
-              <Text className="text-xs font-bold text-neutral-400 uppercase mb-2">Notes & Spec descriptions</Text>
-              <TextInput value={ideaNotes} onChangeText={setIdeaNotes} placeholder="Spec specifications details..." placeholderTextColor="#666" className="bg-neutral-950 p-4 text-white rounded-2xl border border-neutral-850 text-left" multiline />
+              <Text className="text-xs font-bold text-[#64748B] uppercase mb-2">Notes & Spec descriptions</Text>
+              <TextInput value={ideaNotes} onChangeText={setIdeaNotes} placeholder="Spec specifications details..." placeholderTextColor="#94A3B8" className="bg-[#F8FAFC] p-4 text-[#0F172A] rounded-2xl border border-[#E2E8F0] text-left" multiline />
             </ScrollView>
             <View className="flex-row space-x-3">
-              <TouchableOpacity onPress={() => setCreateModalVisible(false)} className="flex-1 bg-neutral-950 p-3.5 border border-neutral-850 rounded-xl items-center"><Text className="text-xs font-bold text-neutral-400">Cancel</Text></TouchableOpacity>
-              <TouchableOpacity onPress={handleCreateIdea} className="flex-1 bg-yellow-600 p-3.5 rounded-xl items-center">
+              <TouchableOpacity onPress={() => setCreateModalVisible(false)} className="flex-1 bg-slate-50 p-3.5 border border-slate-200 rounded-xl items-center"><Text className="text-xs font-bold text-[#64748B]">Cancel</Text></TouchableOpacity>
+              <TouchableOpacity onPress={handleCreateIdea} className="flex-1 bg-[#E05646] p-3.5 rounded-xl items-center shadow-md shadow-[#E05646]/20">
                 <Text className="text-xs font-bold text-white">Save Concept</Text>
               </TouchableOpacity>
             </View>
@@ -272,49 +272,49 @@ export default function IdeasScreen() {
 
       {/* DETAIL MODAL PANEL */}
       <Modal visible={detailModalVisible} transparent={true} animationType="slide">
-        <View className="flex-1 bg-black/90 justify-center items-center px-4">
-          <View className="bg-neutral-900 border border-neutral-850 rounded-3xl p-6 w-full max-h-[85%]">
-            <View className="flex-row justify-between items-center border-b border-neutral-800 pb-3 mb-4">
-              <Text className="text-base font-extrabold text-white tracking-tight">Idea Spec Detail</Text>
+        <View className="flex-1 bg-slate-900/30 justify-center items-center px-4">
+          <View className="bg-white border border-[#E2E8F0] rounded-3xl p-6 w-full max-h-[85%] shadow-2xl">
+            <View className="flex-row justify-between items-center border-b border-[#E2E8F0] pb-3 mb-4">
+              <Text className="text-base font-extrabold text-[#0F172A] tracking-tight">Idea Spec Detail</Text>
               <TouchableOpacity onPress={() => setDetailModalVisible(false)}>
-                <Text className="text-xs text-neutral-450 font-bold">Close</Text>
+                <Text className="text-xs text-[#64748B] font-bold">Close</Text>
               </TouchableOpacity>
             </View>
 
             <ScrollView showsVerticalScrollIndicator={false} style={{ minHeight: 320, maxHeight: 480, marginBottom: 16 }}>
-              <Text className="text-xs font-bold text-neutral-500 uppercase mb-2">Title</Text>
-              <TextInput value={ideaTitle} onChangeText={setIdeaTitle} className="bg-neutral-950 border border-neutral-850 text-white rounded-2xl p-4 text-sm mb-4" />
+              <Text className="text-xs font-bold text-[#64748B] uppercase mb-2">Title</Text>
+              <TextInput value={ideaTitle} onChangeText={setIdeaTitle} className="bg-[#F8FAFC] border border-[#E2E8F0] text-[#0F172A] rounded-2xl p-4 text-sm mb-4" />
 
-              <Text className="text-xs font-bold text-neutral-500 uppercase mb-2">Category</Text>
-              <TextInput value={ideaCategory} onChangeText={setIdeaCategory} className="bg-neutral-950 border border-neutral-850 text-white rounded-2xl p-4 text-sm mb-4" />
+              <Text className="text-xs font-bold text-[#64748B] uppercase mb-2">Category</Text>
+              <TextInput value={ideaCategory} onChangeText={setIdeaCategory} className="bg-[#F8FAFC] border border-[#E2E8F0] text-[#0F172A] rounded-2xl p-4 text-sm mb-4" />
 
-              <Text className="text-xs font-bold text-neutral-500 uppercase mb-2">Description Notes</Text>
-              <TextInput value={ideaNotes} onChangeText={setIdeaNotes} multiline className="bg-neutral-950 border border-neutral-850 text-white rounded-2xl p-4 text-sm mb-4 text-left" />
+              <Text className="text-xs font-bold text-[#64748B] uppercase mb-2">Description Notes</Text>
+              <TextInput value={ideaNotes} onChangeText={setIdeaNotes} multiline className="bg-[#F8FAFC] border border-[#E2E8F0] text-[#0F172A] rounded-2xl p-4 text-sm mb-4 text-left" />
 
-              <TouchableOpacity onPress={handleUpdateIdea} className="bg-neutral-950 border border-neutral-850 py-3.5 rounded-2xl items-center mb-6 flex-row justify-center space-x-1.5">
-                <Edit2 size={13} color="#fff" />
+              <TouchableOpacity onPress={handleUpdateIdea} className="bg-[#202E4E] border border-[#202E4E] py-3.5 rounded-2xl items-center mb-6 flex-row justify-center space-x-1.5 shadow-sm">
+                <Edit2 size={13} color="#FFFFFF" />
                 <Text className="text-xs font-bold text-white">Save Changes</Text>
               </TouchableOpacity>
 
               {/* Action Spawner triggers */}
-              <Text className="text-[10px] font-bold text-neutral-500 uppercase tracking-widest mb-2.5">Organize & Act</Text>
+              <Text className="text-[10px] font-bold text-[#64748B] uppercase tracking-widest mb-2.5">Organize & Act</Text>
               
-              <TouchableOpacity onPress={handleOpenSpawnTask} className="bg-indigo-950/40 border border-indigo-900/60 p-4 rounded-2xl flex-row items-center justify-between mb-4">
+              <TouchableOpacity onPress={handleOpenSpawnTask} className="bg-indigo-50 border border-indigo-100 p-4 rounded-2xl flex-row items-center justify-between mb-4">
                 <View className="flex-row items-center space-x-3">
                   <ListTodo size={16} color="#6366F1" />
                   <View>
-                    <Text className="text-indigo-300 text-xs font-bold">Create Task commitment</Text>
-                    <Text className="text-[9px] text-indigo-400">Add to scheduled / habit checklists</Text>
+                    <Text className="text-indigo-700 text-xs font-bold">Create Task commitment</Text>
+                    <Text className="text-[9px] text-indigo-600 font-semibold">Add to scheduled / habit checklists</Text>
                   </View>
                 </View>
               </TouchableOpacity>
 
               {selectedIdea?.brainDump && (
-                <View className="bg-neutral-950 border border-neutral-850 rounded-2xl p-4 mb-4">
-                  <Text className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider mb-2">Derived Source Dump</Text>
+                <View className="bg-slate-50 border border-slate-200 rounded-2xl p-4 mb-4">
+                  <Text className="text-[10px] font-bold text-[#64748B] uppercase tracking-wider mb-2">Derived Source Dump</Text>
                   <View className="flex-row items-center space-x-2">
-                    <FileText size={12} color="#888" />
-                    <Text className="text-neutral-400 text-xs leading-relaxed flex-1 italic">
+                    <FileText size={12} color="#64748B" />
+                    <Text className="text-[#0F172A] text-xs leading-relaxed flex-1 italic font-medium">
                       "{selectedIdea.brainDump.content || selectedIdea.brainDump.rawText}"
                     </Text>
                   </View>
@@ -324,10 +324,10 @@ export default function IdeasScreen() {
               {/* Delete operation */}
               <TouchableOpacity
                 onPress={() => selectedIdea && handleDeleteIdea(selectedIdea.id)}
-                className="bg-red-950/40 border border-red-900/60 p-3.5 rounded-2xl items-center flex-row justify-center space-x-1.5"
+                className="bg-red-50 border border-red-100 p-3.5 rounded-2xl items-center flex-row justify-center space-x-1.5"
               >
                 <Trash2 size={13} color="#EF4444" />
-                <Text className="text-xs font-bold text-red-400">Delete Idea Blueprint</Text>
+                <Text className="text-xs font-bold text-red-650 text-red-650 text-red-600">Delete Idea Blueprint</Text>
               </TouchableOpacity>
             </ScrollView>
           </View>
@@ -336,25 +336,25 @@ export default function IdeasScreen() {
 
       {/* TASK SPAWNER OVERLAY */}
       <Modal visible={spawnTaskVisible} transparent={true} animationType="slide">
-        <View className="flex-1 bg-black/85 justify-center items-center px-4">
-          <View className="bg-neutral-900 border border-neutral-850 p-6 rounded-3xl w-full max-h-[80%]">
-            <Text className="text-base font-extrabold text-white mb-4">Create Task Commitment</Text>
+        <View className="flex-1 bg-slate-900/30 justify-center items-center px-4">
+          <View className="bg-white border border-[#E2E8F0] p-6 rounded-3xl w-full max-h-[80%] shadow-2xl">
+            <Text className="text-base font-extrabold text-[#0F172A] mb-4">Create Task Commitment</Text>
             <ScrollView showsVerticalScrollIndicator={false} style={{ minHeight: 280, maxHeight: 400, marginBottom: 20 }}>
-              <Text className="text-xs font-bold text-neutral-400 uppercase mb-2">Title</Text>
-              <TextInput value={taskTitle} onChangeText={setTaskTitle} className="bg-neutral-950 p-4 text-white rounded-2xl border border-neutral-850 mb-4" />
+              <Text className="text-xs font-bold text-[#64748B] uppercase mb-2">Title</Text>
+              <TextInput value={taskTitle} onChangeText={setTaskTitle} className="bg-[#F8FAFC] p-4 text-[#0F172A] rounded-2xl border border-[#E2E8F0] mb-4" />
 
-              <Text className="text-xs font-bold text-neutral-400 uppercase mb-2">Notes / Description</Text>
-              <TextInput value={taskNotes} onChangeText={setTaskNotes} placeholder="Add context..." placeholderTextColor="#666" className="bg-neutral-950 p-4 text-white rounded-2xl border border-neutral-850 mb-4 text-left" multiline />
+              <Text className="text-xs font-bold text-[#64748B] uppercase mb-2">Notes / Description</Text>
+              <TextInput value={taskNotes} onChangeText={setTaskNotes} placeholder="Add context..." placeholderTextColor="#94A3B8" className="bg-[#F8FAFC] p-4 text-[#0F172A] rounded-2xl border border-[#E2E8F0] mb-4 text-left" multiline />
 
-              <Text className="text-xs font-bold text-neutral-400 uppercase mb-2">Schedule Date</Text>
-              <TextInput value={taskDate} onChangeText={setTaskDate} placeholder="YYYY-MM-DD" className="bg-neutral-950 p-4 text-white rounded-2xl border border-neutral-850 mb-4" />
+              <Text className="text-xs font-bold text-[#64748B] uppercase mb-2">Schedule Date</Text>
+              <TextInput value={taskDate} onChangeText={setTaskDate} placeholder="YYYY-MM-DD" className="bg-[#F8FAFC] p-4 text-[#0F172A] rounded-2xl border border-[#E2E8F0] mb-4" />
 
-              <Text className="text-xs font-bold text-neutral-400 uppercase mb-2">Time (Optional)</Text>
-              <TextInput value={taskTime} onChangeText={setTaskTime} placeholder="e.g. 10:00 AM" placeholderTextColor="#666" className="bg-neutral-950 p-4 text-white rounded-2xl border border-neutral-850" />
+              <Text className="text-xs font-bold text-[#64748B] uppercase mb-2">Time (Optional)</Text>
+              <TextInput value={taskTime} onChangeText={setTaskTime} placeholder="e.g. 10:00 AM" placeholderTextColor="#94A3B8" className="bg-[#F8FAFC] p-4 text-[#0F172A] rounded-2xl border border-[#E2E8F0]" />
             </ScrollView>
             <View className="flex-row space-x-3">
-              <TouchableOpacity onPress={() => setSpawnTaskVisible(false)} className="flex-1 bg-neutral-950 p-3.5 border border-neutral-850 rounded-xl items-center"><Text className="text-xs font-bold text-neutral-400">Back</Text></TouchableOpacity>
-              <TouchableOpacity onPress={handleSaveSpawnTask} disabled={isSavingTask} className="flex-1 bg-indigo-600 p-3.5 rounded-xl items-center">
+              <TouchableOpacity onPress={() => setSpawnTaskVisible(false)} className="flex-1 bg-slate-50 p-3.5 border border-slate-200 rounded-xl items-center"><Text className="text-xs font-bold text-[#64748B]">Back</Text></TouchableOpacity>
+              <TouchableOpacity onPress={handleSaveSpawnTask} disabled={isSavingTask} className="flex-1 bg-[#E05646] p-3.5 rounded-xl items-center shadow-md shadow-[#E05646]/20">
                 {isSavingTask ? <ActivityIndicator size="small" color="#fff" /> : <Text className="text-xs font-bold text-white">Save Task</Text>}
               </TouchableOpacity>
             </View>
