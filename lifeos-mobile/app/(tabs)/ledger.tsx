@@ -243,23 +243,23 @@ export default function LedgerScreen() {
   });
 
   return (
-    <SafeAreaView className="flex-1 bg-black px-4 pt-4" edges={["top", "left", "right"]}>
-      <ScrollView showsVerticalScrollIndicator={false} className="flex-1">
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#F0F4F8" }} edges={["top", "left", "right"]}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 140 }} className="flex-1">
         
         {/* Header */}
-        <View className="mb-6 flex-row justify-between items-center">
+        <View className="mb-6 flex-row justify-between items-center px-4 pt-4">
           <View>
-            <Text className="text-3xl font-extrabold text-white tracking-tight">Ledger</Text>
-            <Text className="text-xs text-neutral-400 mt-1">Track expense patterns and outstanding balances.</Text>
+            <Text className="text-3xl font-extrabold text-[#0F172A] tracking-tight">Ledger</Text>
+            <Text className="text-xs text-[#64748B] mt-1 font-semibold">Track expense patterns and outstanding balances.</Text>
           </View>
           <TouchableOpacity
             onPress={() => setIsSplitMode(!isSplitMode)}
-            className={`px-3 py-2 rounded-xl flex-row items-center space-x-1 border ${
-              isSplitMode ? "bg-amber-950 border-amber-900" : "bg-neutral-900 border-neutral-800"
+            className={`px-3.5 py-2.5 rounded-xl flex-row items-center space-x-1.5 border ${
+              isSplitMode ? "bg-[#202E4E] border-[#202E4E] shadow-sm shadow-[#202E4E]/20" : "bg-white border-[#E2E8F0] shadow-sm shadow-[#0F172A]/5"
             }`}
           >
-            <Users size={12} color={isSplitMode ? "#fbbf24" : "#a3a3a3"} />
-            <Text className={`text-[10px] font-bold ${isSplitMode ? "text-amber-400" : "text-neutral-300"}`}>
+            <Users size={12} color={isSplitMode ? "#FFFFFF" : "#64748B"} />
+            <Text className={`text-[10px] font-bold ${isSplitMode ? "text-white" : "text-[#64748B]"}`}>
               {isSplitMode ? "Custom Record" : "Split Bill"}
             </Text>
           </TouchableOpacity>
@@ -267,30 +267,30 @@ export default function LedgerScreen() {
 
         {/* Financial Summary Grid Banner */}
         {summary && (
-          <View className="flex-row space-x-3 mb-6">
-            <View className="flex-1 bg-neutral-900 border border-neutral-800 rounded-2xl p-3.5">
-              <Text className="text-[9px] font-bold text-neutral-500 uppercase tracking-wider">
+          <View className="flex-row space-x-3 mb-6 px-4">
+            <View className="flex-1 bg-white border border-[#E2E8F0] rounded-2xl p-3.5 shadow-sm shadow-[#0F172A]/5">
+              <Text className="text-[9px] font-black text-[#64748B] uppercase tracking-wider">
                 Expenses
               </Text>
-              <Text className="text-base font-extrabold text-white mt-1">
+              <Text className="text-base font-black text-[#0F172A] mt-1">
                 {currencySymbol}{summary.totalExpense.toFixed(2)}
               </Text>
             </View>
 
-            <View className="flex-1 bg-neutral-900 border border-neutral-800 rounded-2xl p-3.5">
-              <Text className="text-[9px] font-bold text-green-500 uppercase tracking-wider">
+            <View className="flex-1 bg-white border border-[#E2E8F0] rounded-2xl p-3.5 shadow-sm shadow-[#0F172A]/5">
+              <Text className="text-[9px] font-black text-emerald-700 uppercase tracking-wider">
                 Owed to you
               </Text>
-              <Text className="text-base font-extrabold text-green-400 mt-1">
+              <Text className="text-base font-black text-emerald-600 mt-1">
                 +{currencySymbol}{summary.totalLentPending.toFixed(2)}
               </Text>
             </View>
 
-            <View className="flex-1 bg-neutral-900 border border-neutral-800 rounded-2xl p-3.5">
-              <Text className="text-[9px] font-bold text-red-500 uppercase tracking-wider">
+            <View className="flex-1 bg-white border border-[#E2E8F0] rounded-2xl p-3.5 shadow-sm shadow-[#0F172A]/5">
+              <Text className="text-[9px] font-black text-rose-700 uppercase tracking-wider">
                 You owe
               </Text>
-              <Text className="text-base font-extrabold text-red-400 mt-1">
+              <Text className="text-base font-black text-rose-600 mt-1">
                 -{currencySymbol}{summary.totalBorrowedPending.toFixed(2)}
               </Text>
             </View>
@@ -299,39 +299,39 @@ export default function LedgerScreen() {
 
         {/* Group Splits Console Form */}
         {isSplitMode ? (
-          <View className="bg-neutral-900 border border-amber-950 rounded-3xl p-5 mb-6">
+          <View className="bg-white border border-[#E2E8F0] rounded-3xl p-5 mb-6 mx-4 shadow-sm shadow-[#0F172A]/5">
             <View className="flex-row justify-between items-center mb-3">
-              <Text className="text-base font-bold text-amber-400 flex-row items-center">
+              <Text className="text-base font-extrabold text-[#0F172A] flex-row items-center">
                 🔥 Split Bill Console
               </Text>
               <TouchableOpacity onPress={() => setIsSplitMode(false)}>
-                <X size={14} color="#737373" />
+                <X size={14} color="#64748B" />
               </TouchableOpacity>
             </View>
 
             <View className="flex-row space-x-3 mb-3.5">
               <TextInput
                 placeholder={`${currencySymbol} 0.00`}
-                placeholderTextColor="#737373"
+                placeholderTextColor="#94A3B8"
                 value={splitTotal}
                 onChangeText={setSplitTotal}
                 keyboardType="numeric"
-                className="w-24 text-white text-sm bg-neutral-950 rounded-xl px-4 py-3 border border-neutral-800 text-center"
+                className="w-24 text-[#0F172A] text-sm bg-[#F8FAFC] rounded-xl px-4 py-3 border border-[#E2E8F0] text-center font-semibold"
               />
               <TextInput
                 placeholder="Bill Description (e.g. Dinner split)"
-                placeholderTextColor="#737373"
+                placeholderTextColor="#94A3B8"
                 value={splitDescription}
                 onChangeText={setSplitDescription}
-                className="flex-1 text-white text-sm bg-neutral-950 rounded-xl px-4 py-3 border border-neutral-800 text-left"
+                className="flex-1 text-[#0F172A] text-sm bg-[#F8FAFC] rounded-xl px-4 py-3 border border-[#E2E8F0] text-left font-semibold"
               />
             </View>
 
             {/* Split place link */}
             {places.length > 0 && (
               <View className="mb-3.5">
-                <Text className="text-[10px] text-neutral-400 mb-1.5 flex-row items-center">
-                  <MapPin size={10} color="#a3a3a3" className="mr-1" /> Split Location (Optional)
+                <Text className="text-[10px] text-[#64748B] mb-1.5 flex-row items-center font-bold">
+                  <MapPin size={10} color="#64748B" className="mr-1" /> Split Location (Optional)
                 </Text>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                   {places.map((place) => (
@@ -339,10 +339,10 @@ export default function LedgerScreen() {
                       key={place.id}
                       onPress={() => setSplitPlaceId(splitPlaceId === place.id ? null : place.id)}
                       className={`px-3 py-1.5 rounded-lg border mr-2 ${
-                        splitPlaceId === place.id ? "bg-amber-950/40 border-amber-900" : "bg-neutral-950 border-neutral-800"
+                        splitPlaceId === place.id ? "bg-[#202E4E] border-[#202E4E] shadow-sm shadow-[#202E4E]/20" : "bg-[#F8FAFC] border-[#E2E8F0]"
                       }`}
                     >
-                      <Text className="text-[10px] text-neutral-300">{place.name}</Text>
+                      <Text className={`text-[10px] ${splitPlaceId === place.id ? "text-white font-bold" : "text-[#64748B]"}`}>{place.name}</Text>
                     </TouchableOpacity>
                   ))}
                 </ScrollView>
@@ -353,12 +353,12 @@ export default function LedgerScreen() {
             {people.length > 0 && (
               <View className="mb-4">
                 <View className="flex-row justify-between items-center mb-1.5">
-                  <Text className="text-[10px] text-neutral-400 flex-row items-center">
-                    <User size={10} color="#a3a3a3" className="mr-1" /> Select split contacts
+                  <Text className="text-[10px] text-[#64748B] flex-row items-center font-bold">
+                    <User size={10} color="#64748B" className="mr-1" /> Select split contacts
                   </Text>
                   {selectedSplitPeople.length > 0 && (
                     <TouchableOpacity onPress={handleSplitEqually}>
-                      <Text className="text-[10px] text-amber-400 font-extrabold uppercase">Split Equally</Text>
+                      <Text className="text-[10px] text-[#E05646] font-extrabold uppercase">Split Equally</Text>
                     </TouchableOpacity>
                   )}
                 </View>
@@ -377,10 +377,10 @@ export default function LedgerScreen() {
                           }
                         }}
                         className={`px-3 py-1.5 rounded-lg border mr-2 ${
-                          isSelected ? "bg-amber-900 border-amber-700" : "bg-neutral-950 border-neutral-800"
+                          isSelected ? "bg-[#202E4E] border-[#202E4E] shadow-sm shadow-[#202E4E]/20" : "bg-[#F8FAFC] border-[#E2E8F0]"
                         }`}
                       >
-                        <Text className="text-[10px] text-white">{person.name}</Text>
+                        <Text className={`text-[10px] ${isSelected ? "text-white font-bold" : "text-[#64748B]"}`}>{person.name}</Text>
                       </TouchableOpacity>
                     );
                   })}
@@ -388,24 +388,24 @@ export default function LedgerScreen() {
 
                 {/* Individual share inputs */}
                 {selectedSplitPeople.length > 0 && (
-                  <View className="bg-neutral-950 p-3 rounded-2xl border border-neutral-850 space-y-2">
-                    <Text className="text-[9px] font-bold text-neutral-500 uppercase tracking-wider mb-1">
+                  <View className="bg-[#F8FAFC] p-3 rounded-2xl border border-[#E2E8F0] space-y-2">
+                    <Text className="text-[9px] font-bold text-[#64748B] uppercase tracking-wider mb-1">
                       Individual shares
                     </Text>
                     {selectedSplitPeople.map((pId) => {
                       const personName = people.find((p) => p.id === pId)?.name || "Contact";
                       return (
                         <View key={pId} className="flex-row justify-between items-center">
-                          <Text className="text-xs text-neutral-300">{personName}</Text>
+                          <Text className="text-xs text-[#0F172A] font-bold">{personName}</Text>
                           <TextInput
                             placeholder="$ 0.00"
-                            placeholderTextColor="#555"
+                            placeholderTextColor="#94A3B8"
                             value={customSplitAmounts[pId] || ""}
                             onChangeText={(val) =>
                               setCustomSplitAmounts({ ...customSplitAmounts, [pId]: val })
                             }
                             keyboardType="numeric"
-                            className="w-20 bg-neutral-900 border border-neutral-800 rounded-lg text-right text-white text-xs px-2.5 py-1.5"
+                            className="w-20 bg-white border border-[#E2E8F0] rounded-lg text-right text-[#0F172A] text-xs px-2.5 py-1.5 font-semibold"
                           />
                         </View>
                       );
@@ -417,18 +417,18 @@ export default function LedgerScreen() {
 
             <TouchableOpacity
               onPress={handleProcessSplit}
-              className="bg-amber-500 p-3.5 rounded-2xl flex items-center justify-center shadow-lg"
+              className="bg-[#E05646] p-3.5 rounded-2xl flex items-center justify-center shadow-md shadow-[#E05646]/20"
             >
-              <Text className="text-black text-sm font-extrabold">Execute Group Split</Text>
+              <Text className="text-white text-sm font-extrabold">Execute Group Split</Text>
             </TouchableOpacity>
           </View>
         ) : (
           /* Standard Recording Form */
-          <View className="bg-neutral-900 border border-neutral-800 rounded-3xl p-5 mb-6">
-            <Text className="text-base font-bold text-white mb-3">Record Transaction</Text>
+          <View className="bg-white border border-[#E2E8F0] rounded-3xl p-5 mb-6 mx-4 shadow-sm shadow-[#0F172A]/5">
+            <Text className="text-base font-extrabold text-[#0F172A] mb-3">Record Transaction</Text>
 
             {/* Segmented control type */}
-            <View className="flex-row bg-neutral-950 border border-neutral-850 p-1 rounded-xl mb-3.5">
+            <View className="flex-row bg-[#F8FAFC] border border-[#E2E8F0] p-1 rounded-xl mb-3.5">
               {(["EXPENSE", "LENT", "BORROWED"] as const).map((t) => (
                 <TouchableOpacity
                   key={t}
@@ -436,22 +436,18 @@ export default function LedgerScreen() {
                   className={`flex-1 py-2 rounded-lg flex items-center justify-center ${
                     type === t
                       ? t === "LENT"
-                        ? "bg-green-950 border border-green-800"
+                        ? "bg-emerald-500 border border-emerald-500 shadow-sm"
                         : t === "BORROWED"
-                        ? "bg-red-950 border border-red-800"
-                        : "bg-neutral-800 border border-neutral-700"
+                        ? "bg-rose-500 border border-rose-500 shadow-sm"
+                        : "bg-white border border-[#E2E8F0] shadow-sm"
                       : ""
                   }`}
                 >
                   <Text
                     className={`text-[10px] font-bold ${
                       type === t
-                        ? t === "LENT"
-                          ? "text-green-300"
-                          : t === "BORROWED"
-                          ? "text-red-300"
-                          : "text-white"
-                        : "text-neutral-500"
+                        ? "text-white"
+                        : "text-[#64748B]"
                     }`}
                   >
                     {t === "LENT" ? "Owed to me" : t === "BORROWED" ? "I owe" : "Expense"}
@@ -464,25 +460,25 @@ export default function LedgerScreen() {
             <View className="flex-row space-x-3 mb-3.5">
               <TextInput
                 placeholder={`${currencySymbol} 0.00`}
-                placeholderTextColor="#737373"
+                placeholderTextColor="#94A3B8"
                 value={amount}
                 onChangeText={setAmount}
                 keyboardType="numeric"
-                className="w-24 text-white text-sm bg-neutral-950 rounded-xl px-4 py-3 border border-neutral-800 text-center"
+                className="w-24 text-[#0F172A] text-sm bg-[#F8FAFC] rounded-xl px-4 py-3 border border-[#E2E8F0] text-center font-semibold"
               />
               <TextInput
                 placeholder="Description"
-                placeholderTextColor="#737373"
+                placeholderTextColor="#94A3B8"
                 value={description}
                 onChangeText={setDescription}
-                className="flex-1 text-white text-sm bg-neutral-950 rounded-xl px-4 py-3 border border-neutral-800 text-left"
+                className="flex-1 text-[#0F172A] text-sm bg-[#F8FAFC] rounded-xl px-4 py-3 border border-[#E2E8F0] text-left font-semibold"
               />
             </View>
 
             {/* Category pills (Expense only) */}
             {type === "EXPENSE" && (
               <View className="mb-3.5">
-                <Text className="text-[10px] text-neutral-400 mb-1.5">Category</Text>
+                <Text className="text-[10px] text-[#64748B] mb-1.5 font-bold">Category</Text>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                   {PRESET_CATEGORIES.map((cat) => (
                     <TouchableOpacity
@@ -490,11 +486,11 @@ export default function LedgerScreen() {
                       onPress={() => setCategory(cat)}
                       className={`px-3 py-1.5 rounded-lg border mr-2 ${
                         category === cat
-                          ? "bg-indigo-950 border-indigo-800 text-indigo-300"
-                          : "bg-neutral-950 border-neutral-850"
+                          ? "bg-[#202E4E] border-[#202E4E]"
+                          : "bg-[#F8FAFC] border-[#E2E8F0]"
                       }`}
                     >
-                      <Text className={`text-[10px] ${category === cat ? "text-indigo-300 font-bold" : "text-neutral-400"}`}>
+                      <Text className={`text-[10px] ${category === cat ? "text-white font-bold" : "text-[#64748B]"}`}>
                         {cat}
                       </Text>
                     </TouchableOpacity>
@@ -506,8 +502,8 @@ export default function LedgerScreen() {
             {/* Places linking selector */}
             {places.length > 0 && (
               <View className="mb-3.5">
-                <Text className="text-[10px] text-neutral-400 mb-1.5 flex-row items-center">
-                  <MapPin size={10} color="#a3a3a3" className="mr-1" /> Place Link (Optional)
+                <Text className="text-[10px] text-[#64748B] mb-1.5 flex-row items-center font-bold">
+                  <MapPin size={10} color="#64748B" className="mr-1" /> Place Link (Optional)
                 </Text>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                   {places.map((place) => (
@@ -515,10 +511,10 @@ export default function LedgerScreen() {
                       key={place.id}
                       onPress={() => setSelectedPlaceId(selectedPlaceId === place.id ? null : place.id)}
                       className={`px-3 py-1.5 rounded-lg border mr-2 ${
-                        selectedPlaceId === place.id ? "bg-neutral-800 border-neutral-700" : "bg-neutral-950 border-neutral-850"
+                        selectedPlaceId === place.id ? "bg-[#202E4E] border-[#202E4E]" : "bg-[#F8FAFC] border-[#E2E8F0]"
                       }`}
                     >
-                      <Text className="text-[10px] text-neutral-300">{place.name}</Text>
+                      <Text className={`text-[10px] ${selectedPlaceId === place.id ? "text-white font-bold" : "text-[#64748B]"}`}>{place.name}</Text>
                     </TouchableOpacity>
                   ))}
                 </ScrollView>
@@ -528,8 +524,8 @@ export default function LedgerScreen() {
             {/* Contact Person Selector (Lent / Borrowed only) */}
             {type !== "EXPENSE" && people.length > 0 && (
               <View className="mb-3.5">
-                <Text className="text-[10px] text-neutral-400 mb-1.5 flex-row items-center">
-                  <User size={10} color="#a3a3a3" className="mr-1" /> Choose Linked Contact
+                <Text className="text-[10px] text-[#64748B] mb-1.5 flex-row items-center font-bold">
+                  <User size={10} color="#64748B" className="mr-1" /> Choose Linked Contact
                 </Text>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                   {people.map((person) => (
@@ -539,12 +535,12 @@ export default function LedgerScreen() {
                       className={`px-3 py-1.5 rounded-lg border mr-2 ${
                         selectedPersonId === person.id
                           ? type === "LENT"
-                            ? "bg-green-950 border-green-800"
-                            : "bg-red-950 border-red-800"
-                          : "bg-neutral-950 border-neutral-850"
+                            ? "bg-emerald-500 border border-emerald-500"
+                            : "bg-rose-500 border border-rose-500"
+                          : "bg-[#F8FAFC] border-[#E2E8F0]"
                       }`}
                     >
-                      <Text className={`text-[10px] ${selectedPersonId === person.id ? (type === "LENT" ? "text-green-300 font-bold" : "text-red-300 font-bold") : "text-neutral-400"}`}>
+                      <Text className={`text-[10px] ${selectedPersonId === person.id ? "text-white font-bold" : "text-[#64748B]"}`}>
                         {person.name}
                       </Text>
                     </TouchableOpacity>
@@ -556,15 +552,15 @@ export default function LedgerScreen() {
             {/* Due date follow-up trigger (Lent/Borrowed only) */}
             {type !== "EXPENSE" && (
               <View className="mb-4">
-                <Text className="text-[10px] text-neutral-400 mb-1.5 flex-row items-center">
-                  <Calendar size={10} color="#a3a3a3" className="mr-1" /> Remind Due Date (YYYY-MM-DD - Optional)
+                <Text className="text-[10px] text-[#64748B] mb-1.5 flex-row items-center font-bold">
+                  <Calendar size={10} color="#64748B" className="mr-1" /> Remind Due Date (YYYY-MM-DD - Optional)
                 </Text>
                 <TextInput
                   placeholder="YYYY-MM-DD"
-                  placeholderTextColor="#555"
+                  placeholderTextColor="#94A3B8"
                   value={dueDate}
                   onChangeText={setDueDate}
-                  className="text-white text-[12px] bg-neutral-950 rounded-xl px-4 py-2 border border-neutral-800 text-left w-32"
+                  className="text-[#0F172A] text-[12px] bg-[#F8FAFC] rounded-xl px-4 py-2 border border-[#E2E8F0] text-left w-32 font-semibold"
                 />
               </View>
             )}
@@ -572,23 +568,23 @@ export default function LedgerScreen() {
             {/* Log submit */}
             <TouchableOpacity
               onPress={handleCreateTransaction}
-              className="bg-indigo-600 p-3.5 rounded-2xl flex-row items-center justify-center shadow-lg"
+              className="bg-[#E05646] p-3.5 rounded-2xl flex-row items-center justify-center shadow-md shadow-[#E05646]/20"
             >
-              <Plus size={18} color="#fff" />
+              <Plus size={18} color="#FFFFFF" />
               <Text className="text-white text-sm font-bold ml-1.5">Log Transaction</Text>
             </TouchableOpacity>
           </View>
         )}
 
         {/* Tab filters */}
-        <View className="flex-row space-x-2 border-b border-neutral-850 pb-3 mb-4">
+        <View className="flex-row space-x-2 border-b border-[#E2E8F0] pb-3 mb-4 mx-4">
           {(["ALL", "EXPENSES", "DEBTS"] as const).map((tab) => (
             <TouchableOpacity
               key={tab}
               onPress={() => setActiveTab(tab)}
-              className={`px-3 py-1.5 rounded-lg ${activeTab === tab ? "bg-neutral-800" : ""}`}
+              className={`px-3 py-1.5 rounded-lg ${activeTab === tab ? "bg-white border border-[#E2E8F0] shadow-sm" : ""}`}
             >
-              <Text className={`text-[10px] font-bold ${activeTab === tab ? "text-white" : "text-neutral-500"}`}>
+              <Text className={`text-[10px] font-bold ${activeTab === tab ? "text-[#0F172A]" : "text-[#64748B]"}`}>
                 {tab === "DEBTS" ? "Debts (Owed/Owe)" : tab === "EXPENSES" ? "Expenses" : "All Records"}
               </Text>
             </TouchableOpacity>
@@ -596,13 +592,13 @@ export default function LedgerScreen() {
         </View>
 
         {/* List of transaction records */}
-        <View className="mb-10">
+        <View className="mb-10 mx-4">
           {isLoading ? (
-            <ActivityIndicator size="small" color="#ffffff" className="my-6" />
+            <ActivityIndicator size="small" color="#E05646" className="my-6" />
           ) : filteredTransactions.length === 0 ? (
-            <View className="bg-neutral-950 border border-neutral-900 border-dashed rounded-2xl py-10 px-4 flex items-center justify-center">
-              <Clock size={24} color="#404040" />
-              <Text className="text-xs font-bold text-neutral-500 mt-2">No transaction logs</Text>
+            <View className="bg-white border border-[#E2E8F0] border-dashed rounded-2xl py-10 px-4 flex items-center justify-center">
+              <Clock size={24} color="#94A3B8" />
+              <Text className="text-xs font-bold text-[#0F172A] mt-2">No transaction logs</Text>
             </View>
           ) : (
             filteredTransactions.map((tx) => {
@@ -614,14 +610,14 @@ export default function LedgerScreen() {
               return (
                 <View
                   key={tx.id}
-                  className="bg-neutral-900 border border-neutral-800 rounded-2xl p-4 mb-3 shadow-sm"
+                  className="bg-white border border-[#E2E8F0] rounded-2xl p-4 mb-3 shadow-sm shadow-[#0F172A]/5"
                 >
                   <View className="flex-row items-center justify-between">
                     <View className="flex-1 pr-3">
                       <View className="flex-row items-center space-x-1.5">
                         {isExpense ? (
-                          <View className="bg-neutral-800 border border-neutral-700 px-1.5 py-0.5 rounded">
-                            <Text className="text-[8px] font-extrabold text-neutral-400">
+                          <View className="bg-slate-50 border border-slate-200 px-1.5 py-0.5 rounded">
+                            <Text className="text-[8px] font-extrabold text-[#64748B]">
                               {tx.category || "General"}
                             </Text>
                           </View>
@@ -630,38 +626,38 @@ export default function LedgerScreen() {
                         ) : (
                           <ArrowDownLeft size={13} color="#EF4444" />
                         )}
-                        <Text className="text-white font-bold text-sm">{tx.description}</Text>
+                        <Text className="text-[#0F172A] font-bold text-sm">{tx.description}</Text>
                       </View>
 
                       {/* Link Badges (Place & Person) */}
                       <View className="flex-row flex-wrap items-center gap-1.5 mt-2">
                         {!isExpense && tx.person && (
-                          <View className="bg-neutral-950 border border-neutral-850 px-1.5 py-0.5 rounded flex-row items-center">
-                            <User size={8} color="#a3a3a3" style={{ marginRight: 3 }} />
-                            <Text className="text-[8px] text-neutral-400 font-bold">
+                          <View className="bg-slate-50 border border-slate-200 px-1.5 py-0.5 rounded flex-row items-center">
+                            <User size={8} color="#64748B" style={{ marginRight: 3 }} />
+                            <Text className="text-[8px] text-[#64748B] font-bold">
                               {tx.person.name}
                             </Text>
                           </View>
                         )}
                         {tx.place && (
-                          <View className="bg-neutral-950 border border-neutral-850 px-1.5 py-0.5 rounded flex-row items-center">
-                            <MapPin size={8} color="#a3a3a3" style={{ marginRight: 3 }} />
-                            <Text className="text-[8px] text-neutral-400 font-bold">
+                          <View className="bg-slate-50 border border-slate-200 px-1.5 py-0.5 rounded flex-row items-center">
+                            <MapPin size={8} color="#64748B" style={{ marginRight: 3 }} />
+                            <Text className="text-[8px] text-[#64748B] font-bold">
                               {tx.place.name}
                             </Text>
                           </View>
                         )}
                         {tx.dueDate && isPending && (
-                          <View className="bg-amber-950/60 border border-amber-900 px-1.5 py-0.5 rounded flex-row items-center">
-                            <Calendar size={8} color="#fbbf24" style={{ marginRight: 3 }} />
-                            <Text className="text-[8px] text-amber-400 font-extrabold">
+                          <View className="bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded flex-row items-center">
+                            <Calendar size={8} color="#D97706" style={{ marginRight: 3 }} />
+                            <Text className="text-[8px] text-amber-700 font-extrabold">
                               Due: {new Date(tx.dueDate).toLocaleDateString()}
                             </Text>
                           </View>
                         )}
                       </View>
 
-                      <Text className="text-[8px] text-neutral-600 mt-1.5">
+                      <Text className="text-[8px] text-[#94A3B8] mt-1.5 font-bold">
                         Logged: {new Date(tx.createdAt).toLocaleDateString()}
                       </Text>
                     </View>
@@ -669,8 +665,8 @@ export default function LedgerScreen() {
                     {/* Amount & Settlement options */}
                     <View className="flex-row items-center space-x-3.5">
                       <Text
-                        className={`font-extrabold text-base ${
-                          isExpense ? "text-white" : isOwed ? "text-green-400" : "text-red-400"
+                        className={`font-black text-base ${
+                          isExpense ? "text-[#0F172A]" : isOwed ? "text-emerald-600" : "text-rose-600"
                         }`}
                       >
                         {isExpense ? "" : isOwed ? "+" : "-"}{currencySymbol}{parsedAmount.toFixed(2)}
@@ -678,19 +674,19 @@ export default function LedgerScreen() {
 
                       {!isExpense && (
                         <TouchableOpacity
-                          onPress={() => handleOpenSettlePrompt(tx)}
+                           onPress={() => handleOpenSettlePrompt(tx)}
                           className={`px-2 py-1 rounded-lg border flex-row items-center space-x-1 ${
                             !isPending
-                              ? "bg-neutral-950 border-neutral-850"
+                              ? "bg-slate-50 border-slate-100"
                               : isOwed
-                              ? "bg-green-950/40 border-green-900/60"
-                              : "bg-red-950/40 border-red-900/60"
+                              ? "bg-emerald-50 border-emerald-100"
+                              : "bg-rose-50 border-rose-100"
                           }`}
                         >
                           {!isPending ? (
                             <>
-                              <CheckCircle size={10} color="#A3A3A3" />
-                              <Text className="text-[8px] font-bold text-neutral-500 uppercase">
+                              <CheckCircle size={10} color="#94A3B8" />
+                              <Text className="text-[8px] font-bold text-[#94A3B8] uppercase">
                                 Settled
                               </Text>
                             </>
@@ -699,7 +695,7 @@ export default function LedgerScreen() {
                               <Clock size={10} color={isOwed ? "#10B981" : "#EF4444"} />
                               <Text
                                 className={`text-[8px] font-bold uppercase ${
-                                  isOwed ? "text-green-400" : "text-red-400"
+                                  isOwed ? "text-emerald-700" : "text-rose-700"
                                 }`}
                               >
                                 Settle
@@ -711,25 +707,25 @@ export default function LedgerScreen() {
 
                       <TouchableOpacity
                         onPress={() => deleteTransaction(tx.id)}
-                        className="p-1.5 bg-neutral-950 border border-neutral-850 rounded-lg"
+                        className="p-2 bg-red-50 border border-red-100 rounded-lg"
                       >
-                        <Trash2 size={12} color="#EF4444" />
+                        <Trash2 size={13} color="#EF4444" />
                       </TouchableOpacity>
                     </View>
                   </View>
 
                   {/* Partial Payments History Under Card */}
                   {tx.partialPayments && tx.partialPayments.length > 0 && (
-                    <View className="mt-2.5 pt-2.5 border-t border-neutral-850">
-                      <Text className="text-[9px] font-extrabold text-neutral-500 uppercase tracking-wider mb-1">
+                    <View className="mt-2.5 pt-2.5 border-t border-[#E2E8F0]">
+                      <Text className="text-[9px] font-bold text-[#64748B] uppercase tracking-wider mb-1">
                         Repayments History
                       </Text>
                       {tx.partialPayments.map((subPay) => (
                         <View key={subPay.id} className="flex-row justify-between items-center py-1">
-                          <Text className="text-[9px] text-neutral-400">
+                          <Text className="text-[9px] text-[#0F172A] font-bold">
                             ✓ Payment received ({new Date(subPay.settledAt || subPay.createdAt).toLocaleDateString()})
                           </Text>
-                          <Text className="text-[9px] font-bold text-green-400">
+                          <Text className="text-[9px] font-extrabold text-emerald-600">
                             {currencySymbol}{parseFloat(subPay.amount).toFixed(2)}
                           </Text>
                         </View>
@@ -750,22 +746,22 @@ export default function LedgerScreen() {
         visible={settleModalVisible}
         onRequestClose={() => setSettleModalVisible(false)}
       >
-        <View style={{ flex: 1, justifyContent: "flex-end", backgroundColor: "rgba(0,0,0,0.8)" }}>
-          <View className="bg-neutral-900 border-t border-t-neutral-800 p-6 rounded-t-3xl">
+        <View style={{ flex: 1, justifyContent: "flex-end", backgroundColor: "rgba(15, 23, 42, 0.3)" }}>
+          <View className="bg-white border-t border-t-[#E2E8F0] p-6 rounded-t-3xl shadow-2xl">
             <View className="flex-row justify-between items-center mb-4">
-              <Text className="text-base font-bold text-white">Settle Transaction</Text>
+              <Text className="text-base font-extrabold text-[#0F172A]">Settle Transaction</Text>
               <TouchableOpacity onPress={() => setSettleModalVisible(false)}>
-                <X size={16} color="#737373" />
+                <X size={16} color="#64748B" />
               </TouchableOpacity>
             </View>
 
             {settlingTx && (
-              <View className="mb-5 bg-neutral-950 p-4 border border-neutral-850 rounded-2xl">
-                <Text className="text-xs text-neutral-400">Outstanding Balance:</Text>
-                <Text className="text-2xl font-extrabold text-white mt-1">
+              <View className="mb-5 bg-[#F8FAFC] p-4 border border-[#E2E8F0] rounded-2xl">
+                <Text className="text-xs text-[#64748B] font-bold">Outstanding Balance:</Text>
+                <Text className="text-2xl font-black text-[#0F172A] mt-1">
                   {currencySymbol}{parseFloat(settlingTx.amount).toFixed(2)}
                 </Text>
-                <Text className="text-xs text-neutral-500 mt-1">
+                <Text className="text-xs text-[#64748B] mt-1 font-medium">
                   For: {settlingTx.description}
                 </Text>
               </View>
@@ -774,27 +770,27 @@ export default function LedgerScreen() {
             {/* Settle Entire Balance Button */}
             <TouchableOpacity
               onPress={handleConfirmFullSettle}
-              className="bg-green-600 p-4 rounded-2xl flex items-center justify-center mb-4 shadow-lg"
+              className="bg-[#E05646] p-4 rounded-2xl flex items-center justify-center mb-4 shadow-md shadow-[#E05646]/20"
             >
               <Text className="text-white text-sm font-extrabold">Settle Full Outstanding Balance</Text>
             </TouchableOpacity>
 
-            <Text className="text-[10px] text-neutral-500 mb-2">Or post a partial repayment:</Text>
+            <Text className="text-[10px] text-[#64748B] mb-2 font-bold">Or post a partial repayment:</Text>
             
             <View className="flex-row space-x-3 mb-6">
               <TextInput
                 placeholder={`${currencySymbol} Paid amount`}
-                placeholderTextColor="#555"
+                placeholderTextColor="#94A3B8"
                 value={partialSettleAmount}
                 onChangeText={setPartialSettleAmount}
                 keyboardType="numeric"
-                className="flex-1 text-white text-sm bg-neutral-950 border border-neutral-850 rounded-xl px-4 py-3 text-left"
+                className="flex-1 text-[#0F172A] text-sm bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl px-4 py-3 text-left"
               />
               <TouchableOpacity
                 onPress={handleConfirmPartialSettle}
-                className="bg-neutral-800 border border-neutral-700 px-5 rounded-xl items-center justify-center"
+                className="bg-[#202E4E] border border-[#202E4E] px-5 rounded-xl items-center justify-center shadow-sm"
               >
-                <Text className="text-neutral-300 text-xs font-bold">Apply Portional</Text>
+                <Text className="text-white text-xs font-bold">Apply Portional</Text>
               </TouchableOpacity>
             </View>
           </View>
