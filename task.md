@@ -1,0 +1,9 @@
+- [ ] Implement trigger engine backend
+  - [ ] Create `trigger.evaluator.ts` background evaluation loop
+  - [ ] Integrate evaluation interval in `queue.manager.ts`
+  - [ ] Link `TIME` and `NOT_COMPLETED` trigger hooks in `tasks.service.ts`
+  - [ ] Link `BEFORE_EVENT` trigger hooks in `events.service.ts`
+  - [ ] Wire `LOCATION` triggers logic in `places.service.ts`
+- [ ] Verify functionality and compilation
+  - [ ] Run typescript checks and builds
+  - [ ] Verify database updates and trigger logs
