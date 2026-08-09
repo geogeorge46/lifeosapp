@@ -46,17 +46,17 @@ export default function MoreScreen() {
   ];
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#000" }}>
-      <ScrollView contentContainerStyle={{ padding: 24 }}>
-        <Text style={{ color: "#fff", fontSize: 32, fontWeight: "700", marginBottom: 8, paddingTop: 16 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#F0F4F8" }}>
+      <ScrollView contentContainerStyle={{ padding: 20, paddingBottom: 140 }} showsVerticalScrollIndicator={false}>
+        <Text style={{ color: "#0F172A", fontSize: 28, fontWeight: "900", letterSpacing: -1, marginBottom: 4, paddingTop: 16 }}>
           LifeOS
         </Text>
-        <Text style={{ color: "#888", fontSize: 16, marginBottom: 32 }}>
+        <Text style={{ color: "#64748B", fontSize: 13, fontWeight: "600", marginBottom: 28 }}>
           Secondary modules & system preferences
         </Text>
 
         {/* Directory Links */}
-        <View style={{ gap: 16, marginBottom: 32 }}>
+        <View style={{ gap: 12, marginBottom: 20 }}>
           {menuItems.map((item, idx) => {
             const Icon = item.icon;
             return (
@@ -64,40 +64,45 @@ export default function MoreScreen() {
                 key={idx}
                 onPress={() => router.push(item.route)}
                 style={{
-                  backgroundColor: "#0d0d0d",
-                  borderRadius: 16,
-                  padding: 20,
+                  backgroundColor: "#FFFFFF",
+                  borderRadius: 20,
+                  padding: 16,
                   flexDirection: "row",
                   alignItems: "center",
                   justifyContent: "space-between",
                   borderWidth: 1,
-                  borderColor: "#1e1e1e",
+                  borderColor: "#E2E8F0",
+                  shadowColor: "#0F172A",
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.02,
+                  shadowRadius: 6,
+                  elevation: 2,
                 }}
               >
                 <View style={{ flexDirection: "row", alignItems: "center", flex: 1 }}>
                   <View
                     style={{
-                      width: 48,
-                      height: 48,
+                      width: 44,
+                      height: 44,
                       borderRadius: 12,
-                      backgroundColor: `${item.color}20`,
+                      backgroundColor: `${item.color}15`,
                       alignItems: "center",
                       justifyContent: "center",
-                      marginRight: 16,
+                      marginRight: 14,
                     }}
                   >
-                    <Icon color={item.color} size={24} />
+                    <Icon color={item.color} size={20} />
                   </View>
                   <View style={{ flex: 1, paddingRight: 8 }}>
-                    <Text style={{ color: "#fff", fontSize: 18, fontWeight: "600", marginBottom: 4 }}>
+                    <Text style={{ color: "#0F172A", fontSize: 15, fontWeight: "800", marginBottom: 2 }}>
                       {item.title}
                     </Text>
-                    <Text style={{ color: "#aaa", fontSize: 13, lineHeight: 18 }}>
+                    <Text style={{ color: "#64748B", fontSize: 12, lineHeight: 16, fontWeight: "500" }}>
                       {item.subtitle}
                     </Text>
                   </View>
                 </View>
-                <ChevronRight color="#444" size={20} />
+                <ChevronRight color="#94A3B8" size={16} />
               </TouchableOpacity>
             );
           })}
@@ -107,21 +112,38 @@ export default function MoreScreen() {
         <TouchableOpacity
           onPress={() => router.push("/settings")}
           style={{
-            backgroundColor: "#0d0d0d",
-            borderRadius: 16,
-            padding: 20,
+            backgroundColor: "#FFFFFF",
+            borderRadius: 20,
+            padding: 16,
             flexDirection: "row",
             alignItems: "center",
             borderWidth: 1,
-            borderColor: "#1e1e1e",
+            borderColor: "#E2E8F0",
+            shadowColor: "#0F172A",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.02,
+            shadowRadius: 6,
+            elevation: 2,
           }}
         >
-          <Settings color="#666" size={24} style={{ marginRight: 16 }} />
-          <View style={{ flex: 1 }}>
-            <Text style={{ color: "#fff", fontSize: 16, fontWeight: "600" }}>System Settings</Text>
-            <Text style={{ color: "#666", fontSize: 13, marginTop: 2 }}>Preferences, accounts & rules</Text>
+          <View
+            style={{
+              width: 44,
+              height: 44,
+              borderRadius: 12,
+              backgroundColor: "rgba(100, 116, 139, 0.1)",
+              alignItems: "center",
+              justifyContent: "center",
+              marginRight: 14,
+            }}
+          >
+            <Settings color="#64748B" size={20} />
           </View>
-          <ChevronRight color="#444" size={20} />
+          <View style={{ flex: 1 }}>
+            <Text style={{ color: "#0F172A", fontSize: 15, fontWeight: "800" }}>System Settings</Text>
+            <Text style={{ color: "#64748B", fontSize: 12, marginTop: 2, fontWeight: "500" }}>Preferences, accounts & rules</Text>
+          </View>
+          <ChevronRight color="#94A3B8" size={16} />
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
