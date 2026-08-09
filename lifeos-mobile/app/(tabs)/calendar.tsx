@@ -200,18 +200,18 @@ export default function CalendarScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#000" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#F0F4F8" }}>
       {/* Calendar Strip Header */}
-      <View style={{ borderBottomWidth: 1, borderBottomColor: "#1e1e1e", paddingBottom: 16, paddingTop: 16 }}>
+      <View style={{ backgroundColor: "#FFFFFF", borderBottomWidth: 1, borderBottomColor: "#E2E8F0", paddingBottom: 16, paddingTop: 16, shadowColor: "#0F172A", shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.04, shadowRadius: 10, elevation: 4 }}>
         <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 24, marginBottom: 16 }}>
-          <TouchableOpacity onPress={handlePrevWeek} style={{ padding: 8 }}>
-            <ChevronLeft color="#fff" size={24} />
+          <TouchableOpacity onPress={handlePrevWeek} style={{ padding: 8, backgroundColor: "#F8FAFC", borderWidth: 1, borderColor: "#E2E8F0", borderRadius: 12 }}>
+            <ChevronLeft color="#0F172A" size={16} />
           </TouchableOpacity>
-          <Text style={{ color: "#fff", fontSize: 22, fontWeight: "700" }}>
+          <Text style={{ color: "#0F172A", fontSize: 18, fontWeight: "900", letterSpacing: -0.5 }}>
             {selectedDate.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
           </Text>
-          <TouchableOpacity onPress={handleNextWeek} style={{ padding: 8 }}>
-            <ChevronRight color="#fff" size={24} />
+          <TouchableOpacity onPress={handleNextWeek} style={{ padding: 8, backgroundColor: "#F8FAFC", borderWidth: 1, borderColor: "#E2E8F0", borderRadius: 12 }}>
+            <ChevronRight color="#0F172A" size={16} />
           </TouchableOpacity>
         </View>
 
@@ -230,13 +230,18 @@ export default function CalendarScreen() {
                   paddingVertical: 10,
                   paddingHorizontal: 12,
                   borderRadius: 16,
-                  backgroundColor: isSelected ? "#2563eb" : "transparent",
+                  backgroundColor: isSelected ? "#E05646" : "transparent",
+                  shadowColor: isSelected ? "#E05646" : "transparent",
+                  shadowOffset: isSelected ? { width: 0, height: 4 } : { width: 0, height: 0 },
+                  shadowOpacity: isSelected ? 0.2 : 0,
+                  shadowRadius: 6,
+                  elevation: isSelected ? 4 : 0,
                 }}
               >
-                <Text style={{ color: isSelected ? "#fff" : "#666", fontSize: 12, fontWeight: "600", marginBottom: 4 }}>
+                <Text style={{ color: isSelected ? "#FFFFFF" : "#64748B", fontSize: 11, fontWeight: "bold", marginBottom: 4 }}>
                   {weekdayName}
                 </Text>
-                <Text style={{ color: isSelected ? "#fff" : "#fff", fontSize: 16, fontWeight: "700" }}>
+                <Text style={{ color: isSelected ? "#FFFFFF" : "#0F172A", fontSize: 15, fontWeight: "900" }}>
                   {dayNum}
                 </Text>
               </TouchableOpacity>
@@ -245,74 +250,94 @@ export default function CalendarScreen() {
         </View>
       </View>
 
-      <ScrollView contentContainerStyle={{ padding: 24 }}>
+      <ScrollView contentContainerStyle={{ padding: 20, paddingBottom: 140 }} showsVerticalScrollIndicator={false}>
         {/* Selected Date Header */}
-        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
-          <Text style={{ color: "#fff", fontSize: 18, fontWeight: "700" }}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+          <Text style={{ color: "#0F172A", fontSize: 16, fontWeight: "900", letterSpacing: -0.5 }}>
             {selectedDate.toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" })}
           </Text>
           <TouchableOpacity
             onPress={handleOpenAddModal}
             style={{
               flexDirection: "row",
-              backgroundColor: "#222",
+              backgroundColor: "#FFFFFF",
               paddingVertical: 8,
               paddingHorizontal: 14,
-              borderRadius: 10,
+              borderRadius: 12,
               borderWidth: 1,
-              borderColor: "#333",
+              borderColor: "#E2E8F0",
               alignItems: "center",
+              shadowColor: "#0F172A",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.04,
+              shadowRadius: 4,
+              elevation: 2,
             }}
           >
-            <Plus color="#3b82f6" size={14} style={{ marginRight: 6 }} />
-            <Text style={{ color: "#3b82f6", fontSize: 12, fontWeight: "600" }}>Add Entry</Text>
+            <Plus color="#E05646" size={12} style={{ marginRight: 6 }} strokeWidth={2.5} />
+            <Text style={{ color: "#E05646", fontSize: 11, fontWeight: "800" }}>Add Entry</Text>
           </TouchableOpacity>
         </View>
 
         {isLoading ? (
-          <ActivityIndicator size="small" color="#fff" style={{ marginVertical: 30 }} />
+          <ActivityIndicator size="small" color="#E05646" style={{ marginVertical: 30 }} />
         ) : (
-          <View style={{ gap: 24 }}>
+          <View style={{ gap: 20 }}>
             {/* Events Section */}
             <View>
-              <Text style={{ color: "#888", fontSize: 12, fontWeight: "700", textTransform: "uppercase", letterSpacing: 1, marginBottom: 12 }}>
-                Events (Fixed Time)
-              </Text>
+              <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 12 }}>
+                <View style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: "#E6F4EA", alignItems: "center", justifyContent: "center", marginRight: 8 }}>
+                  <Clock color="#10B981" size={13} />
+                </View>
+                <Text style={{ color: "#64748B", fontSize: 11, fontWeight: "900", textTransform: "uppercase", letterSpacing: 0.5 }}>
+                  Events (Fixed Time)
+                </Text>
+              </View>
               {events.length === 0 ? (
-                <Text style={{ color: "#444", fontSize: 13, fontStyle: "italic" }}>No events scheduled.</Text>
+                <View style={{ backgroundColor: "#FFFFFF", borderWidth: 1, borderColor: "#E2E8F0", borderRadius: 20, padding: 18, alignItems: "center" }}>
+                  <Text style={{ color: "#94A3B8", fontSize: 12, fontStyle: "italic", fontWeight: "600" }}>No events scheduled.</Text>
+                </View>
               ) : (
                 events.map((event) => (
                   <View
                     key={event.id}
                     style={{
-                      backgroundColor: "#0d0d0d",
+                      backgroundColor: "#FFFFFF",
                       borderLeftWidth: 4,
-                      borderLeftColor: "#10b981",
-                      borderRadius: 12,
+                      borderLeftColor: "#10B981",
+                      borderRadius: 20,
                       padding: 16,
                       marginBottom: 10,
                       flexDirection: "row",
                       justifyContent: "space-between",
                       alignItems: "center",
                       borderWidth: 1,
-                      borderColor: "#1e1e1e",
+                      borderColor: "#E2E8F0",
+                      shadowColor: "#0F172A",
+                      shadowOffset: { width: 0, height: 2 },
+                      shadowOpacity: 0.03,
+                      shadowRadius: 6,
+                      elevation: 2,
                     }}
                   >
                     <View style={{ flex: 1, paddingRight: 8 }}>
-                      <Text style={{ color: "#fff", fontSize: 15, fontWeight: "600" }}>{event.title}</Text>
+                      <Text style={{ color: "#0F172A", fontSize: 14, fontWeight: "800" }}>{event.title}</Text>
                       <View style={{ flexDirection: "row", alignItems: "center", marginTop: 6 }}>
-                        <Clock color="#666" size={11} style={{ marginRight: 4 }} />
-                        <Text style={{ color: "#666", fontSize: 11 }}>
+                        <Clock color="#64748B" size={10} style={{ marginRight: 4 }} />
+                        <Text style={{ color: "#64748B", fontSize: 11, fontWeight: "700" }}>
                           {new Date(event.startDate).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })} -{" "}
                           {new Date(event.endDate).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}
                         </Text>
                       </View>
                       {event.description && (
-                        <Text style={{ color: "#aaa", fontSize: 12, marginTop: 4 }}>{event.description}</Text>
+                        <Text style={{ color: "#64748B", fontSize: 11, marginTop: 4, fontWeight: "500" }}>{event.description}</Text>
                       )}
                     </View>
-                    <TouchableOpacity onPress={() => handleDeleteEvent(event.id)} style={{ padding: 6 }}>
-                      <Trash2 color="#ef4444" size={14} />
+                    <TouchableOpacity
+                      onPress={() => handleDeleteEvent(event.id)}
+                      style={{ padding: 8, backgroundColor: "#FEF2F2", borderWidth: 1, borderColor: "#FEE2E2", borderRadius: 12 }}
+                    >
+                      <Trash2 color="#EF4444" size={13} />
                     </TouchableOpacity>
                   </View>
                 ))
@@ -321,27 +346,39 @@ export default function CalendarScreen() {
 
             {/* Tasks Section */}
             <View>
-              <Text style={{ color: "#888", fontSize: 12, fontWeight: "700", textTransform: "uppercase", letterSpacing: 1, marginBottom: 12 }}>
-                Tasks (Actions)
-              </Text>
+              <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 12 }}>
+                <View style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: "rgba(224, 86, 70, 0.08)", alignItems: "center", justifyContent: "center", marginRight: 8 }}>
+                  <CalendarIcon color="#E05646" size={13} />
+                </View>
+                <Text style={{ color: "#64748B", fontSize: 11, fontWeight: "900", textTransform: "uppercase", letterSpacing: 0.5 }}>
+                  Tasks (Actions)
+                </Text>
+              </View>
               {occurrences.length === 0 ? (
-                <Text style={{ color: "#444", fontSize: 13, fontStyle: "italic" }}>No tasks scheduled.</Text>
+                <View style={{ backgroundColor: "#FFFFFF", borderWidth: 1, borderColor: "#E2E8F0", borderRadius: 20, padding: 18, alignItems: "center" }}>
+                  <Text style={{ color: "#94A3B8", fontSize: 12, fontStyle: "italic", fontWeight: "600" }}>No tasks scheduled.</Text>
+                </View>
               ) : (
                 occurrences.map((occ) => (
                   <View
                     key={occ.id}
                     style={{
-                      backgroundColor: "#0d0d0d",
+                      backgroundColor: "#FFFFFF",
                       borderLeftWidth: 4,
-                      borderLeftColor: occ.status === "COMPLETED" ? "#4b5563" : "#3b82f6",
-                      borderRadius: 12,
+                      borderLeftColor: occ.status === "COMPLETED" ? "#94A3B8" : "#E05646",
+                      borderRadius: 20,
                       padding: 16,
                       marginBottom: 10,
                       borderWidth: 1,
-                      borderColor: "#1e1e1e",
+                      borderColor: "#E2E8F0",
                       flexDirection: "row",
                       alignItems: "center",
                       justifyContent: "space-between",
+                      shadowColor: "#0F172A",
+                      shadowOffset: { width: 0, height: 2 },
+                      shadowOpacity: 0.03,
+                      shadowRadius: 6,
+                      elevation: 2,
                     }}
                   >
                     <TouchableOpacity
@@ -351,43 +388,46 @@ export default function CalendarScreen() {
                       {/* Checkbox Circle */}
                       <View
                         style={{
-                          width: 18,
-                          height: 18,
-                          borderRadius: 9,
+                          width: 22,
+                          height: 22,
+                          borderRadius: 11,
                           borderWidth: 1.5,
-                          borderColor: occ.status === "COMPLETED" ? "#4b5563" : "#3b82f6",
-                          backgroundColor: occ.status === "COMPLETED" ? "#3b82f6" : "transparent",
+                          borderColor: occ.status === "COMPLETED" ? "#E05646" : "#E2E8F0",
+                          backgroundColor: occ.status === "COMPLETED" ? "#E05646" : "#F8FAFC",
                           marginRight: 12,
                           alignItems: "center",
                           justifyContent: "center",
                         }}
                       >
                         {occ.status === "COMPLETED" && (
-                          <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: "#fff" }} />
+                          <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: "#FFFFFF" }} />
                         )}
                       </View>
 
                       <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
                         <Text
                           style={{
-                            color: occ.status === "COMPLETED" ? "#555" : "#fff",
+                            color: occ.status === "COMPLETED" ? "#94A3B8" : "#0F172A",
                             textDecorationLine: occ.status === "COMPLETED" ? "line-through" : "none",
-                            fontSize: 15,
-                            fontWeight: "600",
+                            fontSize: 14,
+                            fontWeight: "800",
                           }}
                         >
                           {occ.task.title}
                         </Text>
                         {occ.scheduledTime && (
-                          <Text style={{ color: "#3b82f6", fontSize: 11, fontWeight: "600" }}>
+                          <Text style={{ color: "#E05646", fontSize: 11, fontWeight: "800" }}>
                             {occ.scheduledTime}
                           </Text>
                         )}
                       </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => handleDeleteTaskOccurrence(occ.id)} style={{ padding: 6 }}>
-                      <Trash2 color="#ef4444" size={14} />
+                    <TouchableOpacity
+                      onPress={() => handleDeleteTaskOccurrence(occ.id)}
+                      style={{ padding: 8, backgroundColor: "#FEF2F2", borderWidth: 1, borderColor: "#FEE2E2", borderRadius: 12 }}
+                    >
+                      <Trash2 color="#EF4444" size={13} />
                     </TouchableOpacity>
                   </View>
                 ))
@@ -404,47 +444,61 @@ export default function CalendarScreen() {
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
-        <View style={{ flex: 1, justifyContent: "flex-end", backgroundColor: "rgba(0,0,0,0.8)" }}>
+        <View style={{ flex: 1, justifyContent: "flex-end", backgroundColor: "rgba(15, 23, 42, 0.3)" }}>
           <View
             style={{
-              backgroundColor: "#161616",
-              borderTopLeftRadius: 24,
-              borderTopRightRadius: 24,
+              backgroundColor: "#FFFFFF",
+              borderTopLeftRadius: 32,
+              borderTopRightRadius: 32,
               padding: 24,
               borderWidth: 1,
-              borderColor: "#222",
-              minHeight: 400,
+              borderColor: "#E2E8F0",
+              minHeight: 420,
+              shadowColor: "#0F172A",
+              shadowOffset: { width: 0, height: -10 },
+              shadowOpacity: 0.08,
+              shadowRadius: 16,
+              elevation: 24,
             }}
           >
-            <Text style={{ color: "#fff", fontSize: 18, fontWeight: "700", marginBottom: 16 }}>
-              Add Calendar Entry
-            </Text>
+            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+              <Text style={{ color: "#0F172A", fontSize: 18, fontWeight: "800", letterSpacing: -0.5 }}>
+                Add Calendar Entry
+              </Text>
+              <TouchableOpacity onPress={() => setModalVisible(false)} style={{ paddingHorizontal: 12, paddingVertical: 6, backgroundColor: "#F8FAFC", borderWidth: 1, borderColor: "#E2E8F0", borderRadius: 12 }}>
+                <Text style={{ color: "#64748B", fontSize: 12, fontWeight: "bold" }}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
 
             {/* Type selector */}
             <View style={{ flexDirection: "row", gap: 12, marginBottom: 20 }}>
               <TouchableOpacity
                 onPress={() => setItemType("TASK")}
                 style={{
-                  backgroundColor: itemType === "TASK" ? "#2563eb" : "#222",
+                  backgroundColor: itemType === "TASK" ? "#E05646" : "#F8FAFC",
+                  borderWidth: 1,
+                  borderColor: itemType === "TASK" ? "#E05646" : "#E2E8F0",
                   padding: 12,
                   borderRadius: 12,
                   flex: 1,
                   alignItems: "center",
                 }}
               >
-                <Text style={{ color: "#fff", fontWeight: "700" }}>Task</Text>
+                <Text style={{ color: itemType === "TASK" ? "#FFFFFF" : "#64748B", fontWeight: "800" }}>Task</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => setItemType("EVENT")}
                 style={{
-                  backgroundColor: itemType === "EVENT" ? "#10b981" : "#222",
+                  backgroundColor: itemType === "EVENT" ? "#10B981" : "#F8FAFC",
+                  borderWidth: 1,
+                  borderColor: itemType === "EVENT" ? "#10B981" : "#E2E8F0",
                   padding: 12,
                   borderRadius: 12,
                   flex: 1,
                   alignItems: "center",
                 }}
               >
-                <Text style={{ color: "#fff", fontWeight: "700" }}>Event</Text>
+                <Text style={{ color: itemType === "EVENT" ? "#FFFFFF" : "#64748B", fontWeight: "800" }}>Event</Text>
               </TouchableOpacity>
             </View>
 
@@ -452,15 +506,17 @@ export default function CalendarScreen() {
               value={titleInput}
               onChangeText={setTitleInput}
               placeholder="Title"
-              placeholderTextColor="#555"
+              placeholderTextColor="#94A3B8"
               style={{
-                backgroundColor: "#222",
-                color: "#fff",
+                backgroundColor: "#F8FAFC",
+                color: "#0F172A",
                 padding: 12,
                 borderRadius: 12,
                 borderWidth: 1,
-                borderColor: "#333",
+                borderColor: "#E2E8F0",
                 marginBottom: 12,
+                textAlign: "left",
+                fontWeight: "600",
               }}
             />
 
@@ -468,70 +524,78 @@ export default function CalendarScreen() {
               value={descriptionInput}
               onChangeText={setDescriptionInput}
               placeholder="Description (Optional)"
-              placeholderTextColor="#555"
+              placeholderTextColor="#94A3B8"
               style={{
-                backgroundColor: "#222",
-                color: "#fff",
+                backgroundColor: "#F8FAFC",
+                color: "#0F172A",
                 padding: 12,
                 borderRadius: 12,
                 borderWidth: 1,
-                borderColor: "#333",
+                borderColor: "#E2E8F0",
                 marginBottom: 12,
+                textAlign: "left",
+                fontWeight: "600",
               }}
             />
 
             {itemType === "TASK" ? (
               <View>
-                <Text style={{ color: "#888", fontSize: 12, marginBottom: 6 }}>Scheduled Date (YYYY-MM-DD):</Text>
+                <Text style={{ color: "#64748B", fontSize: 11, marginBottom: 6, fontWeight: "700" }}>Scheduled Date (YYYY-MM-DD):</Text>
                 <TextInput
                   value={dateInput}
                   onChangeText={setDateInput}
                   placeholder="YYYY-MM-DD"
-                  placeholderTextColor="#555"
+                  placeholderTextColor="#94A3B8"
                   style={{
-                    backgroundColor: "#222",
-                    color: "#fff",
+                    backgroundColor: "#F8FAFC",
+                    color: "#0F172A",
                     padding: 12,
                     borderRadius: 12,
                     borderWidth: 1,
-                    borderColor: "#333",
+                    borderColor: "#E2E8F0",
                     marginBottom: 12,
+                    textAlign: "left",
+                    fontWeight: "600",
                   }}
                 />
               </View>
             ) : (
               <View style={{ flexDirection: "row", gap: 12, marginBottom: 12 }}>
                 <View style={{ flex: 1 }}>
-                  <Text style={{ color: "#888", fontSize: 12, marginBottom: 6 }}>Start Date:</Text>
+                  <Text style={{ color: "#64748B", fontSize: 11, marginBottom: 6, fontWeight: "700" }}>Start Date:</Text>
                   <TextInput
                     value={dateInput}
                     onChangeText={setDateInput}
                     placeholder="YYYY-MM-DD"
-                    placeholderTextColor="#555"
+                    placeholderTextColor="#94A3B8"
                     style={{
-                      backgroundColor: "#222",
-                      color: "#fff",
+                      backgroundColor: "#F8FAFC",
+                      color: "#0F172A",
                       padding: 12,
                       borderRadius: 12,
                       borderWidth: 1,
-                      borderColor: "#333",
+                      borderColor: "#E2E8F0",
+                      textAlign: "left",
+                      fontWeight: "600",
                     }}
                   />
                 </View>
                 <View style={{ flex: 1 }}>
-                  <Text style={{ color: "#888", fontSize: 12, marginBottom: 6 }}>End Date:</Text>
+                  <Text style={{ color: "#64748B", fontSize: 11, marginBottom: 6, fontWeight: "700" }}>End Date:</Text>
                   <TextInput
                     value={endDateInput}
                     onChangeText={setEndDateInput}
                     placeholder="YYYY-MM-DD"
-                    placeholderTextColor="#555"
+                    placeholderTextColor="#94A3B8"
                     style={{
-                      backgroundColor: "#222",
-                      color: "#fff",
+                      backgroundColor: "#F8FAFC",
+                      color: "#0F172A",
                       padding: 12,
                       borderRadius: 12,
                       borderWidth: 1,
-                      borderColor: "#333",
+                      borderColor: "#E2E8F0",
+                      textAlign: "left",
+                      fontWeight: "600",
                     }}
                   />
                 </View>
@@ -543,15 +607,17 @@ export default function CalendarScreen() {
                 value={timeInput}
                 onChangeText={setTimeInput}
                 placeholder="Time (e.g. 10:00 AM, optional)"
-                placeholderTextColor="#555"
+                placeholderTextColor="#94A3B8"
                 style={{
-                  backgroundColor: "#222",
-                  color: "#fff",
+                  backgroundColor: "#F8FAFC",
+                  color: "#0F172A",
                   padding: 12,
                   borderRadius: 12,
                   borderWidth: 1,
-                  borderColor: "#333",
+                  borderColor: "#E2E8F0",
                   marginBottom: 20,
+                  textAlign: "left",
+                  fontWeight: "600",
                 }}
               />
             ) : (
@@ -560,30 +626,34 @@ export default function CalendarScreen() {
                   value={startTimeInput}
                   onChangeText={setStartTimeInput}
                   placeholder="Start Time (e.g. 10:00 AM)"
-                  placeholderTextColor="#555"
+                  placeholderTextColor="#94A3B8"
                   style={{
-                    backgroundColor: "#222",
-                    color: "#fff",
+                    backgroundColor: "#F8FAFC",
+                    color: "#0F172A",
                     padding: 12,
                     borderRadius: 12,
                     borderWidth: 1,
-                    borderColor: "#333",
+                    borderColor: "#E2E8F0",
                     flex: 1,
+                    textAlign: "left",
+                    fontWeight: "600",
                   }}
                 />
                 <TextInput
                   value={endTimeInput}
                   onChangeText={setEndTimeInput}
                   placeholder="End Time (e.g. 11:00 AM)"
-                  placeholderTextColor="#555"
+                  placeholderTextColor="#94A3B8"
                   style={{
-                    backgroundColor: "#222",
-                    color: "#fff",
+                    backgroundColor: "#F8FAFC",
+                    color: "#0F172A",
                     padding: 12,
                     borderRadius: 12,
                     borderWidth: 1,
-                    borderColor: "#333",
+                    borderColor: "#E2E8F0",
                     flex: 1,
+                    textAlign: "left",
+                    fontWeight: "600",
                   }}
                 />
               </View>
@@ -593,22 +663,20 @@ export default function CalendarScreen() {
               onPress={handleCreateItem}
               disabled={isSubmitting || !titleInput.trim() || !dateInput.trim()}
               style={{
-                backgroundColor: itemType === "TASK" ? "#2563eb" : "#10b981",
+                backgroundColor: itemType === "TASK" ? "#E05646" : "#10B981",
                 padding: 16,
                 borderRadius: 16,
                 alignItems: "center",
                 justifyContent: "center",
                 marginBottom: 12,
+                shadowColor: itemType === "TASK" ? "#E05646" : "#10B981",
+                shadowOffset: { width: 0, height: 4 },
+                shadowOpacity: 0.2,
+                shadowRadius: 6,
+                elevation: 4,
               }}
             >
-              {isSubmitting ? <ActivityIndicator color="#fff" /> : <Text style={{ color: "#fff", fontWeight: "700" }}>Create</Text>}
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => setModalVisible(false)}
-              style={{ padding: 12, alignItems: "center" }}
-            >
-              <Text style={{ color: "#ef4444", fontWeight: "600" }}>Cancel</Text>
+              {isSubmitting ? <ActivityIndicator color="#FFFFFF" /> : <Text style={{ color: "#FFFFFF", fontWeight: "800" }}>Create</Text>}
             </TouchableOpacity>
           </View>
         </View>
