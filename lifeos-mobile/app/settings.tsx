@@ -126,103 +126,103 @@ export default function SettingsScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-black px-4 pt-4" edges={["top", "left", "right"]}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#F0F4F8" }} edges={["top", "left", "right"]}>
       {/* Header */}
-      <View className="flex-row items-center justify-between mb-6">
+      <View className="flex-row items-center justify-between mb-6 px-4 pt-4">
         <TouchableOpacity
           onPress={() => router.back()}
-          className="p-2.5 bg-neutral-900 border border-neutral-800 rounded-xl"
+          className="p-2.5 bg-white border border-[#E2E8F0] rounded-xl shadow-sm"
         >
-          <ArrowLeft size={16} color="#fff" />
+          <ArrowLeft size={16} color="#0F172A" />
         </TouchableOpacity>
-        <Text className="text-lg font-bold text-white">System Settings</Text>
+        <Text className="text-lg font-extrabold text-[#0F172A]">System Settings</Text>
         <View style={{ width: 40 }} />
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false} className="flex-1">
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40 }} className="flex-1 px-4">
         {/* Section 1: Notifications & Schedule */}
-        <View className="bg-neutral-900 border border-neutral-800 rounded-3xl p-5 mb-6">
+        <View className="bg-white border border-[#E2E8F0] rounded-3xl p-5 mb-6 shadow-sm shadow-[#0F172A]/5">
           <View className="flex-row items-center space-x-2 mb-4">
-            <Bell size={18} color="#8b5cf6" />
-            <Text className="text-sm font-bold text-white">Notifications & Reminders</Text>
+            <Bell size={18} color="#E05646" />
+            <Text className="text-sm font-extrabold text-[#0F172A]">Notifications & Reminders</Text>
           </View>
 
           {/* Toggle Push */}
-          <View className="flex-row justify-between items-center py-2.5 border-b border-neutral-850">
+          <View className="flex-row justify-between items-center py-2.5 border-b border-[#E2E8F0]">
             <View>
-              <Text className="text-xs font-bold text-white">Enable Push Alerts</Text>
-              <Text className="text-[10px] text-neutral-500 mt-0.5">Toggle geofence & ledger reminders</Text>
+              <Text className="text-xs font-bold text-[#0F172A]">Enable Push Alerts</Text>
+              <Text className="text-[10px] text-[#64748B] mt-0.5 font-semibold">Toggle geofence & ledger reminders</Text>
             </View>
             <Switch
               value={notificationsEnabled}
               onValueChange={(val) => updateSetting("notificationsEnabled", val)}
-              trackColor={{ false: "#262626", true: "#8b5cf6" }}
-              thumbColor={notificationsEnabled ? "#ffffff" : "#a3a3a3"}
+              trackColor={{ false: "#E2E8F0", true: "#E05646" }}
+              thumbColor={notificationsEnabled ? "#ffffff" : "#94A3B8"}
             />
           </View>
 
           {/* Morning recap timing */}
-          <View className="flex-row justify-between items-center py-2.5 border-b border-neutral-850">
+          <View className="flex-row justify-between items-center py-2.5 border-b border-[#E2E8F0]">
             <View>
-              <Text className="text-xs font-bold text-white">Morning Digest Alert</Text>
-              <Text className="text-[10px] text-neutral-500 mt-0.5">Alert schedule for daily recap</Text>
+              <Text className="text-xs font-bold text-[#0F172A]">Morning Digest Alert</Text>
+              <Text className="text-[10px] text-[#64748B] mt-0.5 font-semibold">Alert schedule for daily recap</Text>
             </View>
             <TextInput
               value={morningRecapTime}
               onChangeText={(val) => updateSetting("morningRecapTime", val)}
               placeholder="HH:MM"
-              placeholderTextColor="#525252"
-              className="text-white text-xs font-bold bg-neutral-950 px-3 py-1.5 rounded-lg border border-neutral-800 w-16 text-center"
+              placeholderTextColor="#94A3B8"
+              className="text-[#0F172A] text-xs font-bold bg-[#F8FAFC] px-3 py-1.5 rounded-lg border border-[#E2E8F0] w-16 text-center font-semibold"
             />
           </View>
 
           {/* Evening check-in timing */}
-          <View className="flex-row justify-between items-center py-2.5 border-b border-neutral-850">
+          <View className="flex-row justify-between items-center py-2.5 border-b border-[#E2E8F0]">
             <View>
-              <Text className="text-xs font-bold text-white">Evening Log Prompt</Text>
-              <Text className="text-[10px] text-neutral-500 mt-0.5">Alert schedule for task audits</Text>
+              <Text className="text-xs font-bold text-[#0F172A]">Evening Log Prompt</Text>
+              <Text className="text-[10px] text-[#64748B] mt-0.5 font-semibold">Alert schedule for task audits</Text>
             </View>
             <TextInput
               value={eveningCheckinTime}
               onChangeText={(val) => updateSetting("eveningCheckinTime", val)}
               placeholder="HH:MM"
-              placeholderTextColor="#525252"
-              className="text-white text-xs font-bold bg-neutral-950 px-3 py-1.5 rounded-lg border border-neutral-800 w-16 text-center"
+              placeholderTextColor="#94A3B8"
+              className="text-[#0F172A] text-xs font-bold bg-[#F8FAFC] px-3 py-1.5 rounded-lg border border-[#E2E8F0] w-16 text-center font-semibold"
             />
           </View>
 
           {/* Resurfacing snooze */}
           <View className="flex-row justify-between items-center py-2.5">
             <View>
-              <Text className="text-xs font-bold text-white">Task Resurface Interval</Text>
-              <Text className="text-[10px] text-neutral-500 mt-0.5">Snooze time before tasks re-appear</Text>
+              <Text className="text-xs font-bold text-[#0F172A]">Task Resurface Interval</Text>
+              <Text className="text-[10px] text-[#64748B] mt-0.5 font-semibold">Snooze time before tasks re-appear</Text>
             </View>
             <TextInput
               value={String(snoozeIntervalMinutes)}
               onChangeText={(val) => updateSetting("snoozeIntervalMinutes", parseInt(val) || 0)}
               keyboardType="numeric"
-              className="text-white text-xs font-bold bg-neutral-950 px-3 py-1.5 rounded-lg border border-neutral-800 w-16 text-center"
+              className="text-[#0F172A] text-xs font-bold bg-[#F8FAFC] px-3 py-1.5 rounded-lg border border-[#E2E8F0] w-16 text-center font-semibold"
             />
           </View>
         </View>
 
         {/* Section 2: Location & Geofencing */}
-        <View className="bg-neutral-900 border border-neutral-800 rounded-3xl p-5 mb-6">
+        <View className="bg-white border border-[#E2E8F0] rounded-3xl p-5 mb-6 shadow-sm shadow-[#0F172A]/5">
           <View className="flex-row items-center space-x-2 mb-4">
-            <MapPin size={18} color="#10b981" />
-            <Text className="text-sm font-bold text-white">Location & Geofencing</Text>
+            <MapPin size={18} color="#E05646" />
+            <Text className="text-sm font-bold text-[#0F172A]">Location & Geofencing</Text>
           </View>
 
           {/* Background Location Status */}
-          <View className="py-2.5 border-b border-neutral-850">
+          <View className="py-2.5 border-b border-[#E2E8F0]">
             <View className="flex-row justify-between items-center">
               <View>
-                <Text className="text-xs font-bold text-white">Always-Allow Location</Text>
-                <Text className="text-[10px] text-neutral-500 mt-0.5">Required for background entry alerts</Text>
+                <Text className="text-xs font-bold text-[#0F172A]">Always-Allow Location</Text>
+                <Text className="text-[10px] text-[#64748B] mt-0.5 font-medium">Required for background entry alerts</Text>
               </View>
               <Text
                 className={`text-xs font-bold ${
-                  bgPermStatus.includes("Granted") ? "text-emerald-500" : "text-amber-500"
+                  bgPermStatus.includes("Granted") ? "text-emerald-600" : "text-amber-600"
                 }`}
               >
                 {bgPermStatus}
@@ -231,16 +231,16 @@ export default function SettingsScreen() {
             {!bgPermStatus.includes("Granted") && (
               <TouchableOpacity
                 onPress={handleRequestBgPermission}
-                className="mt-3 bg-neutral-950 border border-neutral-800 py-2 rounded-xl items-center"
+                className="mt-3 bg-[#F8FAFC] border border-[#E2E8F0] py-2 rounded-xl items-center"
               >
-                <Text className="text-white text-xs font-bold">Request Location Permission</Text>
+                <Text className="text-[#0F172A] text-xs font-bold">Request Location Permission</Text>
               </TouchableOpacity>
             )}
           </View>
 
           {/* Default Radius */}
-          <View className="py-2.5 border-b border-neutral-850">
-            <Text className="text-xs font-bold text-white mb-2">Default Geofence Radius</Text>
+          <View className="py-2.5 border-b border-[#E2E8F0]">
+            <Text className="text-xs font-bold text-[#0F172A] mb-2">Default Geofence Radius</Text>
             <View className="flex-row gap-2">
               {[50, 150, 300, 500].map((radiusVal) => {
                 const isSel = defaultGeofenceRadius === radiusVal;
@@ -249,10 +249,10 @@ export default function SettingsScreen() {
                     key={radiusVal}
                     onPress={() => updateSetting("defaultGeofenceRadius", radiusVal)}
                     className={`flex-1 py-2 rounded-xl border items-center justify-center ${
-                      isSel ? "bg-emerald-600 border-emerald-500" : "bg-neutral-950 border-neutral-850"
+                      isSel ? "bg-[#E05646] border-[#E05646]" : "bg-[#F8FAFC] border-[#E2E8F0]"
                     }`}
                   >
-                    <Text className="text-xs font-bold text-white">{radiusVal}m</Text>
+                    <Text className={`text-xs font-bold ${isSel ? "text-white" : "text-[#64748B]"}`}>{radiusVal}m</Text>
                   </TouchableOpacity>
                 );
               })}
@@ -260,10 +260,10 @@ export default function SettingsScreen() {
           </View>
 
           {/* Android battery quirks warning */}
-          <View className="bg-neutral-950 p-3 rounded-2xl border border-neutral-850 mt-2 flex-row space-x-2">
-            <Info size={14} color="#10b981" style={{ marginTop: 2 }} />
+          <View className="bg-slate-50 p-3 rounded-2xl border border-slate-200 mt-2 flex-row space-x-2">
+            <Info size={14} color="#E05646" style={{ marginTop: 2 }} />
             <View className="flex-1">
-              <Text className="text-[10px] text-neutral-400 font-medium leading-relaxed">
+              <Text className="text-[10px] text-[#64748B] font-semibold leading-relaxed">
                 Manufacturer Warning: If you run a Xiaomi, Huawei, or OnePlus device, please disable battery optimization for LifeOS to ensure geofences register reliably in background mode.
               </Text>
             </View>
@@ -271,15 +271,15 @@ export default function SettingsScreen() {
         </View>
 
         {/* Section 3: Money Ledger preferences */}
-        <View className="bg-neutral-900 border border-neutral-800 rounded-3xl p-5 mb-6">
+        <View className="bg-white border border-[#E2E8F0] rounded-3xl p-5 mb-6 shadow-sm shadow-[#0F172A]/5">
           <View className="flex-row items-center space-x-2 mb-4">
-            <Coins size={18} color="#f59e0b" />
-            <Text className="text-sm font-bold text-white">Money & Ledger Preferences</Text>
+            <Coins size={18} color="#E05646" />
+            <Text className="text-sm font-bold text-[#0F172A]">Money & Ledger Preferences</Text>
           </View>
 
           {/* Currency Symbol Selection */}
-          <View className="py-2.5 border-b border-neutral-850">
-            <Text className="text-xs font-bold text-white mb-2">Preferred Currency Display</Text>
+          <View className="py-2.5 border-b border-[#E2E8F0]">
+            <Text className="text-xs font-bold text-[#0F172A] mb-2">Preferred Currency Display</Text>
             <View className="flex-row gap-2">
               {["$", "₹", "€", "£", "¥"].map((sym) => {
                 const isSel = currencySymbol === sym;
@@ -288,10 +288,10 @@ export default function SettingsScreen() {
                     key={sym}
                     onPress={() => updateSetting("currencySymbol", sym)}
                     className={`flex-1 py-2 rounded-xl border items-center justify-center ${
-                      isSel ? "bg-amber-600 border-amber-500" : "bg-neutral-950 border-neutral-850"
+                      isSel ? "bg-[#E05646] border-[#E05646]" : "bg-[#F8FAFC] border-[#E2E8F0]"
                     }`}
                   >
-                    <Text className="text-sm font-extrabold text-white">{sym}</Text>
+                    <Text className={`text-sm font-extrabold ${isSel ? "text-white" : "text-[#64748B]"}`}>{sym}</Text>
                   </TouchableOpacity>
                 );
               })}
@@ -301,35 +301,35 @@ export default function SettingsScreen() {
           {/* Money Follow up default window */}
           <View className="flex-row justify-between items-center py-2.5">
             <View>
-              <Text className="text-xs font-bold text-white">Default Follow-up Window</Text>
-              <Text className="text-[10px] text-neutral-500 mt-0.5">Days before reminding unpaid ledger debts</Text>
+              <Text className="text-xs font-bold text-[#0F172A]">Default Follow-up Window</Text>
+              <Text className="text-[10px] text-[#64748B] mt-0.5 font-semibold">Days before reminding unpaid ledger debts</Text>
             </View>
             <TextInput
               value={String(ledgerFollowUpDays)}
               onChangeText={(val) => updateSetting("ledgerFollowUpDays", parseInt(val) || 0)}
               keyboardType="numeric"
-              className="text-white text-xs font-bold bg-neutral-950 px-3 py-1.5 rounded-lg border border-neutral-800 w-16 text-center"
+              className="text-[#0F172A] text-xs font-bold bg-[#F8FAFC] px-3 py-1.5 rounded-lg border border-[#E2E8F0] w-16 text-center font-semibold"
             />
           </View>
         </View>
 
         {/* Section 4: Data & System administration */}
-        <View className="bg-neutral-900 border border-neutral-800 rounded-3xl p-5 mb-6">
+        <View className="bg-white border border-[#E2E8F0] rounded-3xl p-5 mb-6 shadow-sm shadow-[#0F172A]/5">
           <View className="flex-row items-center space-x-2 mb-4">
-            <Database size={18} color="#3b82f6" />
-            <Text className="text-sm font-bold text-white">Data & Backup Tools</Text>
+            <Database size={18} color="#202E4E" />
+            <Text className="text-sm font-bold text-[#0F172A]">Data & Backup Tools</Text>
           </View>
 
           {/* Export database stats */}
           <TouchableOpacity
             onPress={handleExportData}
-            className="flex-row justify-between items-center py-3 border-b border-neutral-850"
+            className="flex-row justify-between items-center py-3 border-b border-[#E2E8F0]"
           >
             <View>
-              <Text className="text-xs font-bold text-white">Export System Metadata</Text>
-              <Text className="text-[10px] text-neutral-500 mt-0.5">Get raw JSON backups of active directory metrics</Text>
+              <Text className="text-xs font-bold text-[#0F172A]">Export System Metadata</Text>
+              <Text className="text-[10px] text-[#64748B] mt-0.5 font-medium">Get raw JSON backups of active directory metrics</Text>
             </View>
-            <Share2 size={16} color="#3b82f6" />
+            <Share2 size={16} color="#E05646" />
           </TouchableOpacity>
 
           {/* Reset System configuration preferences */}
@@ -338,44 +338,44 @@ export default function SettingsScreen() {
             className="flex-row justify-between items-center py-3"
           >
             <View>
-              <Text className="text-xs font-bold text-red-400">Reset Local Configurations</Text>
-              <Text className="text-[10px] text-neutral-500 mt-0.5">Wipe custom intervals and symbols</Text>
+              <Text className="text-xs font-bold text-rose-600">Reset Local Configurations</Text>
+              <Text className="text-[10px] text-[#64748B] mt-0.5 font-medium">Wipe custom intervals and symbols</Text>
             </View>
-            <RotateCcw size={16} color="#f87171" />
+            <RotateCcw size={16} color="#EF4444" />
           </TouchableOpacity>
         </View>
 
         {/* Section 5: Version & App Info */}
-        <View className="bg-neutral-900 border border-neutral-800 rounded-3xl p-5 mb-8 flex-row items-center justify-between">
+        <View className="bg-white border border-[#E2E8F0] rounded-3xl p-5 mb-8 flex-row items-center justify-between shadow-sm shadow-[#0F172A]/5">
           <View className="flex-row items-center space-x-2">
-            <Settings size={18} color="#666" />
+            <Settings size={18} color="#64748B" />
             <View>
-              <Text className="text-xs font-bold text-white">LifeOS Core Sandbox</Text>
-              <Text className="text-[9px] text-neutral-500 mt-0.5">Locally encrypted data storage | Version 1.2.0</Text>
+              <Text className="text-xs font-bold text-[#0F172A]">LifeOS Core Sandbox</Text>
+              <Text className="text-[9px] text-[#64748B] mt-0.5 font-semibold">Locally encrypted data storage | Version 1.2.0</Text>
             </View>
           </View>
-          <View className="bg-neutral-950 border border-neutral-850 px-2.5 py-1 rounded-xl">
-            <Text className="text-[9px] font-bold text-neutral-400 uppercase">Sandbox MVP</Text>
+          <View className="bg-slate-50 border border-slate-200 px-2.5 py-1 rounded-xl">
+            <Text className="text-[9px] font-bold text-[#64748B] uppercase">Sandbox MVP</Text>
           </View>
         </View>
       </ScrollView>
 
       {/* Export data preview modal */}
       <Modal visible={showExportModal} transparent animationType="slide">
-        <View className="flex-1 justify-end bg-black/75">
-          <View className="bg-neutral-900 border-t border-neutral-800 rounded-t-3xl p-6 min-h-[300px]">
+        <View className="flex-1 justify-end bg-slate-900/30">
+          <View className="bg-white border-t border-t-[#E2E8F0] rounded-t-3xl p-6 min-h-[300px] shadow-2xl">
             <View className="flex-row justify-between items-center mb-4">
-              <Text className="text-base font-bold text-white">System Data Export</Text>
+              <Text className="text-base font-extrabold text-[#0F172A]">System Data Export</Text>
               <TouchableOpacity onPress={() => setShowExportModal(false)}>
-                <Text className="text-neutral-400 text-sm">Close</Text>
+                <Text className="text-[#64748B] text-sm font-bold">Close</Text>
               </TouchableOpacity>
             </View>
-            <ScrollView className="bg-neutral-950 p-4 rounded-2xl max-h-[220px] mb-4 border border-neutral-850">
-              <Text className="text-[10px] text-neutral-400 font-mono">{exportedDataStr}</Text>
+            <ScrollView className="bg-[#F8FAFC] p-4 rounded-2xl max-h-[220px] mb-4 border border-[#E2E8F0]">
+              <Text className="text-[10px] text-[#0F172A] font-mono">{exportedDataStr}</Text>
             </ScrollView>
             <TouchableOpacity
               onPress={copyToClipboard}
-              className="bg-indigo-600 py-3.5 rounded-2xl items-center justify-center"
+              className="bg-[#E05646] py-3.5 rounded-2xl items-center justify-center shadow-md shadow-[#E05646]/20"
             >
               <Text className="text-white text-xs font-bold">Copy JSON to Clipboard</Text>
             </TouchableOpacity>
