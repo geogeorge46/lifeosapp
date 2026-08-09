@@ -370,6 +370,24 @@ export default function DayScreen() {
                 />
               ))
             )}
+
+            {/* Quick Task Adder Input */}
+            <View className="flex-row items-center bg-white border border-[#E2E8F0] rounded-2xl p-2 mt-3 space-x-2 shadow-sm shadow-[#0F172A]/5">
+              <TextInput
+                placeholder="Write task (e.g. exercise every day)..."
+                placeholderTextColor="#94A3B8"
+                value={newTaskInput}
+                onChangeText={setNewTaskInput}
+                onSubmitEditing={handleAddTask}
+                className="flex-1 text-xs text-[#0F172A] bg-[#F8FAFC] rounded-xl px-3.5 py-2.5 border border-[#E2E8F0] text-left font-semibold"
+              />
+              <TouchableOpacity
+                onPress={handleAddTask}
+                className="bg-[#E05646] p-2.5 rounded-xl flex items-center justify-center shadow-sm shadow-[#E05646]/20"
+              >
+                <Plus size={14} color="#FFFFFF" strokeWidth={2.5} />
+              </TouchableOpacity>
+            </View>
           </View>
 
           {/* Habits Loop Section */}
@@ -441,14 +459,14 @@ export default function DayScreen() {
             )}
 
             {/* Quick Habit Adder Input */}
-            <View className="flex-row items-center bg-white border border-[#E2E8F0] rounded-2xl p-2 space-x-2 shadow-sm shadow-[#0F172A]/5">
+            <View className="flex-row items-center bg-white border border-[#E2E8F0] rounded-2xl p-2 mt-3 space-x-2 shadow-sm shadow-[#0F172A]/5">
               <TextInput
                 placeholder="Track new habit (e.g. Drink water)..."
                 placeholderTextColor="#94A3B8"
                 value={newHabitInput}
                 onChangeText={setNewHabitInput}
                 onSubmitEditing={handleAddHabit}
-                className="flex-1 text-[12px] text-[#0F172A] bg-[#F8FAFC] rounded-xl px-3 py-2 border border-[#E2E8F0] text-left font-bold"
+                className="flex-1 text-xs text-[#0F172A] bg-[#F8FAFC] rounded-xl px-3.5 py-2.5 border border-[#E2E8F0] text-left font-semibold"
               />
               <TouchableOpacity
                 onPress={handleAddHabit}
@@ -534,24 +552,6 @@ export default function DayScreen() {
             </View>
           )}
         </ScrollView>
-
-        {/* Task Creation Input Panel - Float-Like Bar */}
-        <View style={{ position: "absolute", bottom: 96, left: 20, right: 20, zIndex: 10 }} className="bg-white border border-[#E2E8F0] rounded-2xl p-2 flex-row items-center space-x-2 shadow-lg shadow-[#0F172A]/8">
-          <TextInput
-            placeholder="Write task (e.g. exercise every day at 10 AM)..."
-            placeholderTextColor="#94A3B8"
-            value={newTaskInput}
-            onChangeText={setNewTaskInput}
-            onSubmitEditing={handleAddTask}
-            className="flex-1 text-[#0F172A] text-xs bg-[#F8FAFC] rounded-xl px-3 py-2.5 border border-[#E2E8F0] text-left font-semibold"
-          />
-          <TouchableOpacity
-            onPress={handleAddTask}
-            className="bg-[#E05646] p-2.5 rounded-xl flex items-center justify-center shadow-md shadow-[#E05646]/20"
-          >
-            <Plus size={16} color="#FFFFFF" strokeWidth={2.5} />
-          </TouchableOpacity>
-        </View>
       </KeyboardAvoidingView>
 
       {/* Reschedule Date Picker Modal */}
