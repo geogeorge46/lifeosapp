@@ -14,7 +14,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({ occurrence, onToggle, onDele
   const { task } = occurrence;
 
   return (
-    <View className="bg-neutral-900 border border-neutral-800 rounded-xl p-4 flex-row items-center justify-between mb-3 shadow-sm">
+    <View className="bg-white border border-[#E2E8F0] rounded-2xl p-4 flex-row items-center justify-between mb-3 shadow-sm shadow-[#0F172A]/5">
       {/* Left section: Checkbox and Details */}
       <View className="flex-row items-center flex-1 pr-3">
         {/* Custom Premium Checkbox */}
@@ -22,25 +22,25 @@ export const TaskItem: React.FC<TaskItemProps> = ({ occurrence, onToggle, onDele
           onPress={() => onToggle(occurrence.id)}
           className={`w-6 h-6 rounded-full border flex items-center justify-center mr-3 ${
             isCompleted
-              ? "bg-indigo-600 border-indigo-500"
-              : "border-neutral-700 bg-neutral-950"
+              ? "bg-[#E05646] border-[#E05646]"
+              : "border-neutral-350 bg-[#F8FAFC]"
           }`}
         >
-          {isCompleted && <Check size={12} color="#fff" strokeWidth={3} />}
+          {isCompleted && <Check size={12} color="#FFFFFF" strokeWidth={3} />}
         </TouchableOpacity>
 
         {/* Task Details */}
         <View className="flex-1">
           <View style={{ flexDirection: "row", alignItems: "center", flexWrap: "wrap" }}>
             <Text
-              className={`text-sm font-medium ${
-                isCompleted ? "line-through text-neutral-500" : "text-white"
+              className={`text-sm font-bold ${
+                isCompleted ? "line-through text-neutral-400" : "text-[#0F172A]"
               }`}
             >
               {task.title}
             </Text>
             {occurrence.scheduledTime && (
-              <Text className="text-xs text-indigo-400 font-semibold ml-2">
+              <Text className="text-xs text-[#E05646] font-semibold ml-2">
                 ({occurrence.scheduledTime})
               </Text>
             )}
@@ -49,8 +49,8 @@ export const TaskItem: React.FC<TaskItemProps> = ({ occurrence, onToggle, onDele
           {/* Fuzzy Due Date / Recurrence Info Tag */}
           {(task.fuzzyDate || task.recurrenceRule) && (
             <View className="flex-row items-center space-x-1 mt-1">
-              <Calendar size={10} color="#818CF8" />
-              <Text className="text-[10px] font-semibold text-indigo-400">
+              <Calendar size={10} color="#64748B" />
+              <Text className="text-[10px] font-semibold text-[#64748B]">
                 {task.fuzzyDate || (task.recurrenceRule === "FREQ=DAILY" ? "Daily" : "Weekly")}
               </Text>
             </View>
@@ -58,9 +58,9 @@ export const TaskItem: React.FC<TaskItemProps> = ({ occurrence, onToggle, onDele
 
           {/* Postponement warning badge */}
           {occurrence.rescheduleCount !== undefined && occurrence.rescheduleCount > 0 && (
-            <View className="flex-row items-center space-x-1 mt-1 bg-amber-950/40 border border-amber-900/60 rounded px-1.5 py-0.5 self-start">
-              <AlertCircle size={8} color="#F59E0B" />
-              <Text className="text-[9px] font-semibold text-amber-500">
+            <View className="flex-row items-center space-x-1 mt-1 bg-amber-50 border border-amber-200 rounded px-1.5 py-0.5 self-start">
+              <AlertCircle size={8} color="#D97706" />
+              <Text className="text-[9px] font-semibold text-amber-700">
                 Postponed {occurrence.rescheduleCount} times
               </Text>
             </View>
@@ -71,7 +71,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({ occurrence, onToggle, onDele
             <Text
               numberOfLines={1}
               className={`text-[11px] mt-1 ${
-                isCompleted ? "text-neutral-600" : "text-neutral-400"
+                isCompleted ? "text-neutral-400" : "text-neutral-500"
               }`}
             >
               {task.description}
@@ -83,7 +83,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({ occurrence, onToggle, onDele
       {/* Right section: Delete Button */}
       <TouchableOpacity
         onPress={() => onDelete(occurrence.id)}
-        className="p-2 bg-red-950/40 border border-red-900/60 rounded-lg"
+        className="p-2 bg-red-50 border border-red-100 rounded-xl"
       >
         <Trash2 size={13} color="#EF4444" />
       </TouchableOpacity>
