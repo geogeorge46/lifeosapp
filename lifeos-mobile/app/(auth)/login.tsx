@@ -11,9 +11,14 @@ import {
   ScrollView,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Shield, Mail, Lock, User as UserIcon } from "lucide-react-native";
+import { Shield, Mail, Lock, User as UserIcon, Chrome } from "lucide-react-native";
+import * as WebBrowser from "expo-web-browser";
+import * as Linking from "expo-linking";
 import { supabase } from "../../src/services/supabase";
 import { useAuthStore } from "../../src/store/authStore";
+
+// Complete auth session handles for web browser redirect sheets
+WebBrowser.maybeCompleteAuthSession();
 
 export default function LoginScreen() {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -22,6 +27,72 @@ export default function LoginScreen() {
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
   const { setAuth } = useAuthStore();
+
+  const handleGoogleSignIn = async () => {
+    setLoading(true);
+    try {
+      // 1. Generate deep link redirect URL back to the login page
+      const redirectUrl = Linking.createURL("/(auth)/login");
+
+      // 2. Request Google OAuth authorization URL from Supabase
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: redirectUrl,
+          skipBrowserRedirect: true,
+        },
+      });
+
+      if (error) throw error;
+      if (!data?.url) {
+        throw new Error("Failed to receive Google OAuth authorization URL from server.");
+      }
+
+      // 3. Open the secure browser authentication session
+      const result = await WebBrowser.openAuthSessionAsync(data.url, redirectUrl);
+
+      // 4. Extract token details on success
+      if (result.type === "success" && result.url) {
+        // Try parsing from hash fragment (standard OAuth format)
+        let access_token: string | null = null;
+        let refresh_token: string | null = null;
+
+        const hashSplit = result.url.split("#");
+        if (hashSplit.length > 1) {
+          const params = Object.fromEntries(new URLSearchParams(hashSplit[1]));
+          access_token = params.access_token;
+          refresh_token = params.refresh_token;
+        }
+
+        // Fallback: Try parsing from query parameters
+        if (!access_token || !refresh_token) {
+          const querySplit = result.url.split("?");
+          if (querySplit.length > 1) {
+            const params = Object.fromEntries(new URLSearchParams(querySplit[1]));
+            access_token = params.access_token;
+            refresh_token = params.refresh_token;
+          }
+        }
+
+        if (access_token && refresh_token) {
+          const { data: sessionData, error: sessionError } = await supabase.auth.setSession({
+            access_token,
+            refresh_token,
+          });
+
+          if (sessionError) throw sessionError;
+
+          if (sessionData.session) {
+            await setAuth(sessionData.session.access_token, sessionData.session.user);
+          }
+        }
+      }
+    } catch (error: any) {
+      Alert.alert("Google Sign-In Failed", error.message || "Failed to complete Google authentication.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleAuth = async () => {
     if (!email.trim() || !password.trim()) {
@@ -161,6 +232,23 @@ export default function LoginScreen() {
                   {isSignUp ? "GET STARTED" : "LOG IN"}
                 </Text>
               )}
+            </TouchableOpacity>
+
+            <View className="flex-row items-center my-4">
+              <View className="flex-1 h-[1px] bg-[#E2E8F0]" />
+              <Text className="text-xs font-bold text-[#64748B] mx-3">OR</Text>
+              <View className="flex-1 h-[1px] bg-[#E2E8F0]" />
+            </View>
+
+            <TouchableOpacity
+              onPress={handleGoogleSignIn}
+              disabled={loading}
+              className="flex-row bg-[#FFFFFF] border border-[#E2E8F0] py-3.5 rounded-xl items-center justify-center shadow-sm shadow-[#0F172A]/5"
+            >
+              <Chrome size={18} color="#0F172A" style={{ marginRight: 8 }} />
+              <Text className="text-[#0F172A] text-sm font-extrabold">
+                CONTINUE WITH GOOGLE
+              </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
