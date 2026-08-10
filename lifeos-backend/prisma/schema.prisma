@@ -57,13 +57,12 @@ enum GeofenceTriggerType {
 }
 
 model User {
-  id                      String                   @id @default(uuid()) @db.Uuid
+  id                      String                   @id @db.Uuid
   email                   String                   @unique
-  passwordHash            String
-  name                    String
+  name                    String?
+  pushToken               String?
   createdAt               DateTime                 @default(now())
   updatedAt               DateTime                 @updatedAt
-  sessions                Session[]
   brainDumps              BrainDump[]
   brainDumpCollections    BrainDumpCollection[]
   ideas                   Idea[]
@@ -77,20 +76,14 @@ model User {
   notificationLogs        NotificationLog[]
   geofenceTriggers        GeofenceTrigger[]
   habits                  Habit[]
+  relationships           Relationship[]
+  occasions               Occasion[]
+  taskOccurrences         TaskOccurrence[]
+  taskHistories           TaskHistory[]
+  habitCompletions        HabitCompletion[]
+  triggers                Trigger[]
 
   @@map("users")
-}
-
-model Session {
-  id         String   @id @default(uuid()) @db.Uuid
-  userId     String   @db.Uuid
-  token      String   @unique
-  deviceInfo String?
-  expiresAt  DateTime
-  createdAt  DateTime @default(now())
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("sessions")
 }
 
 model BrainDumpCollection {
@@ -340,11 +333,13 @@ model GeofenceTrigger {
 
 model TaskOccurrence {
   id            String          @id @default(uuid()) @db.Uuid
+  userId        String?         @db.Uuid
   taskId        String          @db.Uuid
   status        TaskStatus      @default(CAPTURED)
   scheduledDate DateTime        @db.Date
   scheduledTime String?         // e.g. "10:00 AM" or null for "Anytime"
   completedAt   DateTime?
+  user          User?           @relation(fields: [userId], references: [id], onDelete: Cascade)
   task          Task            @relation(fields: [taskId], references: [id], onDelete: Cascade)
   triggers      Trigger[]
 
@@ -354,11 +349,13 @@ model TaskOccurrence {
 
 model TaskHistory {
   id            String   @id @default(uuid()) @db.Uuid
+  userId        String?  @db.Uuid
   taskId        String   @db.Uuid
   fromDate      DateTime @db.Date
   toDate        DateTime @db.Date
   rescheduledAt DateTime @default(now())
   reason        String?
+  user          User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
   task          Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
 
   @@map("task_histories")
@@ -396,6 +393,7 @@ enum TriggerType {
 
 model Trigger {
   id               String          @id @default(uuid()) @db.Uuid
+  userId           String?         @db.Uuid
   type             TriggerType
   scheduledTime    DateTime?
   placeId          String?         @db.Uuid
@@ -405,6 +403,7 @@ model Trigger {
   transactionId    String?         @db.Uuid
   occasionId       String?         @db.Uuid
   fired            Boolean         @default(false)
+  user             User?           @relation(fields: [userId], references: [id], onDelete: Cascade)
   taskOccurrence   TaskOccurrence? @relation(fields: [taskOccurrenceId], references: [id], onDelete: Cascade)
   event            Event?          @relation(fields: [eventId], references: [id], onDelete: Cascade)
   person           Person?         @relation(fields: [personId], references: [id], onDelete: Cascade)
@@ -431,9 +430,11 @@ model Habit {
 
 model HabitCompletion {
   id          String   @id @default(uuid()) @db.Uuid
+  userId      String?  @db.Uuid
   habitId     String   @db.Uuid
   date        DateTime @db.Date
   completedAt DateTime @default(now())
+  user        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
   habit       Habit    @relation(fields: [habitId], references: [id], onDelete: Cascade)
 
   @@unique([habitId, date])
@@ -442,11 +443,13 @@ model HabitCompletion {
 
 model Relationship {
   id        String   @id @default(uuid()) @db.Uuid
+  userId    String?  @db.Uuid
   personAId String   @db.Uuid
   personBId String   @db.Uuid
   type      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
   personA   Person   @relation("PersonARelations", fields: [personAId], references: [id], onDelete: Cascade)
   personB   Person   @relation("PersonBRelations", fields: [personBId], references: [id], onDelete: Cascade)
 
@@ -456,12 +459,14 @@ model Relationship {
 
 model Occasion {
   id        String    @id @default(uuid()) @db.Uuid
+  userId    String?   @db.Uuid
   personId  String    @db.Uuid
   title     String
   date      DateTime  @db.Date
   type      String    // "ANNIVERSARY", "EXAM", "INTERVIEW", "CUSTOM"
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+  user      User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
   person    Person    @relation(fields: [personId], references: [id], onDelete: Cascade)
   triggers  Trigger[]
 

@@ -6,7 +6,7 @@ export class IdeasController {
 
   create = async (req: Request, res: Response): Promise<void> => {
     try {
-      const userId = (req.headers["x-user-id"] as string) || "00000000-0000-0000-0000-000000000000";
+      const userId = (req as any).user.id;
       const { title, description, notes, category, brainDumpId, personId, placeId } = req.body;
 
       if (!title) {
@@ -45,7 +45,7 @@ export class IdeasController {
 
   getAll = async (req: Request, res: Response): Promise<void> => {
     try {
-      const userId = (req.headers["x-user-id"] as string) || "00000000-0000-0000-0000-000000000000";
+      const userId = (req as any).user.id;
       const result = await this.ideasService.getIdeas(userId);
       res.status(200).json({ success: true, data: result });
     } catch (error: any) {

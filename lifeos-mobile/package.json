@@ -10,6 +10,7 @@
     "ts:check": "tsc"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.109.0",
     "@tanstack/react-query": "^5.28.9",
     "expo": "~54.0.36",
     "expo-av": "~16.0.8",

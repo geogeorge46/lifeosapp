@@ -9,7 +9,7 @@ export class TasksController {
 
   create = async (req: Request, res: Response): Promise<void> => {
     try {
-      const userId = (req.headers["x-user-id"] as string) || "00000000-0000-0000-0000-000000000000";
+      const userId = (req as any).user.id;
       const { rawInput, inboxItemId, brainDumpId, notes } = req.body;
       const targetDumpId = brainDumpId || inboxItemId;
 
@@ -46,7 +46,7 @@ export class TasksController {
 
   getToday = async (req: Request, res: Response): Promise<void> => {
     try {
-      const userId = (req.headers["x-user-id"] as string) || "00000000-0000-0000-0000-000000000000";
+      const userId = (req as any).user.id;
       const dateStr = (req.query.date as string) || new Date().toISOString().split("T")[0];
       
       const result = await this.tasksService.getTodayTasks(userId, dateStr);
@@ -64,7 +64,7 @@ export class TasksController {
 
   getCalendar = async (req: Request, res: Response): Promise<void> => {
     try {
-      const userId = (req.headers["x-user-id"] as string) || "00000000-0000-0000-0000-000000000000";
+      const userId = (req as any).user.id;
       const startStr = req.query.start as string;
       const endStr = req.query.end as string;
 
@@ -200,7 +200,7 @@ export class TasksController {
 
   getWeeklyReport = async (req: Request, res: Response): Promise<void> => {
     try {
-      const userId = (req.headers["x-user-id"] as string) || "00000000-0000-0000-0000-000000000000";
+      const userId = (req as any).user.id;
       
       const validation = WeeklyReportQueryDto.safeParse(req.query);
       if (!validation.success) {

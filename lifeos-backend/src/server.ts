@@ -7,7 +7,6 @@ dotenv.config({ path: path.resolve(process.cwd(), ".env") });
 import app from "./app";
 import { QueueManager } from "./jobs/queue.manager";
 import { prisma } from "./infrastructure/database/prisma.client";
-import bcrypt from "bcryptjs";
 
 const PORT = process.env.PORT || 3000;
 
@@ -27,7 +26,6 @@ const server = app.listen(PORT, () => {
       create: {
         id: defaultUserId,
         email: "developer@lifeos.local",
-        passwordHash: bcrypt.hashSync("developer", 10),
         name: "Default Developer",
       },
     })

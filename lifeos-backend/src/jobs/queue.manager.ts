@@ -56,18 +56,13 @@ export class QueueManager {
         const { userId, title, body } = job.data;
         console.log(`[BullMQ Worker] Pulling notification task for user ${userId}`);
 
-        const session = await prisma.session.findFirst({
-          where: {
-            userId,
-            expiresAt: { gt: new Date() },
-            deviceInfo: { startsWith: "push:" },
-          },
-          orderBy: { createdAt: "desc" },
+        const user = await prisma.user.findUnique({
+          where: { id: userId },
+          select: { pushToken: true }
         });
 
-        if (session && session.deviceInfo) {
-          const pushToken = session.deviceInfo.replace("push:", "");
-          await this.expoPushService.sendPushNotification(pushToken, title, body);
+        if (user && user.pushToken) {
+          await this.expoPushService.sendPushNotification(user.pushToken, title, body);
         }
 
         // Keep database logs updated
@@ -91,19 +86,14 @@ export class QueueManager {
         for (const log of pending) {
           console.log(`[Fallback Worker] Processing queued notification alert: ${log.title}`);
 
-          const session = await prisma.session.findFirst({
-            where: {
-              userId: log.userId,
-              expiresAt: { gt: new Date() },
-              deviceInfo: { startsWith: "push:" },
-            },
-            orderBy: { createdAt: "desc" },
+          const user = await prisma.user.findUnique({
+            where: { id: log.userId },
+            select: { pushToken: true }
           });
 
-          if (session && session.deviceInfo) {
-            const pushToken = session.deviceInfo.replace("push:", "");
+          if (user && user.pushToken) {
             await this.expoPushService.sendPushNotification(
-              pushToken,
+              user.pushToken,
               log.title,
               log.body
             );

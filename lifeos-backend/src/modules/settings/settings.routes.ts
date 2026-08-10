@@ -5,7 +5,7 @@ const router = Router();
 
 router.get("/export", async (req: Request, res: Response): Promise<void> => {
   try {
-    const userId = (req.headers["x-user-id"] as string) || "00000000-0000-0000-0000-000000000000";
+    const userId = (req as any).user.id;
 
     const [
       tasks,
@@ -31,9 +31,7 @@ router.get("/export", async (req: Request, res: Response): Promise<void> => {
         include: { tags: { include: { tag: true } } },
       }),
       prisma.relationship.findMany({
-        where: {
-          personA: { userId },
-        },
+        where: { userId },
       }),
       prisma.place.findMany({
         where: { userId },

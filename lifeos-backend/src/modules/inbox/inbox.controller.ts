@@ -7,7 +7,7 @@ export class InboxController {
 
   capture = async (req: Request, res: Response): Promise<void> => {
     try {
-      const userId = (req.headers["x-user-id"] as string) || "00000000-0000-0000-0000-000000000000";
+      const userId = (req as any).user.id;
       const { type, collectionId } = req.body;
 
       // 1. Process as voice recording upload
@@ -79,7 +79,7 @@ export class InboxController {
 
   getInbox = async (req: Request, res: Response): Promise<void> => {
     try {
-      const userId = (req.headers["x-user-id"] as string) || "00000000-0000-0000-0000-000000000000";
+      const userId = (req as any).user.id;
       const { collectionId, type } = req.query;
 
       const items = await this.inboxService.getUserInbox(
@@ -217,7 +217,7 @@ export class InboxController {
   // --- Collections controllers ---
   createCollection = async (req: Request, res: Response): Promise<void> => {
     try {
-      const userId = (req.headers["x-user-id"] as string) || "00000000-0000-0000-0000-000000000000";
+      const userId = (req as any).user.id;
       const { name } = req.body;
       if (!name) {
         res.status(400).json({
@@ -238,7 +238,7 @@ export class InboxController {
 
   getCollections = async (req: Request, res: Response): Promise<void> => {
     try {
-      const userId = (req.headers["x-user-id"] as string) || "00000000-0000-0000-0000-000000000000";
+      const userId = (req as any).user.id;
       const result = await this.inboxService.getCollections(userId);
       res.status(200).json({ success: true, data: result });
     } catch (error: any) {

@@ -13,6 +13,8 @@ import ideasRouter from "./modules/ideas/ideas.routes";
 import habitsRouter from "./modules/habits/habits.routes";
 import settingsRouter from "./modules/settings/settings.routes";
 
+import { requireAuth } from "./core/middlewares/auth.middleware";
+
 const app = express();
 
 // Set security middleware
@@ -34,6 +36,9 @@ app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 app.get("/health", (_req: Request, res: Response) => {
   res.status(200).json({ success: true, message: "LifeOS Server is active and operational." });
 });
+
+// Protect all API routes
+app.use("/api", requireAuth);
 
 // Bind Feature Modules
 app.use("/api/inbox", inboxRouter);

@@ -6,7 +6,7 @@ export class PeopleController {
 
   create = async (req: Request, res: Response): Promise<void> => {
     try {
-      const userId = (req.headers["x-user-id"] as string) || "00000000-0000-0000-0000-000000000000";
+      const userId = (req as any).user.id;
       const { name, phone, relationship, birthday, tags } = req.body;
 
       if (!name) {
@@ -35,7 +35,7 @@ export class PeopleController {
 
   getAll = async (req: Request, res: Response): Promise<void> => {
     try {
-      const userId = (req.headers["x-user-id"] as string) || "00000000-0000-0000-0000-000000000000";
+      const userId = (req as any).user.id;
       const result = await this.peopleService.getPeople(userId);
       res.status(200).json({ success: true, data: result });
     } catch (error: any) {

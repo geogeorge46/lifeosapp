@@ -6,7 +6,7 @@ export class RelationshipsController {
 
   create = async (req: Request, res: Response): Promise<void> => {
     try {
-      const userId = (req.headers["x-user-id"] as string) || "00000000-0000-0000-0000-000000000000";
+      const userId = (req as any).user.id;
       const { personAId, personBId, type } = req.body;
 
       if (!personAId || !personBId || !type) {
@@ -35,7 +35,7 @@ export class RelationshipsController {
 
   getAll = async (req: Request, res: Response): Promise<void> => {
     try {
-      const userId = (req.headers["x-user-id"] as string) || "00000000-0000-0000-0000-000000000000";
+      const userId = (req as any).user.id;
       const result = await this.service.getRelationships(userId);
       res.status(200).json({ success: true, data: result });
     } catch (error: any) {
@@ -51,7 +51,7 @@ export class RelationshipsController {
 
   delete = async (req: Request, res: Response): Promise<void> => {
     try {
-      const userId = (req.headers["x-user-id"] as string) || "00000000-0000-0000-0000-000000000000";
+      const userId = (req as any).user.id;
       const { id } = req.params;
       await this.service.removeRelationship(userId, id);
       res.status(200).json({ success: true, data: null });
@@ -68,7 +68,7 @@ export class RelationshipsController {
 
   getConnections = async (req: Request, res: Response): Promise<void> => {
     try {
-      const userId = (req.headers["x-user-id"] as string) || "00000000-0000-0000-0000-000000000000";
+      const userId = (req as any).user.id;
       const { id } = req.params; // start contact id
       const result = await this.service.getConnectionsGraph(userId, id);
       res.status(200).json({ success: true, data: result });

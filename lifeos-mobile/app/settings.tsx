@@ -23,6 +23,7 @@ import {
   RotateCcw,
   Share2,
   Trash2,
+  LogOut,
 } from "lucide-react-native";
 import { useRouter } from "expo-router";
 import * as Location from "expo-location";
@@ -31,6 +32,8 @@ import { usePeopleStore } from "../src/store/peopleStore";
 import { usePlacesStore } from "../src/store/placesStore";
 import { useLedgerStore } from "../src/store/ledgerStore";
 import { useTasksStore } from "../src/store/tasksStore";
+import { useAuthStore } from "../src/store/authStore";
+import { supabase } from "../src/services/supabase";
 import { apiService } from "../src/services/api";
 
 export default function SettingsScreen() {
@@ -53,6 +56,25 @@ export default function SettingsScreen() {
   const { places, fetchPlaces } = usePlacesStore();
   const { fetchTransactions } = useLedgerStore();
   const { fetchTodayTasks } = useTasksStore();
+  const { logout, user } = useAuthStore();
+
+  const handleLogout = async () => {
+    Alert.alert("Log Out", "Are you sure you want to log out of your session?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Log Out",
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await supabase.auth.signOut();
+            await logout();
+          } catch (e: any) {
+            Alert.alert("Error", e.message || "Failed to sign out.");
+          }
+        },
+      },
+    ]);
+  };
 
   const [bgPermStatus, setBgPermStatus] = useState("checking...");
   const [showExportModal, setShowExportModal] = useState(false);
@@ -335,13 +357,25 @@ export default function SettingsScreen() {
           {/* Reset System configuration preferences */}
           <TouchableOpacity
             onPress={handleResetApp}
-            className="flex-row justify-between items-center py-3"
+            className="flex-row justify-between items-center py-3 border-b border-[#E2E8F0]"
           >
             <View>
               <Text className="text-xs font-bold text-rose-600">Reset Local Configurations</Text>
               <Text className="text-[10px] text-[#64748B] mt-0.5 font-medium">Wipe custom intervals and symbols</Text>
             </View>
             <RotateCcw size={16} color="#EF4444" />
+          </TouchableOpacity>
+
+          {/* Logout session */}
+          <TouchableOpacity
+            onPress={handleLogout}
+            className="flex-row justify-between items-center py-3"
+          >
+            <View>
+              <Text className="text-xs font-bold text-rose-600">Log Out Session</Text>
+              <Text className="text-[10px] text-[#64748B] mt-0.5 font-medium">Logged in as {user?.email || "User"}</Text>
+            </View>
+            <LogOut size={16} color="#EF4444" />
           </TouchableOpacity>
         </View>
 

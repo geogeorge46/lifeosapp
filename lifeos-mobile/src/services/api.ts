@@ -1,5 +1,36 @@
 const BASE_URL = "http://10.237.142.165:3000/api";
 
+import { useAuthStore } from "../store/authStore";
+
+const originalFetch = global.fetch || (typeof window !== "undefined" ? window.fetch : null);
+if (originalFetch) {
+  const authInterceptedFetch = async (input: any, init?: any): Promise<Response> => {
+    const token = useAuthStore.getState().token;
+    if (token) {
+      init = init || {};
+      init.headers = init.headers || {};
+      if (init.headers instanceof Headers) {
+        init.headers.set("Authorization", `Bearer ${token}`);
+      } else if (Array.isArray(init.headers)) {
+        const idx = init.headers.findIndex((h: any) => h[0].toLowerCase() === "authorization");
+        if (idx > -1) {
+          init.headers[idx][1] = `Bearer ${token}`;
+        } else {
+          init.headers.push(["Authorization", `Bearer ${token}`]);
+        }
+      } else {
+        init.headers["Authorization"] = `Bearer ${token}`;
+      }
+    }
+    return originalFetch(input, init);
+  };
+
+  global.fetch = authInterceptedFetch as any;
+  if (typeof window !== "undefined") {
+    window.fetch = authInterceptedFetch as any;
+  }
+}
+
 export interface BrainDumpCollection {
   id: string;
   userId: string;

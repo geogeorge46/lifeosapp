@@ -6,7 +6,7 @@ export class OccasionsController {
 
   create = async (req: Request, res: Response): Promise<void> => {
     try {
-      const userId = (req.headers["x-user-id"] as string) || "00000000-0000-0000-0000-000000000000";
+      const userId = (req as any).user.id;
       const { personId, title, date, type, offsets } = req.body;
 
       if (!personId || !title || !date || !type) {
@@ -42,7 +42,7 @@ export class OccasionsController {
 
   getForPerson = async (req: Request, res: Response): Promise<void> => {
     try {
-      const userId = (req.headers["x-user-id"] as string) || "00000000-0000-0000-0000-000000000000";
+      const userId = (req as any).user.id;
       const { personId } = req.params;
 
       const result = await this.service.getForContact(userId, personId);
@@ -60,7 +60,7 @@ export class OccasionsController {
 
   delete = async (req: Request, res: Response): Promise<void> => {
     try {
-      const userId = (req.headers["x-user-id"] as string) || "00000000-0000-0000-0000-000000000000";
+      const userId = (req as any).user.id;
       const { id } = req.params;
 
       await this.service.delete(userId, id);

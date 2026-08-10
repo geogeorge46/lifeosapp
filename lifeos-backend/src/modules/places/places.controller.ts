@@ -6,7 +6,7 @@ export class PlacesController {
 
   create = async (req: Request, res: Response): Promise<void> => {
     try {
-      const userId = (req.headers["x-user-id"] as string) || "00000000-0000-0000-0000-000000000000";
+      const userId = (req as any).user.id;
       const { name, address, latitude, longitude, radius } = req.body;
 
       if (!name || latitude === undefined || longitude === undefined) {
@@ -42,7 +42,7 @@ export class PlacesController {
 
   getAll = async (req: Request, res: Response): Promise<void> => {
     try {
-      const userId = (req.headers["x-user-id"] as string) || "00000000-0000-0000-0000-000000000000";
+      const userId = (req as any).user.id;
       const result = await this.placesService.getPlaces(userId);
       res.status(200).json({ success: true, data: result });
     } catch (error: any) {
@@ -74,7 +74,7 @@ export class PlacesController {
 
   bindTask = async (req: Request, res: Response): Promise<void> => {
     try {
-      const userId = (req.headers["x-user-id"] as string) || "00000000-0000-0000-0000-000000000000";
+      const userId = (req as any).user.id;
       const { placeId, taskId, triggerType } = req.body;
 
       if (!placeId || !taskId) {

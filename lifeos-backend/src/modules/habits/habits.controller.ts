@@ -6,7 +6,7 @@ export class HabitsController {
 
   getAll = async (req: Request, res: Response) => {
     try {
-      const userId = (req.headers["x-user-id"] as string) || "00000000-0000-0000-0000-000000000000";
+      const userId = (req as any).user.id;
       const result = await this.habitsService.getHabits(userId);
       res.status(200).json({ success: true, data: result });
     } catch (error: any) {
@@ -22,7 +22,7 @@ export class HabitsController {
 
   create = async (req: Request, res: Response) => {
     try {
-      const userId = (req.headers["x-user-id"] as string) || "00000000-0000-0000-0000-000000000000";
+      const userId = (req as any).user.id;
       const { title } = req.body;
       if (!title) {
         res.status(400).json({

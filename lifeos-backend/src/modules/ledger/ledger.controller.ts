@@ -6,7 +6,7 @@ export class LedgerController {
 
   create = async (req: Request, res: Response): Promise<void> => {
     try {
-      const userId = (req.headers["x-user-id"] as string) || "00000000-0000-0000-0000-000000000000";
+      const userId = (req as any).user.id;
       const { amount, type, description, personId, placeId, category, dueDate } = req.body;
 
       if (amount === undefined || !type || !description) {
@@ -63,7 +63,7 @@ export class LedgerController {
 
   getAll = async (req: Request, res: Response): Promise<void> => {
     try {
-      const userId = (req.headers["x-user-id"] as string) || "00000000-0000-0000-0000-000000000000";
+      const userId = (req as any).user.id;
       const result = await this.ledgerService.getTransactions(userId);
       res.status(200).json({ success: true, data: result });
     } catch (error: any) {
@@ -99,7 +99,7 @@ export class LedgerController {
 
   split = async (req: Request, res: Response): Promise<void> => {
     try {
-      const userId = (req.headers["x-user-id"] as string) || "00000000-0000-0000-0000-000000000000";
+      const userId = (req as any).user.id;
       const { totalAmount, description, placeId, splits } = req.body;
 
       if (totalAmount === undefined || !description || !splits || !Array.isArray(splits)) {
@@ -137,7 +137,7 @@ export class LedgerController {
 
   getPersonBalance = async (req: Request, res: Response): Promise<void> => {
     try {
-      const userId = (req.headers["x-user-id"] as string) || "00000000-0000-0000-0000-000000000000";
+      const userId = (req as any).user.id;
       const { personId } = req.params;
       const result = await this.ledgerService.getPersonBalanceAndLogs(userId, personId);
       res.status(200).json({ success: true, data: result });
@@ -154,7 +154,7 @@ export class LedgerController {
 
   getSummary = async (req: Request, res: Response): Promise<void> => {
     try {
-      const userId = (req.headers["x-user-id"] as string) || "00000000-0000-0000-0000-000000000000";
+      const userId = (req as any).user.id;
       const result = await this.ledgerService.getLedgerSummary(userId);
       res.status(200).json({ success: true, data: result });
     } catch (error: any) {
