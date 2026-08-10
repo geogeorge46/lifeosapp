@@ -31,8 +31,8 @@ export default function LoginScreen() {
   const handleGoogleSignIn = async () => {
     setLoading(true);
     try {
-      // 1. Generate deep link redirect URL back to the login page
-      const redirectUrl = Linking.createURL("/(auth)/login");
+      // 1. Generate deep link redirect URL back to the root of the app
+      const redirectUrl = Linking.createURL("/");
 
       // 2. Request Google OAuth authorization URL from Supabase
       const { data, error } = await supabase.auth.signInWithOAuth({
