@@ -33,6 +33,8 @@ export default function LoginScreen() {
     try {
       // 1. Generate deep link redirect URL back to the root of the app
       const redirectUrl = Linking.createURL("/");
+      console.log("Supabase Redirect URL Requested:", redirectUrl);
+      Alert.alert("Debug Redirect URL", `Your app is requesting: ${redirectUrl}\n\nPlease verify if this is in your Supabase Allowed Redirects list!`);
 
       // 2. Request Google OAuth authorization URL from Supabase
       const { data, error } = await supabase.auth.signInWithOAuth({
