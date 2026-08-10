@@ -20,7 +20,18 @@ export function requireAuth(req: Request, res: Response, next: NextFunction): vo
   const token = authHeader.split(" ")[1];
   try {
     const secret = process.env.JWT_SECRET || "placeholder-jwt-access-token-secret-change-in-production";
-    const decoded = jwt.verify(token, secret) as any;
+    
+    // Supabase JWT secrets are base64-encoded. We decode to Buffer to match the HS256 signature.
+    let verificationKey: string | Buffer = secret;
+    if (secret !== "placeholder-jwt-access-token-secret-change-in-production") {
+      try {
+        verificationKey = Buffer.from(secret, "base64");
+      } catch (e) {
+        verificationKey = secret;
+      }
+    }
+
+    const decoded = jwt.verify(token, verificationKey) as any;
     
     const userPayload = {
       id: decoded.sub,
