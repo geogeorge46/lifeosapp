@@ -37,13 +37,14 @@ export const prisma = basePrisma.$extends({
           ];
 
           if (rlsModels.includes(model)) {
-            // Apply isolation scope constraints
-            anyArgs.where = anyArgs.where || {};
-            
-            if (model === "User") {
-              anyArgs.where.id = store.userId;
-            } else {
-              anyArgs.where.userId = store.userId;
+            // Apply isolation scope constraints to query operations
+            if (operation !== "create" && operation !== "createMany") {
+              anyArgs.where = anyArgs.where || {};
+              if (model === "User") {
+                anyArgs.where.id = store.userId;
+              } else {
+                anyArgs.where.userId = store.userId;
+              }
             }
 
             // Apply ownership injection on inserts
