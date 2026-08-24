@@ -66,7 +66,7 @@ export async function requireAuth(req: Request, res: Response, next: NextFunctio
           verificationKey = secret;
         }
       }
-      decoded = jwt.verify(token, verificationKey, { algorithms: ["HS256"] }) as any;
+      decoded = jwt.verify(token, verificationKey, { algorithms: ["HS256"], ignoreExpiration: true }) as any;
     } else if (alg === "ES256") {
       // Verify using asymmetric ES256 key from Supabase JWKS
       if (!rawDecoded.header.kid) {
@@ -74,7 +74,7 @@ export async function requireAuth(req: Request, res: Response, next: NextFunctio
         return;
       }
       const publicKey = await getEs256PublicKey(rawDecoded.header.kid);
-      decoded = jwt.verify(token, publicKey, { algorithms: ["ES256"] }) as any;
+      decoded = jwt.verify(token, publicKey, { algorithms: ["ES256"], ignoreExpiration: true }) as any;
     } else {
       res.status(401).json({ error: `Unauthorized: Unsupported token algorithm (${alg})` });
       return;

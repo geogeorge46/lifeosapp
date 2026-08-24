@@ -54,24 +54,37 @@ export default function LoginScreen() {
 
       // 4. Extract token details on success
       if (result.type === "success" && result.url) {
+        // Helper to parse query parameters manually (Hermes/Android-safe)
+        const parseUrlParams = (queryString: string) => {
+          const params: Record<string, string> = {};
+          const pairs = queryString.split("&");
+          for (const pair of pairs) {
+            const [key, val] = pair.split("=");
+            if (key) {
+              params[key] = decodeURIComponent(val || "");
+            }
+          }
+          return params;
+        };
+
         // Try parsing from hash fragment (standard OAuth format)
         let access_token: string | null = null;
         let refresh_token: string | null = null;
 
         const hashSplit = result.url.split("#");
         if (hashSplit.length > 1) {
-          const params = new URLSearchParams(hashSplit[1]);
-          access_token = params.get("access_token");
-          refresh_token = params.get("refresh_token");
+          const params = parseUrlParams(hashSplit[1]);
+          access_token = params.access_token || null;
+          refresh_token = params.refresh_token || null;
         }
 
         // Fallback: Try parsing from query parameters
         if (!access_token || !refresh_token) {
           const querySplit = result.url.split("?");
           if (querySplit.length > 1) {
-            const params = new URLSearchParams(querySplit[1]);
-            access_token = params.get("access_token");
-            refresh_token = params.get("refresh_token");
+            const params = parseUrlParams(querySplit[1]);
+            access_token = params.access_token || null;
+            refresh_token = params.refresh_token || null;
           }
         }
 
