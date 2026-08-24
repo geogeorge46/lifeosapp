@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { MapPin, Navigation, Compass, AlertCircle, Plus, Trash2, Link } from "lucide-react-native";
+import { MapPin, Navigation, Compass, AlertCircle, Plus, Trash2, Link, Search, X } from "lucide-react-native";
 import { usePlacesStore } from "../../src/store/placesStore";
 import { useTasksStore } from "../../src/store/tasksStore";
 import { Task, TaskOccurrence } from "../../src/services/api";
@@ -29,6 +29,44 @@ export default function PlacesScreen() {
   const [radius, setRadius] = useState(150); // Default 150m
   const [lat, setLat] = useState("37.7749"); // Defaults to San Francisco
   const [lng, setLng] = useState("-122.4194");
+
+  // Geocoding search states
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+
+  const handleSearchLocation = async () => {
+    if (!searchQuery.trim()) return;
+    setIsSearching(true);
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
+          searchQuery.trim()
+        )}&format=json&limit=5`,
+        {
+          headers: {
+            "User-Agent": "LifeOS-App-Dev",
+          },
+        }
+      );
+      if (!response.ok) throw new Error("Search request failed");
+      const data = await response.json();
+      setSearchResults(data);
+    } catch (err) {
+      Alert.alert("Search Error", "Unable to find location. Please check your internet connection.");
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  const handleSelectSearchResult = (item: any) => {
+    const shortName = item.display_name.split(",")[0] || "Custom Place";
+    setName(shortName);
+    setLat(item.lat);
+    setLng(item.lon);
+    setSearchResults([]);
+    setSearchQuery("");
+  };
 
   // Bind Task form fields
   const [selectedPlaceId, setSelectedPlaceId] = useState<string | null>(null);
@@ -157,6 +195,62 @@ export default function PlacesScreen() {
         {/* 1. Add Location Panel */}
         <View className="bg-white border border-[#E2E8F0] rounded-3xl p-5 mb-6 mx-4 shadow-sm shadow-[#0F172A]/5">
           <Text className="text-base font-extrabold text-[#0F172A] mb-3">Add Location Pin</Text>
+
+          {/* Search Location Bar */}
+          <View className="flex-row space-x-2 mb-3">
+            <View className="flex-1 relative justify-center">
+              <TextInput
+                placeholder="Search location/address..."
+                placeholderTextColor="#94A3B8"
+                value={searchQuery}
+                onChangeText={setSearchQuery}
+                onSubmitEditing={handleSearchLocation}
+                className="text-[#0F172A] text-sm bg-[#F8FAFC] rounded-xl pl-4 pr-10 py-3 border border-[#E2E8F0] text-left font-semibold"
+              />
+              {searchQuery.length > 0 && (
+                <TouchableOpacity
+                  onPress={() => {
+                    setSearchQuery("");
+                    setSearchResults([]);
+                  }}
+                  className="absolute right-3 p-1"
+                >
+                  <X size={14} color="#94A3B8" />
+                </TouchableOpacity>
+              )}
+            </View>
+            <TouchableOpacity
+              onPress={handleSearchLocation}
+              disabled={isSearching}
+              className="bg-[#202E4E] px-4 rounded-xl flex items-center justify-center"
+            >
+              {isSearching ? (
+                <ActivityIndicator size="small" color="#FFFFFF" />
+              ) : (
+                <Search size={16} color="#FFFFFF" />
+              )}
+            </TouchableOpacity>
+          </View>
+
+          {/* Search Results Dropdown List */}
+          {searchResults.length > 0 && (
+            <View className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-2xl p-2 mb-3 max-h-48">
+              <ScrollView nestedScrollEnabled={true}>
+                {searchResults.map((item, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => handleSelectSearchResult(item)}
+                    className="p-3 border-b border-[#F1F5F9] last:border-b-0 flex-row items-center space-x-2"
+                  >
+                    <MapPin size={12} color="#64748B" />
+                    <Text className="text-xs text-[#334155] flex-1 font-semibold" numberOfLines={2}>
+                      {item.display_name}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
+          )}
 
           {/* Location Name */}
           <TextInput
