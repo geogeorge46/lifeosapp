@@ -19,13 +19,21 @@ export const useAuthStore = create<AuthState>((set) => ({
       if (token) {
         await SecureStore.setItemAsync("supabase_token", token);
         if (user) {
-          await SecureStore.setItemAsync("supabase_user", JSON.stringify(user));
+          const simplifiedUser = {
+            id: user.id,
+            email: user.email,
+            name: user.user_metadata?.name || user.email,
+          };
+          await SecureStore.setItemAsync("supabase_user", JSON.stringify(simplifiedUser));
+          set({ token, user: simplifiedUser });
+        } else {
+          set({ token, user: null });
         }
       } else {
         await SecureStore.deleteItemAsync("supabase_token");
         await SecureStore.deleteItemAsync("supabase_user");
+        set({ token: null, user: null });
       }
-      set({ token, user });
     } catch (e) {
       console.error("Failed to persist authentication state:", e);
     }
