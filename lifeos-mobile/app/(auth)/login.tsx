@@ -31,81 +31,89 @@ export default function LoginScreen() {
   const handleGoogleSignIn = async () => {
     setLoading(true);
     try {
-      // 1. Generate deep link redirect URL back to the root of the app
       const redirectUrl = Linking.createURL("/");
       console.log("🔗 OAuth redirect URL:", redirectUrl);
 
-      // 2. Request Google OAuth authorization URL from Supabase (PKCE flow)
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "google",
-        options: {
-          redirectTo: redirectUrl,
-          skipBrowserRedirect: true,
-        },
+        options: { redirectTo: redirectUrl, skipBrowserRedirect: true },
+      });
+      if (error) throw error;
+      if (!data?.url) throw new Error("Failed to receive OAuth URL from Supabase.");
+
+      // Safe URL param parser (no URLSearchParams / WebCrypto needed)
+      const extractCode = (url: string): string | null => {
+        const qIdx = url.indexOf("?");
+        if (qIdx === -1) return null;
+        const qs = url.substring(qIdx + 1).split("#")[0];
+        for (const pair of qs.split("&")) {
+          const eqIdx = pair.indexOf("=");
+          if (eqIdx > -1 && pair.substring(0, eqIdx) === "code") {
+            return decodeURIComponent(pair.substring(eqIdx + 1));
+          }
+        }
+        return null;
+      };
+
+      const processCode = async (code: string) => {
+        console.log("🔑 Exchanging PKCE code for session...");
+        const { data: sessionData, error: sessionError } = await supabase.auth.exchangeCodeForSession(code);
+        if (sessionError) throw sessionError;
+        if (sessionData.session) {
+          console.log("✅ Session established for:", sessionData.session.user?.email);
+          await setAuth(sessionData.session.access_token, sessionData.session.user);
+        }
+      };
+
+      // PATH A: Listen for deep link via Linking (catches cases where Chrome Custom Tab
+      // can't auto-redirect but Android still fires the deep link to Expo Go)
+      let linkResolved = false;
+      const linkSub = Linking.addEventListener("url", async (event) => {
+        if (!linkResolved && event.url) {
+          linkResolved = true;
+          linkSub.remove();
+          console.log("🔗 Deep link received via Linking:", event.url);
+          const code = extractCode(event.url);
+          if (code) {
+            await processCode(code).catch(console.error);
+          }
+          setLoading(false);
+        }
       });
 
-      if (error) throw error;
-      if (!data?.url) {
-        throw new Error("Failed to receive Google OAuth authorization URL from server.");
-      }
-
-      // 3. Open the secure browser authentication session
+      // PATH B: Open the auth browser — if it can auto-redirect, this returns the URL directly
       const result = await WebBrowser.openAuthSessionAsync(data.url, redirectUrl);
-      console.log("➡️ Google Sign-In WebBrowser result type:", result.type);
-      if (result.type === "success") {
-        console.log("➡️ Redirect URL received:", result.url);
-      }
+      linkSub.remove();
 
-      // 4. With PKCE flow, Supabase returns a `code` in the query string (not tokens in the fragment)
-      if (result.type === "success" && result.url) {
-        // Safe manual parser (Hermes/Android compatible)
-        const parseUrlParams = (queryString: string) => {
-          const params: Record<string, string> = {};
-          const cleanQs = queryString.split("#")[0]; // strip any fragment
-          for (const pair of cleanQs.split("&")) {
-            const eqIdx = pair.indexOf("=");
-            if (eqIdx > -1) {
-              const key = pair.substring(0, eqIdx);
-              const val = pair.substring(eqIdx + 1);
-              params[key] = decodeURIComponent(val);
-            }
-          }
-          return params;
-        };
+      console.log("➡️ Browser result type:", result.type);
 
-        const querySplit = result.url.split("?");
-        if (querySplit.length > 1) {
-          const params = parseUrlParams(querySplit[1]);
-          const code = params.code;
-          console.log("🔑 Extracted PKCE auth code:", code ? "FOUND" : "MISSING");
-
+      if (!linkResolved) {
+        if (result.type === "success" && result.url) {
+          // Browser successfully returned the redirect URL
+          const code = extractCode(result.url);
+          console.log("🔑 PKCE code from browser result:", code ? "FOUND" : "MISSING");
           if (code) {
-            // Exchange the PKCE code for a real session
-            const { data: sessionData, error: sessionError } = await supabase.auth.exchangeCodeForSession(code);
-            if (sessionError) throw sessionError;
-
-            if (sessionData.session) {
-              console.log("✅ PKCE session established for:", sessionData.session.user?.email);
-              await setAuth(sessionData.session.access_token, sessionData.session.user);
-            } else {
-              console.warn("⚠️ exchangeCodeForSession succeeded but no session returned.");
-              Alert.alert("Sign-In Incomplete", "Authentication completed but no session was created.");
-            }
+            await processCode(code);
           } else {
-            // Fallback: check if Supabase already established a session internally
-            const { data: existingSession } = await supabase.auth.getSession();
-            if (existingSession?.session) {
-              console.log("✅ Supabase session found via fallback getSession.");
-              await setAuth(existingSession.session.access_token, existingSession.session.user);
+            // No code in URL — check if Supabase already has a session internally
+            const { data: existing } = await supabase.auth.getSession();
+            if (existing?.session) {
+              console.log("✅ Session found via getSession() fallback.");
+              await setAuth(existing.session.access_token, existing.session.user);
             } else {
-              Alert.alert("Authentication Failed", "No authentication code found in the redirect URL.");
+              Alert.alert("Sign-In Failed", "No authentication code returned. Please try again.");
             }
           }
-        } else {
-          Alert.alert("Authentication Failed", "Redirect URL did not contain authentication parameters.");
+        } else if (result.type === "cancel" || result.type === "dismiss") {
+          // User closed browser — check if session was somehow established
+          const { data: existing } = await supabase.auth.getSession();
+          if (existing?.session) {
+            console.log("✅ Session found after browser closed.");
+            await setAuth(existing.session.access_token, existing.session.user);
+          } else {
+            console.log("ℹ️ Browser closed by user with no session.");
+          }
         }
-      } else if (result.type !== "cancel") {
-        console.log("⚠️ WebBrowser returned:", result.type);
       }
     } catch (error: any) {
       console.error("❌ Google Sign-In Error:", error);
