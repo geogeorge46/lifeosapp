@@ -50,6 +50,7 @@ export default function LoginScreen() {
 
       // 3. Open the secure browser authentication session
       const result = await WebBrowser.openAuthSessionAsync(data.url, redirectUrl);
+      console.log("➡️ Google Sign-In WebBrowser result:", JSON.stringify(result, null, 2));
 
       // 4. Extract token details on success
       if (result.type === "success" && result.url) {
@@ -74,6 +75,9 @@ export default function LoginScreen() {
           }
         }
 
+        console.log("🔑 Extracted access token:", access_token ? "FOUND (valid length)" : "MISSING");
+        console.log("🔑 Extracted refresh token:", refresh_token ? "FOUND (valid length)" : "MISSING");
+
         if (access_token && refresh_token) {
           const { data: sessionData, error: sessionError } = await supabase.auth.setSession({
             access_token,
@@ -83,11 +87,19 @@ export default function LoginScreen() {
           if (sessionError) throw sessionError;
 
           if (sessionData.session) {
+            console.log("✅ Supabase OAuth Session successfully established for user:", sessionData.session.user?.email);
             await setAuth(sessionData.session.access_token, sessionData.session.user);
+          } else {
+            console.warn("⚠️ Supabase setSession succeeded, but no session object returned.");
           }
+        } else {
+          Alert.alert("Authentication Failed", "No access token found in the redirect URL.");
         }
+      } else {
+        console.log("⚠️ WebBrowser session did not return success type.");
       }
     } catch (error: any) {
+      console.error("❌ Google Sign-In Error:", error);
       Alert.alert("Google Sign-In Failed", error.message || "Failed to complete Google authentication.");
     } finally {
       setLoading(false);
@@ -121,7 +133,10 @@ export default function LoginScreen() {
 
         if (error) throw error;
         
+        console.log("📝 Supabase SignUp returned user:", data.user?.email, "Session exists:", !!data.session);
+
         if (data.session) {
+          console.log("✅ Establishing session for newly signed up user...");
           await setAuth(data.session.access_token, data.user);
         } else {
           Alert.alert(
@@ -132,6 +147,7 @@ export default function LoginScreen() {
         }
       } else {
         // Log In
+        console.log("🔑 Attempting Email/Password Login for:", email.trim());
         const { data, error } = await supabase.auth.signInWithPassword({
           email: email.trim(),
           password: password.trim(),
@@ -139,11 +155,17 @@ export default function LoginScreen() {
 
         if (error) throw error;
 
+        console.log("📝 Supabase SignIn returned session details. User:", data.user?.email);
+
         if (data.session) {
+          console.log("✅ Establishing login session...");
           await setAuth(data.session.access_token, data.user);
+        } else {
+          console.warn("⚠️ SignIn completed but no session object returned.");
         }
       }
     } catch (error: any) {
+      console.error("❌ Email Auth Error:", error);
       Alert.alert("Authentication Failed", error.message || "Failed to complete authentication.");
     } finally {
       setLoading(false);
