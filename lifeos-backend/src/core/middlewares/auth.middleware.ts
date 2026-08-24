@@ -47,6 +47,7 @@ export function requireAuth(req: Request, res: Response, next: NextFunction): vo
     });
     return;
   } catch (err: any) {
+    console.error("🔒 JWT Verification Failed:", err.message);
     res.status(401).json({ error: "Unauthorized: Invalid or expired access token" });
     return;
   }
