@@ -31,7 +31,7 @@ export function requireAuth(req: Request, res: Response, next: NextFunction): vo
       }
     }
 
-    const decoded = jwt.verify(token, verificationKey) as any;
+    const decoded = jwt.verify(token, verificationKey, { algorithms: ["HS256"] }) as any;
     
     const userPayload = {
       id: decoded.sub,
