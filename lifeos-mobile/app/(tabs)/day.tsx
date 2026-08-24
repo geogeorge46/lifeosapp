@@ -24,6 +24,7 @@ import { useLedgerStore } from "../../src/store/ledgerStore";
 import { TaskItem } from "../../src/components/features/tasks/TaskItem";
 import { useRouter } from "expo-router";
 import { apiService, Event } from "../../src/services/api";
+import { useAuthStore } from "../../src/store/authStore";
 
 export default function DayScreen() {
   const router = useRouter();
@@ -74,7 +75,10 @@ export default function DayScreen() {
     }
   };
 
+  const { token } = useAuthStore.getState();
+
   useEffect(() => {
+    if (!token) return; // Don't make API calls if not authenticated
     fetchTodayTasks(todayStr);
     loadTodayRecap();
     fetchTodayEvents();
@@ -82,7 +86,7 @@ export default function DayScreen() {
     fetchPeople().catch(() => {});
     fetchPlaces().catch(() => {});
     fetchTransactions().catch(() => {});
-  }, []);
+  }, [token]);
 
   const handleGlobalSearch = () => {
     const q = searchQuery.toLowerCase().trim();

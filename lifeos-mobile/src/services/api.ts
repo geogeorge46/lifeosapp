@@ -24,8 +24,8 @@ if (originalFetch) {
     }
     const response = await originalFetch(input, init);
 
-    // Auto-logout if the backend reports a stale or invalid session token
-    if (response.status === 401) {
+    // Auto-logout only if we HAD a token and the backend still rejected it (genuinely stale token)
+    if (response.status === 401 && token) {
       console.warn("Backend reported 401 Unauthorized. Clearing stale session tokens.");
       useAuthStore.getState().logout();
     }
