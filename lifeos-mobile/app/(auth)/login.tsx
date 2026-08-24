@@ -60,18 +60,18 @@ export default function LoginScreen() {
 
         const hashSplit = result.url.split("#");
         if (hashSplit.length > 1) {
-          const params = Object.fromEntries(new URLSearchParams(hashSplit[1]));
-          access_token = params.access_token;
-          refresh_token = params.refresh_token;
+          const params = new URLSearchParams(hashSplit[1]);
+          access_token = params.get("access_token");
+          refresh_token = params.get("refresh_token");
         }
 
         // Fallback: Try parsing from query parameters
         if (!access_token || !refresh_token) {
           const querySplit = result.url.split("?");
           if (querySplit.length > 1) {
-            const params = Object.fromEntries(new URLSearchParams(querySplit[1]));
-            access_token = params.access_token;
-            refresh_token = params.refresh_token;
+            const params = new URLSearchParams(querySplit[1]);
+            access_token = params.get("access_token");
+            refresh_token = params.get("refresh_token");
           }
         }
 
