@@ -17,11 +17,12 @@ export default function RootLayout() {
     if (loading) return;
 
     const inAuthGroup = segments[0] === "(auth)";
+    const inTabsGroup = segments[0] === "(tabs)";
 
     if (!token && !inAuthGroup) {
       // Direct unauthorized traffic to login gateway
       router.replace("/(auth)/login");
-    } else if (token && inAuthGroup) {
+    } else if (token && !inTabsGroup) {
       // Direct authenticated traffic to main home day page
       router.replace("/(tabs)/day");
     }
