@@ -22,7 +22,15 @@ if (originalFetch) {
         init.headers["Authorization"] = `Bearer ${token}`;
       }
     }
-    return originalFetch(input, init);
+    const response = await originalFetch(input, init);
+
+    // Auto-logout if the backend reports a stale or invalid session token
+    if (response.status === 401) {
+      console.warn("Backend reported 401 Unauthorized. Clearing stale session tokens.");
+      useAuthStore.getState().logout();
+    }
+
+    return response;
   };
 
   global.fetch = authInterceptedFetch as any;
