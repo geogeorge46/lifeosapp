@@ -33,8 +33,9 @@ export default function LoginScreen() {
     try {
       // 1. Generate deep link redirect URL back to the root of the app
       const redirectUrl = Linking.createURL("/");
+      console.log("🔗 OAuth redirect URL:", redirectUrl);
 
-      // 2. Request Google OAuth authorization URL from Supabase
+      // 2. Request Google OAuth authorization URL from Supabase (PKCE flow)
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
@@ -50,66 +51,61 @@ export default function LoginScreen() {
 
       // 3. Open the secure browser authentication session
       const result = await WebBrowser.openAuthSessionAsync(data.url, redirectUrl);
-      console.log("➡️ Google Sign-In WebBrowser result:", JSON.stringify(result, null, 2));
+      console.log("➡️ Google Sign-In WebBrowser result type:", result.type);
+      if (result.type === "success") {
+        console.log("➡️ Redirect URL received:", result.url);
+      }
 
-      // 4. Extract token details on success
+      // 4. With PKCE flow, Supabase returns a `code` in the query string (not tokens in the fragment)
       if (result.type === "success" && result.url) {
-        // Helper to parse query parameters manually (Hermes/Android-safe)
+        // Safe manual parser (Hermes/Android compatible)
         const parseUrlParams = (queryString: string) => {
           const params: Record<string, string> = {};
-          const pairs = queryString.split("&");
-          for (const pair of pairs) {
-            const [key, val] = pair.split("=");
-            if (key) {
-              params[key] = decodeURIComponent(val || "");
+          const cleanQs = queryString.split("#")[0]; // strip any fragment
+          for (const pair of cleanQs.split("&")) {
+            const eqIdx = pair.indexOf("=");
+            if (eqIdx > -1) {
+              const key = pair.substring(0, eqIdx);
+              const val = pair.substring(eqIdx + 1);
+              params[key] = decodeURIComponent(val);
             }
           }
           return params;
         };
 
-        // Try parsing from hash fragment (standard OAuth format)
-        let access_token: string | null = null;
-        let refresh_token: string | null = null;
+        const querySplit = result.url.split("?");
+        if (querySplit.length > 1) {
+          const params = parseUrlParams(querySplit[1]);
+          const code = params.code;
+          console.log("🔑 Extracted PKCE auth code:", code ? "FOUND" : "MISSING");
 
-        const hashSplit = result.url.split("#");
-        if (hashSplit.length > 1) {
-          const params = parseUrlParams(hashSplit[1]);
-          access_token = params.access_token || null;
-          refresh_token = params.refresh_token || null;
-        }
+          if (code) {
+            // Exchange the PKCE code for a real session
+            const { data: sessionData, error: sessionError } = await supabase.auth.exchangeCodeForSession(code);
+            if (sessionError) throw sessionError;
 
-        // Fallback: Try parsing from query parameters
-        if (!access_token || !refresh_token) {
-          const querySplit = result.url.split("?");
-          if (querySplit.length > 1) {
-            const params = parseUrlParams(querySplit[1]);
-            access_token = params.access_token || null;
-            refresh_token = params.refresh_token || null;
-          }
-        }
-
-        console.log("🔑 Extracted access token:", access_token ? "FOUND (valid length)" : "MISSING");
-        console.log("🔑 Extracted refresh token:", refresh_token ? "FOUND (valid length)" : "MISSING");
-
-        if (access_token && refresh_token) {
-          const { data: sessionData, error: sessionError } = await supabase.auth.setSession({
-            access_token,
-            refresh_token,
-          });
-
-          if (sessionError) throw sessionError;
-
-          if (sessionData.session) {
-            console.log("✅ Supabase OAuth Session successfully established for user:", sessionData.session.user?.email);
-            await setAuth(sessionData.session.access_token, sessionData.session.user);
+            if (sessionData.session) {
+              console.log("✅ PKCE session established for:", sessionData.session.user?.email);
+              await setAuth(sessionData.session.access_token, sessionData.session.user);
+            } else {
+              console.warn("⚠️ exchangeCodeForSession succeeded but no session returned.");
+              Alert.alert("Sign-In Incomplete", "Authentication completed but no session was created.");
+            }
           } else {
-            console.warn("⚠️ Supabase setSession succeeded, but no session object returned.");
+            // Fallback: check if Supabase already established a session internally
+            const { data: existingSession } = await supabase.auth.getSession();
+            if (existingSession?.session) {
+              console.log("✅ Supabase session found via fallback getSession.");
+              await setAuth(existingSession.session.access_token, existingSession.session.user);
+            } else {
+              Alert.alert("Authentication Failed", "No authentication code found in the redirect URL.");
+            }
           }
         } else {
-          Alert.alert("Authentication Failed", "No access token found in the redirect URL.");
+          Alert.alert("Authentication Failed", "Redirect URL did not contain authentication parameters.");
         }
-      } else {
-        console.log("⚠️ WebBrowser session did not return success type.");
+      } else if (result.type !== "cancel") {
+        console.log("⚠️ WebBrowser returned:", result.type);
       }
     } catch (error: any) {
       console.error("❌ Google Sign-In Error:", error);
