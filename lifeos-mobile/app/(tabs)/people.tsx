@@ -37,6 +37,8 @@ import { Transaction } from "../../src/services/api";
 import { RelationshipGraphModal } from "../../src/components/features/people/RelationshipGraphModal";
 import { DatePickerModal } from "../../src/components/common/DatePickerModal";
 
+const MONTHS_SHORT = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
 export default function PeopleScreen() {
   const router = useRouter();
   const { people, isLoading, fetchPeople, addPerson, deletePerson, linkPlace, unlinkPlace, addTag } =
@@ -175,6 +177,79 @@ export default function PeopleScreen() {
             <Text className="text-xs font-bold text-indigo-600">Graph</Text>
           </TouchableOpacity>
         </View>
+
+        {/* Upcoming Birthdays & Occasions Feed Widget */}
+        {(() => {
+          const upcomingItems: { name: string; title: string; daysLeft: number; dateStr: string; personId: string }[] = [];
+          const now = new Date();
+          now.setHours(0, 0, 0, 0);
+
+          people.forEach((p) => {
+            if (p.birthday && p.birthday.match(/^\d{4}-\d{2}-\d{2}$/)) {
+              const [, mStr, dStr] = p.birthday.split("-");
+              const bMonth = Number(mStr) - 1;
+              const bDay = Number(dStr);
+
+              let nextBday = new Date(now.getFullYear(), bMonth, bDay);
+              if (nextBday.getTime() < now.getTime()) {
+                nextBday = new Date(now.getFullYear() + 1, bMonth, bDay);
+              }
+              const diffMs = nextBday.getTime() - now.getTime();
+              const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
+              if (diffDays <= 60) {
+                upcomingItems.push({
+                  name: p.name,
+                  title: "Birthday",
+                  daysLeft: diffDays,
+                  dateStr: `${MONTHS_SHORT[bMonth]} ${bDay}`,
+                  personId: p.id,
+                });
+              }
+            }
+          });
+
+          upcomingItems.sort((a, b) => a.daysLeft - b.daysLeft);
+
+          if (upcomingItems.length === 0) return null;
+
+          return (
+            <View className="mb-6 px-4">
+              <View className="flex-row items-center space-x-1.5 mb-2.5">
+                <Gift size={15} color="#E05646" />
+                <Text className="text-xs font-black text-[#0F172A] uppercase tracking-wider">
+                  Upcoming Birthdays & Milestones
+                </Text>
+              </View>
+
+              <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row space-x-3">
+                {upcomingItems.map((item, idx) => (
+                  <TouchableOpacity
+                    key={idx}
+                    onPress={() => setExpandedPersonId(item.personId)}
+                    className="bg-white border border-[#E2E8F0] rounded-2xl p-3.5 w-44 shadow-sm"
+                  >
+                    <View className="flex-row items-center justify-between mb-1.5">
+                      <View className="w-7 h-7 rounded-full bg-orange-100 items-center justify-center">
+                        <Text className="text-xs font-black text-[#E05646]">{item.name[0]}</Text>
+                      </View>
+                      <View className={`px-2 py-0.5 rounded-md ${item.daysLeft === 0 ? "bg-red-500" : "bg-orange-100"}`}>
+                        <Text className={`text-[9px] font-black ${item.daysLeft === 0 ? "text-white" : "text-[#E05646]"}`}>
+                          {item.daysLeft === 0 ? "🎉 TODAY!" : `In ${item.daysLeft} days`}
+                        </Text>
+                      </View>
+                    </View>
+                    <Text className="text-xs font-bold text-[#0F172A]" numberOfLines={1}>
+                      {item.name}
+                    </Text>
+                    <Text className="text-[10px] text-[#64748B] font-semibold mt-0.5">
+                      🎂 {item.title} ({item.dateStr})
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
+          );
+        })()}
 
         {/* 1. Add Contact Panel */}
         <View className="bg-white border border-[#E2E8F0] rounded-3xl p-5 mb-6 mx-4 shadow-sm shadow-[#0F172A]/5">
