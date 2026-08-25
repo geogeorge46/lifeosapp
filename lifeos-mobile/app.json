@@ -1,7 +1,17 @@
 {
-  "scheme": "lifeos",
-  "plugins": [
-    "expo-router",
-    "expo-secure-store"
-  ]
+  "expo": {
+    "name": "LifeOS",
+    "slug": "lifeos-mobile",
+    "version": "0.1.0",
+    "scheme": "lifeos",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "android": {
+      "package": "com.geogeorge.lifeos"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store"
+    ]
+  }
 }
