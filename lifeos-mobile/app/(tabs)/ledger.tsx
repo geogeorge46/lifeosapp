@@ -297,6 +297,158 @@ export default function LedgerScreen() {
           </View>
         )}
 
+        {/* Visual Analytics Section: Category Distribution & Net Debt Breakdown */}
+        {transactions.length > 0 && (
+          <View className="mb-6 mx-4 space-y-4">
+            {/* Category Expense Breakdown Bars */}
+            {(() => {
+              const expenseTxs = transactions.filter((t) => t.type === "EXPENSE");
+              if (expenseTxs.length === 0) return null;
+
+              const categoryTotals: Record<string, number> = {};
+              let grandTotal = 0;
+
+              expenseTxs.forEach((t) => {
+                const cat = t.category || "General";
+                const amt = parseFloat(t.amount);
+                if (!isNaN(amt)) {
+                  categoryTotals[cat] = (categoryTotals[cat] || 0) + amt;
+                  grandTotal += amt;
+                }
+              });
+
+              if (grandTotal === 0) return null;
+
+              const categoriesList = Object.keys(categoryTotals)
+                .map((cat) => ({
+                  category: cat,
+                  total: categoryTotals[cat],
+                  percentage: Math.round((categoryTotals[cat] / grandTotal) * 100),
+                }))
+                .sort((a, b) => b.total - a.total);
+
+              const CATEGORY_COLORS: Record<string, string> = {
+                Food: "#F59E0B",
+                Travel: "#3B82F6",
+                Bills: "#8B5CF6",
+                Shopping: "#10B981",
+                Entertainment: "#EC4899",
+                Health: "#EF4444",
+                General: "#64748B",
+              };
+
+              return (
+                <View className="bg-white border border-[#E2E8F0] rounded-3xl p-5 mb-4 shadow-sm shadow-[#0F172A]/5">
+                  <Text className="text-sm font-extrabold text-[#0F172A] mb-3">
+                    📊 Expense Category Breakdown
+                  </Text>
+                  <View className="space-y-2.5">
+                    {categoriesList.map((item) => {
+                      const barColor = CATEGORY_COLORS[item.category] || "#64748B";
+                      return (
+                        <View key={item.category} className="mb-2">
+                          <View className="flex-row justify-between items-center mb-1">
+                            <Text className="text-xs font-bold text-[#0F172A]">{item.category}</Text>
+                            <Text className="text-xs font-extrabold text-[#64748B]">
+                              {currencySymbol}{item.total.toFixed(2)} ({item.percentage}%)
+                            </Text>
+                          </View>
+                          {/* Progress bar */}
+                          <View className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                            <View
+                              style={{
+                                width: `${item.percentage}%`,
+                                backgroundColor: barColor,
+                              }}
+                              className="h-full rounded-full"
+                            />
+                          </View>
+                        </View>
+                      );
+                    })}
+                  </View>
+                </View>
+              );
+            })()}
+
+            {/* Who Owes You vs Who You Owe Summary Card */}
+            {(() => {
+              const pendingLent = transactions.filter((t) => t.type === "LENT" && t.status === "PENDING" && t.person);
+              const pendingBorrowed = transactions.filter((t) => t.type === "BORROWED" && t.status === "PENDING" && t.person);
+
+              if (pendingLent.length === 0 && pendingBorrowed.length === 0) return null;
+
+              return (
+                <View className="bg-white border border-[#E2E8F0] rounded-3xl p-5 shadow-sm shadow-[#0F172A]/5">
+                  <Text className="text-sm font-extrabold text-[#0F172A] mb-3">
+                    💳 Outstanding Debt Summary
+                  </Text>
+
+                  {/* People who owe you */}
+                  {pendingLent.length > 0 && (
+                    <View className="mb-3">
+                      <Text className="text-[10px] font-black text-emerald-700 uppercase tracking-wider mb-2">
+                        Owed To You ({pendingLent.length})
+                      </Text>
+                      <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row space-x-2">
+                        {pendingLent.map((tx) => (
+                          <TouchableOpacity
+                            key={tx.id}
+                            onPress={() => handleOpenSettlePrompt(tx)}
+                            className="bg-emerald-50 border border-emerald-100 rounded-2xl p-3 w-36 mr-2"
+                          >
+                            <View className="flex-row items-center justify-between mb-1">
+                              <Text className="text-xs font-bold text-emerald-900" numberOfLines={1}>
+                                {tx.person?.name}
+                              </Text>
+                            </View>
+                            <Text className="text-sm font-black text-emerald-700">
+                              +{currencySymbol}{parseFloat(tx.amount).toFixed(2)}
+                            </Text>
+                            <Text className="text-[9px] text-emerald-600 font-semibold mt-1" numberOfLines={1}>
+                              {tx.description}
+                            </Text>
+                          </TouchableOpacity>
+                        ))}
+                      </ScrollView>
+                    </View>
+                  )}
+
+                  {/* People you owe */}
+                  {pendingBorrowed.length > 0 && (
+                    <View>
+                      <Text className="text-[10px] font-black text-rose-700 uppercase tracking-wider mb-2">
+                        You Owe ({pendingBorrowed.length})
+                      </Text>
+                      <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row space-x-2">
+                        {pendingBorrowed.map((tx) => (
+                          <TouchableOpacity
+                            key={tx.id}
+                            onPress={() => handleOpenSettlePrompt(tx)}
+                            className="bg-rose-50 border border-rose-100 rounded-2xl p-3 w-36 mr-2"
+                          >
+                            <View className="flex-row items-center justify-between mb-1">
+                              <Text className="text-xs font-bold text-rose-900" numberOfLines={1}>
+                                {tx.person?.name}
+                              </Text>
+                            </View>
+                            <Text className="text-sm font-black text-rose-700">
+                              -{currencySymbol}{parseFloat(tx.amount).toFixed(2)}
+                            </Text>
+                            <Text className="text-[9px] text-rose-600 font-semibold mt-1" numberOfLines={1}>
+                              {tx.description}
+                            </Text>
+                          </TouchableOpacity>
+                        ))}
+                      </ScrollView>
+                    </View>
+                  )}
+                </View>
+              );
+            })()}
+          </View>
+        )}
+
         {/* Group Splits Console Form */}
         {isSplitMode ? (
           <View className="bg-white border border-[#E2E8F0] rounded-3xl p-5 mb-6 mx-4 shadow-sm shadow-[#0F172A]/5">
