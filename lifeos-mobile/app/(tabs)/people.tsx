@@ -483,35 +483,54 @@ export default function PeopleScreen() {
 
                     {activeSubTab === "occasions" && (
                       <View className="mb-2">
-                        {/* List occasions */}
+                        {/* List occasions with countdown */}
                         {(() => {
                           const list = occasions[person.id] || [];
                           if (list.length === 0) {
                             return <Text className="text-[10px] text-[#64748B] italic py-1 text-center">No custom occasions mapped.</Text>;
                           }
-                          return list.map((occ) => (
-                            <View key={occ.id} className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-2.5 mb-1.5 flex-row justify-between items-center">
-                              <View className="flex-1 mr-2">
-                                <Text className="text-[#0F172A] text-xs font-bold">{occ.title}</Text>
-                                <Text className="text-[8px] font-extrabold text-pink-600 uppercase tracking-widest mt-1">
-                                  {occ.type} | Date: {new Date(occ.date).toLocaleDateString()}
-                                </Text>
+                          return list.map((occ) => {
+                            const target = new Date(occ.date);
+                            const now = new Date();
+                            target.setHours(0, 0, 0, 0);
+                            now.setHours(0, 0, 0, 0);
+                            const diffDays = Math.round((target.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+                            const countdownText =
+                              diffDays === 0
+                                ? "🎉 Today!"
+                                : diffDays > 0
+                                ? `⏳ In ${diffDays} day${diffDays > 1 ? "s" : ""}`
+                                : `Passed ${Math.abs(diffDays)}d ago`;
+
+                            return (
+                              <View key={occ.id} className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-2.5 mb-1.5 flex-row justify-between items-center">
+                                <View className="flex-1 mr-2">
+                                  <View className="flex-row items-center space-x-2">
+                                    <Text className="text-[#0F172A] text-xs font-bold">{occ.title}</Text>
+                                    <View className="bg-pink-100 px-2 py-0.5 rounded-md">
+                                      <Text className="text-[9px] font-black text-pink-700">{countdownText}</Text>
+                                    </View>
+                                  </View>
+                                  <Text className="text-[8px] font-extrabold text-pink-600 uppercase tracking-widest mt-1">
+                                    {occ.type} | Date: {new Date(occ.date).toLocaleDateString()}
+                                  </Text>
+                                </View>
+                                <TouchableOpacity
+                                  onPress={() => deleteOccasion(person.id, occ.id)}
+                                  className="p-2 bg-red-50 border border-red-100 rounded-lg"
+                                >
+                                  <Trash2 size={11} color="#EF4444" />
+                                </TouchableOpacity>
                               </View>
-                              <TouchableOpacity
-                                onPress={() => deleteOccasion(person.id, occ.id)}
-                                className="p-2 bg-red-50 border border-red-100 rounded-lg"
-                              >
-                                <Trash2 size={11} color="#EF4444" />
-                              </TouchableOpacity>
-                            </View>
-                          ));
+                            );
+                          });
                         })()}
 
                         {/* Add Occasion form */}
                         <View className="mt-4 pt-4 border-t border-[#E2E8F0]">
                           <Text className="text-xs font-bold text-[#0F172A] mb-2">Schedule Custom Occasion</Text>
                           <TextInput
-                            placeholder="Occasion Title (e.g. Job Interview)"
+                            placeholder="Occasion Title (e.g. Birthday, Anniversary)"
                             placeholderTextColor="#94A3B8"
                             value={occasionTitle}
                             onChangeText={setOccasionTitle}
@@ -527,8 +546,8 @@ export default function PeopleScreen() {
                             />
                             
                             {/* Occasion type selector pills */}
-                            <View className="flex-row space-x-1.5 flex-1 items-center justify-between">
-                              {["interview", "exam", "anniversary", "custom"].map((t) => {
+                            <View className="flex-row space-x-1 flex-1 items-center justify-between">
+                              {["birthday", "anniversary", "interview", "custom"].map((t) => {
                                 const isSel = occasionType === t;
                                 return (
                                   <TouchableOpacity
@@ -549,11 +568,11 @@ export default function PeopleScreen() {
 
                           {/* Triggers Offsets */}
                           <Text className="text-[10px] text-[#64748B] mb-1.5 font-bold">Configure Multi-Stage Reminders</Text>
-                          <View className="flex-row flex-wrap gap-2 mb-3">
+                          <View className="flex-row flex-wrap gap-1.5 mb-3">
                             {[
+                              { label: "7 Days Before", value: -10080 },
                               { label: "1 Day Before", value: -1440 },
                               { label: "On the Day", value: 0 },
-                              { label: "1 Day After", value: 1440 },
                             ].map((offsetItem) => {
                               const isChecked = occasionOffsets.includes(offsetItem.value);
                               return (
@@ -566,7 +585,7 @@ export default function PeopleScreen() {
                                       setOccasionOffsets([...occasionOffsets, offsetItem.value]);
                                     }
                                   }}
-                                  className={`px-2.5 py-1 rounded-md border ${
+                                  className={`px-2 py-1 rounded-md border ${
                                     isChecked
                                       ? "bg-pink-500 border-pink-500"
                                       : "bg-[#F8FAFC] border-[#E2E8F0]"
