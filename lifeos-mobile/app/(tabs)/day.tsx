@@ -27,6 +27,7 @@ import { useCallback } from "react";
 import { apiService, Event } from "../../src/services/api";
 import { useAuthStore } from "../../src/store/authStore";
 import { exportEventToNativeCalendar } from "../../src/services/calendarExport";
+import { HabitHeatmapModal } from "../../src/components/features/habits/HabitHeatmapModal";
 
 export default function DayScreen() {
   const router = useRouter();
@@ -59,6 +60,7 @@ export default function DayScreen() {
 
   const [searchModalVisible, setSearchModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [heatmapModalVisible, setHeatmapModalVisible] = useState(false);
 
   const [todayEvents, setTodayEvents] = useState<Event[]>([]);
   const [eventsLoading, setEventsLoading] = useState(false);
@@ -406,13 +408,22 @@ export default function DayScreen() {
 
           {/* Habits Loop Section */}
           <View className="mb-6">
-            <View className="flex-row items-center mb-3">
-              <View className="w-7 h-7 rounded-full bg-amber-50 border border-amber-100 items-center justify-center mr-2">
-                <Zap size={14} color="#D97706" />
+            <View className="flex-row items-center justify-between mb-3">
+              <View className="flex-row items-center">
+                <View className="w-7 h-7 rounded-full bg-amber-50 border border-amber-100 items-center justify-center mr-2">
+                  <Zap size={14} color="#D97706" />
+                </View>
+                <Text className="text-xs font-black text-[#64748B] uppercase tracking-wider">
+                  Habits Loop ({habits.length})
+                </Text>
               </View>
-              <Text className="text-xs font-black text-[#64748B] uppercase tracking-wider">
-                Habits Loop ({habits.length})
-              </Text>
+              <TouchableOpacity
+                onPress={() => setHeatmapModalVisible(true)}
+                className="flex-row items-center space-x-1 bg-orange-50 border border-orange-100 px-2.5 py-1.5 rounded-xl shadow-sm"
+              >
+                <Text style={{ fontSize: 11, marginRight: 2 }}>🔥</Text>
+                <Text className="text-[10px] font-extrabold text-[#E05646]">Streak Heatmap</Text>
+              </TouchableOpacity>
             </View>
 
             {habits.length === 0 ? (
@@ -938,6 +949,10 @@ export default function DayScreen() {
           </ScrollView>
         </SafeAreaView>
       </Modal>
+      <HabitHeatmapModal
+        visible={heatmapModalVisible}
+        onClose={() => setHeatmapModalVisible(false)}
+      />
     </SafeAreaView>
   );
 }
