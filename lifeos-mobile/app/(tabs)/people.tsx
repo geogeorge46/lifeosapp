@@ -219,7 +219,7 @@ export default function PeopleScreen() {
             <Text className={`text-sm font-semibold ${birthday ? "text-[#0F172A]" : "text-[#94A3B8]"}`}>
               {birthday ? `🎂 Birthday: ${birthday}` : "Select Birthday (Tap for Calendar)"}
             </Text>
-            <Gift size={18} color="#EC4899" />
+            <Gift size={18} color="#E05646" />
           </TouchableOpacity>
 
           {/* Tags */}
@@ -517,11 +517,11 @@ export default function PeopleScreen() {
                                 <View className="flex-1 mr-2">
                                   <View className="flex-row items-center space-x-2">
                                     <Text className="text-[#0F172A] text-xs font-bold">{occ.title}</Text>
-                                    <View className="bg-pink-100 px-2 py-0.5 rounded-md">
-                                      <Text className="text-[9px] font-black text-pink-700">{countdownText}</Text>
+                                    <View className="bg-orange-100 px-2 py-0.5 rounded-md">
+                                      <Text className="text-[9px] font-black text-orange-700">{countdownText}</Text>
                                     </View>
                                   </View>
-                                  <Text className="text-[8px] font-extrabold text-pink-600 uppercase tracking-widest mt-1">
+                                  <Text className="text-[8px] font-extrabold text-orange-600 uppercase tracking-widest mt-1">
                                     {occ.type} | Date: {new Date(occ.date).toLocaleDateString()}
                                   </Text>
                                 </View>
@@ -557,7 +557,7 @@ export default function PeopleScreen() {
                               <Text className={`text-xs font-semibold ${occasionDate ? "text-[#0F172A]" : "text-[#94A3B8]"}`}>
                                 {occasionDate || "YYYY-MM-DD"}
                               </Text>
-                              <Gift size={14} color="#EC4899" />
+                              <Gift size={14} color="#E05646" />
                             </TouchableOpacity>
                             
                             {/* Occasion type selector pills */}
@@ -569,7 +569,7 @@ export default function PeopleScreen() {
                                     key={t}
                                     onPress={() => setOccasionType(t)}
                                     className={`flex-1 py-2 rounded-lg border items-center justify-center ${
-                                      isSel ? "bg-pink-500 border-pink-500" : "bg-[#F8FAFC] border-[#E2E8F0]"
+                                      isSel ? "bg-[#E05646] border-[#E05646]" : "bg-[#F8FAFC] border-[#E2E8F0]"
                                     }`}
                                   >
                                     <Text className={`text-[8px] font-extrabold uppercase ${isSel ? "text-white" : "text-[#64748B]"}`}>
@@ -602,7 +602,7 @@ export default function PeopleScreen() {
                                   }}
                                   className={`px-2 py-1 rounded-md border ${
                                     isChecked
-                                      ? "bg-pink-500 border-pink-500"
+                                      ? "bg-[#E05646] border-[#E05646]"
                                       : "bg-[#F8FAFC] border-[#E2E8F0]"
                                   }`}
                                 >

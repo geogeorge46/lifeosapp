@@ -82,8 +82,8 @@ export const DatePickerModal: React.FC<DatePickerModalProps> = ({
           {/* Header */}
           <View className="flex-row items-center justify-between mb-4 border-b border-slate-100 pb-3">
             <View className="flex-row items-center space-x-2">
-              <View className="w-8 h-8 rounded-xl bg-pink-50 border border-pink-100 items-center justify-center">
-                <CalendarIcon size={16} color="#EC4899" />
+              <View className="w-8 h-8 rounded-xl bg-orange-50 border border-orange-100 items-center justify-center">
+                <CalendarIcon size={16} color="#E05646" />
               </View>
               <Text className="text-base font-extrabold text-[#0F172A]">{title}</Text>
             </View>
@@ -108,7 +108,7 @@ export const DatePickerModal: React.FC<DatePickerModalProps> = ({
               <Text className="text-sm font-black text-[#0F172A]">
                 {MONTHS[selectedMonth]} {selectedYear}
               </Text>
-              <Text className="text-[10px] font-bold text-pink-600">
+              <Text className="text-[10px] font-bold text-orange-600">
                 {viewMode === "YEARS" ? "Tap for Calendar" : "Tap to Change Year"}
               </Text>
             </TouchableOpacity>
@@ -136,7 +136,7 @@ export const DatePickerModal: React.FC<DatePickerModalProps> = ({
                       }}
                       className={`w-[22%] py-2.5 rounded-xl border items-center justify-center ${
                         isSel
-                          ? "bg-pink-500 border-pink-500 shadow-sm"
+                          ? "bg-[#E05646] border-[#E05646] shadow-sm"
                           : "bg-slate-50 border-slate-200"
                       }`}
                     >
@@ -183,7 +183,7 @@ export const DatePickerModal: React.FC<DatePickerModalProps> = ({
                       onPress={() => setSelectedDay(d)}
                       className={`w-[12.5%] aspect-square rounded-xl border items-center justify-center ${
                         isSel
-                          ? "bg-pink-500 border-pink-500 shadow-md shadow-pink-500/20"
+                          ? "bg-[#E05646] border-[#E05646] shadow-md shadow-[#E05646]/20"
                           : "bg-slate-50 border-slate-200"
                       }`}
                     >
@@ -200,7 +200,7 @@ export const DatePickerModal: React.FC<DatePickerModalProps> = ({
           {/* Selected Date Preview Banner */}
           <View className="bg-[#202E4E] border border-slate-700 rounded-2xl px-4 py-2.5 mb-3 flex-row items-center justify-between shadow-sm">
             <Text className="text-xs font-bold text-slate-300">Selected Date:</Text>
-            <Text className="text-xs font-extrabold text-pink-400">
+            <Text className="text-xs font-extrabold text-orange-400">
               {MONTHS[selectedMonth]} {Math.min(selectedDay, daysInMonth)}, {selectedYear}
             </Text>
           </View>
@@ -216,7 +216,7 @@ export const DatePickerModal: React.FC<DatePickerModalProps> = ({
 
             <TouchableOpacity
               onPress={handleConfirm}
-              className="flex-1 py-3.5 rounded-2xl bg-pink-500 items-center justify-center flex-row space-x-1.5 shadow-md shadow-pink-500/20"
+              className="flex-1 py-3.5 rounded-2xl bg-[#E05646] items-center justify-center flex-row space-x-1.5 shadow-md shadow-[#E05646]/20"
             >
               <Check size={16} color="#FFFFFF" />
               <Text className="text-xs font-extrabold text-white">Select Date</Text>
