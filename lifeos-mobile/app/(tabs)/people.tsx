@@ -34,6 +34,8 @@ import { useSettingsStore } from "../../src/store/settingsStore";
 import { useOccasionsStore } from "../../src/store/occasionsStore";
 import { Transaction } from "../../src/services/api";
 
+import { RelationshipGraphModal } from "../../src/components/features/people/RelationshipGraphModal";
+
 export default function PeopleScreen() {
   const router = useRouter();
   const { people, isLoading, fetchPeople, addPerson, deletePerson, linkPlace, unlinkPlace, addTag } =
@@ -42,6 +44,8 @@ export default function PeopleScreen() {
   const { personBalances, fetchPersonBalance } = useLedgerStore();
   const { currencySymbol } = useSettingsStore();
   const { occasions, fetchOccasions, addOccasion, deleteOccasion } = useOccasionsStore();
+
+  const [graphModalVisible, setGraphModalVisible] = useState(false);
 
   // Create Occasion Form states
   const [occasionTitle, setOccasionTitle] = useState("");
@@ -151,17 +155,19 @@ export default function PeopleScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: "#F0F4F8" }} edges={["top", "left", "right"]}>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 140 }} className="flex-1">
         {/* Header */}
-        <View className="flex-row items-center justify-between mb-6 px-4 pt-4">
+        <View className="flex-row justify-between items-center mb-6 pt-4 px-4">
           <View>
-            <Text className="text-3xl font-extrabold text-[#0F172A] tracking-tight">People</Text>
-            <Text className="text-xs text-[#64748B] mt-1 font-semibold">Manage contacts, relationships, and tags.</Text>
+            <Text className="text-3xl font-extrabold text-[#0F172A]">People</Text>
+            <Text className="text-xs text-[#64748B] mt-1 font-semibold">
+              Manage personal CRM, ties & places
+            </Text>
           </View>
           <TouchableOpacity
-            onPress={() => router.push("/graph")}
-            className="px-3.5 py-2.5 bg-[#202E4E] border border-[#202E4E] rounded-xl flex-row items-center space-x-1.5 shadow-sm shadow-[#202E4E]/20"
+            onPress={() => setGraphModalVisible(true)}
+            className="flex-row items-center space-x-1.5 bg-indigo-50 border border-indigo-100 px-3.5 py-2.5 rounded-xl shadow-sm"
           >
-            <Network size={12} color="#FFFFFF" />
-            <Text className="text-[11px] font-bold text-white">Graph Map</Text>
+            <Network size={16} color="#6366F1" />
+            <Text className="text-xs font-bold text-indigo-600">Graph</Text>
           </TouchableOpacity>
         </View>
 
@@ -652,6 +658,11 @@ export default function PeopleScreen() {
           )}
         </View>
       </ScrollView>
+
+      <RelationshipGraphModal
+        visible={graphModalVisible}
+        onClose={() => setGraphModalVisible(false)}
+      />
     </SafeAreaView>
   );
 }
