@@ -35,6 +35,7 @@ import { useOccasionsStore } from "../../src/store/occasionsStore";
 import { Transaction } from "../../src/services/api";
 
 import { RelationshipGraphModal } from "../../src/components/features/people/RelationshipGraphModal";
+import { DatePickerModal } from "../../src/components/common/DatePickerModal";
 
 export default function PeopleScreen() {
   const router = useRouter();
@@ -46,6 +47,10 @@ export default function PeopleScreen() {
   const { occasions, fetchOccasions, addOccasion, deleteOccasion } = useOccasionsStore();
 
   const [graphModalVisible, setGraphModalVisible] = useState(false);
+
+  // Date Picker Modal state
+  const [datePickerVisible, setDatePickerVisible] = useState(false);
+  const [datePickerTarget, setDatePickerTarget] = useState<"BIRTHDAY" | "OCCASION">("BIRTHDAY");
 
   // Create Occasion Form states
   const [occasionTitle, setOccasionTitle] = useState("");
@@ -203,14 +208,19 @@ export default function PeopleScreen() {
             />
           </View>
 
-          {/* Birthday Input */}
-          <TextInput
-            placeholder="Birthday (YYYY-MM-DD)"
-            placeholderTextColor="#94A3B8"
-            value={birthday}
-            onChangeText={setBirthday}
-            className="text-[#0F172A] text-sm bg-[#F8FAFC] rounded-xl px-4 py-3 mb-3 border border-[#E2E8F0] text-left font-semibold"
-          />
+          {/* Birthday Interactive Picker */}
+          <TouchableOpacity
+            onPress={() => {
+              setDatePickerTarget("BIRTHDAY");
+              setDatePickerVisible(true);
+            }}
+            className="bg-[#F8FAFC] rounded-xl px-4 py-3 mb-3 border border-[#E2E8F0] flex-row justify-between items-center"
+          >
+            <Text className={`text-sm font-semibold ${birthday ? "text-[#0F172A]" : "text-[#94A3B8]"}`}>
+              {birthday ? `🎂 Birthday: ${birthday}` : "Select Birthday (Tap for Calendar)"}
+            </Text>
+            <Gift size={18} color="#EC4899" />
+          </TouchableOpacity>
 
           {/* Tags */}
           <TextInput
@@ -537,13 +547,18 @@ export default function PeopleScreen() {
                             className="text-[#0F172A] text-xs bg-[#F8FAFC] rounded-lg px-3 py-2 border border-[#E2E8F0] text-left mb-2"
                           />
                           <View className="flex-row space-x-2 mb-2">
-                            <TextInput
-                              placeholder="YYYY-MM-DD"
-                              placeholderTextColor="#94A3B8"
-                              value={occasionDate}
-                              onChangeText={setOccasionDate}
-                              className="flex-1 text-[#0F172A] text-xs bg-[#F8FAFC] rounded-lg px-3 py-2 border border-[#E2E8F0] text-left"
-                            />
+                            <TouchableOpacity
+                              onPress={() => {
+                                setDatePickerTarget("OCCASION");
+                                setDatePickerVisible(true);
+                              }}
+                              className="flex-1 bg-[#F8FAFC] rounded-lg px-3 py-2 border border-[#E2E8F0] flex-row justify-between items-center"
+                            >
+                              <Text className={`text-xs font-semibold ${occasionDate ? "text-[#0F172A]" : "text-[#94A3B8]"}`}>
+                                {occasionDate || "YYYY-MM-DD"}
+                              </Text>
+                              <Gift size={14} color="#EC4899" />
+                            </TouchableOpacity>
                             
                             {/* Occasion type selector pills */}
                             <View className="flex-row space-x-1 flex-1 items-center justify-between">
@@ -681,6 +696,20 @@ export default function PeopleScreen() {
       <RelationshipGraphModal
         visible={graphModalVisible}
         onClose={() => setGraphModalVisible(false)}
+      />
+
+      <DatePickerModal
+        visible={datePickerVisible}
+        title={datePickerTarget === "BIRTHDAY" ? "Select Contact Birthday 🎂" : "Select Occasion Date 📅"}
+        initialDate={datePickerTarget === "BIRTHDAY" ? birthday : occasionDate}
+        onSelectDate={(selectedDateStr) => {
+          if (datePickerTarget === "BIRTHDAY") {
+            setBirthday(selectedDateStr);
+          } else {
+            setOccasionDate(selectedDateStr);
+          }
+        }}
+        onClose={() => setDatePickerVisible(false)}
       />
     </SafeAreaView>
   );
