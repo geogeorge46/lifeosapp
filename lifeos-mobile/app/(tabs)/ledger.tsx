@@ -31,6 +31,7 @@ import { usePeopleStore } from "../../src/store/peopleStore";
 import { usePlacesStore } from "../../src/store/placesStore";
 import { useSettingsStore } from "../../src/store/settingsStore";
 import { Transaction } from "../../src/services/api";
+import { DatePickerModal } from "../../src/components/common/DatePickerModal";
 
 const PRESET_CATEGORIES = ["Food", "Travel", "Bills", "Shopping", "Entertainment", "Health", "General"];
 
@@ -75,6 +76,7 @@ export default function LedgerScreen() {
   const [settleModalVisible, setSettleModalVisible] = useState(false);
   const [settlingTx, setSettlingTx] = useState<Transaction | null>(null);
   const [partialSettleAmount, setPartialSettleAmount] = useState("");
+  const [datePickerVisible, setDatePickerVisible] = useState(false);
 
   useEffect(() => {
     fetchTransactions();
@@ -705,15 +707,17 @@ export default function LedgerScreen() {
             {type !== "EXPENSE" && (
               <View className="mb-4">
                 <Text className="text-[10px] text-[#64748B] mb-1.5 flex-row items-center font-bold">
-                  <Calendar size={10} color="#64748B" className="mr-1" /> Remind Due Date (YYYY-MM-DD - Optional)
+                  <Calendar size={10} color="#64748B" className="mr-1" /> Remind Due Date (Optional)
                 </Text>
-                <TextInput
-                  placeholder="YYYY-MM-DD"
-                  placeholderTextColor="#94A3B8"
-                  value={dueDate}
-                  onChangeText={setDueDate}
-                  className="text-[#0F172A] text-[12px] bg-[#F8FAFC] rounded-xl px-4 py-2 border border-[#E2E8F0] text-left w-32 font-semibold"
-                />
+                <TouchableOpacity
+                  onPress={() => setDatePickerVisible(true)}
+                  className="bg-[#F8FAFC] rounded-xl px-4 py-2.5 border border-[#E2E8F0] flex-row justify-between items-center w-56"
+                >
+                  <Text className={`text-xs font-semibold ${dueDate ? "text-[#0F172A]" : "text-[#94A3B8]"}`}>
+                    {dueDate ? `📅 Due: ${dueDate}` : "Select Due Date (Tap for Calendar)"}
+                  </Text>
+                  <Calendar size={14} color="#E05646" />
+                </TouchableOpacity>
               </View>
             )}
 
@@ -948,6 +952,14 @@ export default function LedgerScreen() {
           </View>
         </View>
       </Modal>
+
+      <DatePickerModal
+        visible={datePickerVisible}
+        title="Select Remind Due Date"
+        initialDate={dueDate || undefined}
+        onSelectDate={(selectedStr: string) => setDueDate(selectedStr)}
+        onClose={() => setDatePickerVisible(false)}
+      />
     </SafeAreaView>
   );
 }

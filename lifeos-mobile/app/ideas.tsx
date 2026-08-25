@@ -24,7 +24,9 @@ import {
   Trash2,
   ListTodo,
   FileText,
+  Calendar as CalendarIcon,
 } from "lucide-react-native";
+import { DatePickerModal } from "../src/components/common/DatePickerModal";
 import { apiService, Idea } from "../src/services/api";
 
 export default function IdeasScreen() {
@@ -53,6 +55,7 @@ export default function IdeasScreen() {
   const [taskDate, setTaskDate] = useState("");
   const [taskTime, setTaskTime] = useState("");
   const [isSavingTask, setIsSavingTask] = useState(false);
+  const [datePickerVisible, setDatePickerVisible] = useState(false);
 
   const fetchAllIdeas = async () => {
     setIsLoading(true);
@@ -347,7 +350,15 @@ export default function IdeasScreen() {
               <TextInput value={taskNotes} onChangeText={setTaskNotes} placeholder="Add context..." placeholderTextColor="#94A3B8" className="bg-[#F8FAFC] p-4 text-[#0F172A] rounded-2xl border border-[#E2E8F0] mb-4 text-left" multiline />
 
               <Text className="text-xs font-bold text-[#64748B] uppercase mb-2">Schedule Date</Text>
-              <TextInput value={taskDate} onChangeText={setTaskDate} placeholder="YYYY-MM-DD" className="bg-[#F8FAFC] p-4 text-[#0F172A] rounded-2xl border border-[#E2E8F0] mb-4" />
+              <TouchableOpacity
+                onPress={() => setDatePickerVisible(true)}
+                className="bg-[#F8FAFC] p-4 rounded-2xl border border-[#E2E8F0] mb-4 flex-row justify-between items-center"
+              >
+                <Text className={`text-sm font-semibold ${taskDate ? "text-[#0F172A]" : "text-[#94A3B8]"}`}>
+                  {taskDate ? `📅 ${taskDate}` : "Select Schedule Date (Tap for Calendar)"}
+                </Text>
+                <CalendarIcon size={16} color="#E05646" />
+              </TouchableOpacity>
 
               <Text className="text-xs font-bold text-[#64748B] uppercase mb-2">Time (Optional)</Text>
               <TextInput value={taskTime} onChangeText={setTaskTime} placeholder="e.g. 10:00 AM" placeholderTextColor="#94A3B8" className="bg-[#F8FAFC] p-4 text-[#0F172A] rounded-2xl border border-[#E2E8F0]" />
@@ -361,6 +372,14 @@ export default function IdeasScreen() {
           </View>
         </View>
       </Modal>
+
+      <DatePickerModal
+        visible={datePickerVisible}
+        title="Select Schedule Date"
+        initialDate={taskDate || undefined}
+        onSelectDate={(selectedStr: string) => setTaskDate(selectedStr)}
+        onClose={() => setDatePickerVisible(false)}
+      />
     </SafeAreaView>
   );
 }

@@ -30,12 +30,13 @@ import {
   Plus,
   Tag,
   ChevronDown,
-  Calendar,
+  Calendar as CalendarIcon,
   ListTodo,
   Lightbulb,
   Edit2,
   FolderOpen,
 } from "lucide-react-native";
+import { DatePickerModal } from "../../src/components/common/DatePickerModal";
 import { useInboxStore } from "../../src/store/inboxStore";
 import { apiService, BrainDump } from "../../src/services/api";
 import { audioRecordingService } from "../../src/services/audio";
@@ -84,6 +85,8 @@ export default function InboxScreen() {
   const [spawnTaskVisible, setSpawnTaskVisible] = useState(false);
   const [spawnEventVisible, setSpawnEventVisible] = useState(false);
   const [spawnIdeaVisible, setSpawnIdeaVisible] = useState(false);
+  const [datePickerVisible, setDatePickerVisible] = useState(false);
+  const [datePickerTarget, setDatePickerTarget] = useState<"TASK" | "EVENT_START" | "EVENT_END">("TASK");
 
   // Form parameters
   const [taskTitle, setTaskTitle] = useState("");
@@ -715,7 +718,7 @@ export default function InboxScreen() {
 
                 <TouchableOpacity onPress={handleOpenSpawnEvent} className="bg-[#F8FAFC] border border-[#E2E8F0] p-4 rounded-2xl flex-row items-center justify-between shadow-sm">
                   <View className="flex-row items-center space-x-3">
-                    <Calendar size={16} color="#10B981" />
+                    <CalendarIcon size={16} color="#10B981" />
                     <View>
                       <Text className="text-[#0F172A] text-xs font-bold">Create Event appointment</Text>
                       <Text className="text-[9px] text-[#64748B]">Pin to specific dates and hours bounds</Text>
@@ -785,7 +788,18 @@ export default function InboxScreen() {
               <TextInput value={taskNotes} onChangeText={setTaskNotes} placeholder="Add context..." placeholderTextColor="#94A3B8" className="bg-[#F8FAFC] p-4 text-[#0F172A] rounded-2xl border border-[#E2E8F0] mb-4 text-left" multiline />
 
               <Text className="text-xs font-bold text-[#64748B] uppercase mb-2">Schedule Date</Text>
-              <TextInput value={taskDate} onChangeText={setTaskDate} placeholder="YYYY-MM-DD" className="bg-[#F8FAFC] p-4 text-[#0F172A] rounded-2xl border border-[#E2E8F0] mb-4 text-left" />
+              <TouchableOpacity
+                onPress={() => {
+                  setDatePickerTarget("TASK");
+                  setDatePickerVisible(true);
+                }}
+                className="bg-[#F8FAFC] p-4 rounded-2xl border border-[#E2E8F0] mb-4 flex-row justify-between items-center"
+              >
+                <Text className={`text-sm font-semibold ${taskDate ? "text-[#0F172A]" : "text-[#94A3B8]"}`}>
+                  {taskDate ? `📅 ${taskDate}` : "Select Schedule Date (Tap for Calendar)"}
+                </Text>
+                <CalendarIcon size={16} color="#E05646" />
+              </TouchableOpacity>
 
               <Text className="text-xs font-bold text-[#64748B] uppercase mb-2">Time (Optional)</Text>
               <TextInput value={taskTime} onChangeText={setTaskTime} placeholder="e.g. 10:00 AM" placeholderTextColor="#94A3B8" className="bg-[#F8FAFC] p-4 text-[#0F172A] rounded-2xl border border-[#E2E8F0] text-left" />
@@ -815,11 +829,33 @@ export default function InboxScreen() {
               <View className="flex-row space-x-3 mb-4">
                 <View className="flex-1">
                   <Text className="text-xs font-bold text-[#64748B] uppercase mb-2">Start Date</Text>
-                  <TextInput value={eventDate} onChangeText={setEventDate} placeholder="YYYY-MM-DD" className="bg-[#F8FAFC] p-4 text-[#0F172A] rounded-2xl border border-[#E2E8F0] text-left" />
+                  <TouchableOpacity
+                    onPress={() => {
+                      setDatePickerTarget("EVENT_START");
+                      setDatePickerVisible(true);
+                    }}
+                    className="bg-[#F8FAFC] p-3.5 rounded-2xl border border-[#E2E8F0] flex-row justify-between items-center"
+                  >
+                    <Text className={`text-xs font-semibold ${eventDate ? "text-[#0F172A]" : "text-[#94A3B8]"}`}>
+                      {eventDate || "YYYY-MM-DD"}
+                    </Text>
+                    <CalendarIcon size={14} color="#E05646" />
+                  </TouchableOpacity>
                 </View>
                 <View className="flex-1">
                   <Text className="text-xs font-bold text-[#64748B] uppercase mb-2">End Date</Text>
-                  <TextInput value={eventEndDate} onChangeText={setEventEndDate} placeholder="YYYY-MM-DD" className="bg-[#F8FAFC] p-4 text-[#0F172A] rounded-2xl border border-[#E2E8F0] text-left" />
+                  <TouchableOpacity
+                    onPress={() => {
+                      setDatePickerTarget("EVENT_END");
+                      setDatePickerVisible(true);
+                    }}
+                    className="bg-[#F8FAFC] p-3.5 rounded-2xl border border-[#E2E8F0] flex-row justify-between items-center"
+                  >
+                    <Text className={`text-xs font-semibold ${eventEndDate ? "text-[#0F172A]" : "text-[#94A3B8]"}`}>
+                      {eventEndDate || "YYYY-MM-DD"}
+                    </Text>
+                    <CalendarIcon size={14} color="#E05646" />
+                  </TouchableOpacity>
                 </View>
               </View>
 
@@ -868,6 +904,34 @@ export default function InboxScreen() {
           </View>
         </View>
       </Modal>
+
+      <DatePickerModal
+        visible={datePickerVisible}
+        title={
+          datePickerTarget === "TASK"
+            ? "Select Schedule Date"
+            : datePickerTarget === "EVENT_START"
+            ? "Select Event Start Date"
+            : "Select Event End Date"
+        }
+        initialDate={
+          (datePickerTarget === "TASK"
+            ? taskDate
+            : datePickerTarget === "EVENT_START"
+            ? eventDate
+            : eventEndDate) || undefined
+        }
+        onSelectDate={(selectedStr: string) => {
+          if (datePickerTarget === "TASK") {
+            setTaskDate(selectedStr);
+          } else if (datePickerTarget === "EVENT_START") {
+            setEventDate(selectedStr);
+          } else {
+            setEventEndDate(selectedStr);
+          }
+        }}
+        onClose={() => setDatePickerVisible(false)}
+      />
     </SafeAreaView>
   );
 }

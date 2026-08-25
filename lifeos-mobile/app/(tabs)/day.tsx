@@ -28,6 +28,7 @@ import { apiService, Event } from "../../src/services/api";
 import { useAuthStore } from "../../src/store/authStore";
 import { exportEventToNativeCalendar } from "../../src/services/calendarExport";
 import { HabitHeatmapModal } from "../../src/components/features/habits/HabitHeatmapModal";
+import { DatePickerModal } from "../../src/components/common/DatePickerModal";
 
 export default function DayScreen() {
   const router = useRouter();
@@ -57,6 +58,7 @@ export default function DayScreen() {
   const [rescheduleModalVisible, setRescheduleModalVisible] = useState(false);
   const [selectedOccurrenceId, setSelectedOccurrenceId] = useState<string | null>(null);
   const [customDateInput, setCustomDateInput] = useState("");
+  const [rescheduleDatePickerVisible, setRescheduleDatePickerVisible] = useState(false);
 
   const [searchModalVisible, setSearchModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -628,26 +630,28 @@ export default function DayScreen() {
             </View>
 
             <Text style={{ color: "#64748B", fontSize: 12, marginBottom: 8, fontWeight: "700" }}>
-              Or specify a custom date (YYYY-MM-DD):
+              Or specify a custom date:
             </Text>
             <View style={{ flexDirection: "row", gap: 12, marginBottom: 20 }}>
-              <TextInput
-                value={customDateInput}
-                onChangeText={setCustomDateInput}
-                placeholder="YYYY-MM-DD"
-                placeholderTextColor="#94A3B8"
+              <TouchableOpacity
+                onPress={() => setRescheduleDatePickerVisible(true)}
                 style={{
                   flex: 1,
                   backgroundColor: "#F8FAFC",
-                  color: "#0F172A",
                   padding: 12,
                   borderRadius: 12,
                   borderWidth: 1,
                   borderColor: "#E2E8F0",
-                  textAlign: "left",
-                  fontWeight: "600",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
                 }}
-              />
+              >
+                <Text style={{ fontSize: 13, fontWeight: "600", color: customDateInput ? "#0F172A" : "#94A3B8" }}>
+                  {customDateInput ? `📅 ${customDateInput}` : "Select Date (Tap for Calendar)"}
+                </Text>
+                <Calendar size={16} color="#E05646" />
+              </TouchableOpacity>
               <TouchableOpacity
                 onPress={handleCustomReschedule}
                 style={{ backgroundColor: "#E05646", paddingHorizontal: 20, borderRadius: 12, justifyContent: "center" }}
@@ -952,6 +956,13 @@ export default function DayScreen() {
       <HabitHeatmapModal
         visible={heatmapModalVisible}
         onClose={() => setHeatmapModalVisible(false)}
+      />
+      <DatePickerModal
+        visible={rescheduleDatePickerVisible}
+        title="Select Reschedule Date"
+        initialDate={customDateInput || undefined}
+        onSelectDate={(selectedStr: string) => setCustomDateInput(selectedStr)}
+        onClose={() => setRescheduleDatePickerVisible(false)}
       />
     </SafeAreaView>
   );

@@ -10,7 +10,18 @@ import {
   Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Plus, Calendar as CalendarIcon, Clock, Trash2, ChevronLeft, ChevronRight } from "lucide-react-native";
+import {
+  Calendar as CalendarIcon,
+  ChevronLeft,
+  ChevronRight,
+  Plus,
+  Clock,
+  MapPin,
+  Trash2,
+  X,
+  Share2,
+} from "lucide-react-native";
+import { DatePickerModal } from "../../src/components/common/DatePickerModal";
 import { apiService, TaskOccurrence, Event } from "../../src/services/api";
 import { useTasksStore } from "../../src/store/tasksStore";
 import { exportEventToNativeCalendar } from "../../src/services/calendarExport";
@@ -62,6 +73,8 @@ export default function CalendarScreen() {
   const [startTimeInput, setStartTimeInput] = useState("10:00 AM"); // For Events
   const [endTimeInput, setEndTimeInput] = useState("11:00 AM"); // For Events
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [datePickerVisible, setDatePickerVisible] = useState(false);
+  const [datePickerTarget, setDatePickerTarget] = useState<"START" | "END">("START");
 
   const selectedDateStr = selectedDate.toISOString().split("T")[0];
 
@@ -548,65 +561,80 @@ export default function CalendarScreen() {
             />
 
             {itemType === "TASK" ? (
-              <View>
-                <Text style={{ color: "#64748B", fontSize: 11, marginBottom: 6, fontWeight: "700" }}>Scheduled Date (YYYY-MM-DD):</Text>
-                <TextInput
-                  value={dateInput}
-                  onChangeText={setDateInput}
-                  placeholder="YYYY-MM-DD"
-                  placeholderTextColor="#94A3B8"
+              <View style={{ marginBottom: 12 }}>
+                <Text style={{ color: "#64748B", fontSize: 11, marginBottom: 6, fontWeight: "700" }}>Scheduled Date:</Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    setDatePickerTarget("START");
+                    setDatePickerVisible(true);
+                  }}
                   style={{
                     backgroundColor: "#F8FAFC",
-                    color: "#0F172A",
                     padding: 12,
                     borderRadius: 12,
                     borderWidth: 1,
                     borderColor: "#E2E8F0",
-                    marginBottom: 12,
-                    textAlign: "left",
-                    fontWeight: "600",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
                   }}
-                />
+                >
+                  <Text style={{ fontSize: 13, fontWeight: "600", color: dateInput ? "#0F172A" : "#94A3B8" }}>
+                    {dateInput ? `📅 ${dateInput}` : "Select Date (Tap for Calendar)"}
+                  </Text>
+                  <CalendarIcon size={16} color="#E05646" />
+                </TouchableOpacity>
               </View>
             ) : (
               <View style={{ flexDirection: "row", gap: 12, marginBottom: 12 }}>
                 <View style={{ flex: 1 }}>
                   <Text style={{ color: "#64748B", fontSize: 11, marginBottom: 6, fontWeight: "700" }}>Start Date:</Text>
-                  <TextInput
-                    value={dateInput}
-                    onChangeText={setDateInput}
-                    placeholder="YYYY-MM-DD"
-                    placeholderTextColor="#94A3B8"
+                  <TouchableOpacity
+                    onPress={() => {
+                      setDatePickerTarget("START");
+                      setDatePickerVisible(true);
+                    }}
                     style={{
                       backgroundColor: "#F8FAFC",
-                      color: "#0F172A",
                       padding: 12,
                       borderRadius: 12,
                       borderWidth: 1,
                       borderColor: "#E2E8F0",
-                      textAlign: "left",
-                      fontWeight: "600",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
                     }}
-                  />
+                  >
+                    <Text style={{ fontSize: 12, fontWeight: "600", color: dateInput ? "#0F172A" : "#94A3B8" }}>
+                      {dateInput || "YYYY-MM-DD"}
+                    </Text>
+                    <CalendarIcon size={14} color="#E05646" />
+                  </TouchableOpacity>
                 </View>
+
                 <View style={{ flex: 1 }}>
                   <Text style={{ color: "#64748B", fontSize: 11, marginBottom: 6, fontWeight: "700" }}>End Date:</Text>
-                  <TextInput
-                    value={endDateInput}
-                    onChangeText={setEndDateInput}
-                    placeholder="YYYY-MM-DD"
-                    placeholderTextColor="#94A3B8"
+                  <TouchableOpacity
+                    onPress={() => {
+                      setDatePickerTarget("END");
+                      setDatePickerVisible(true);
+                    }}
                     style={{
                       backgroundColor: "#F8FAFC",
-                      color: "#0F172A",
                       padding: 12,
                       borderRadius: 12,
                       borderWidth: 1,
                       borderColor: "#E2E8F0",
-                      textAlign: "left",
-                      fontWeight: "600",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
                     }}
-                  />
+                  >
+                    <Text style={{ fontSize: 12, fontWeight: "600", color: endDateInput ? "#0F172A" : "#94A3B8" }}>
+                      {endDateInput || "YYYY-MM-DD"}
+                    </Text>
+                    <CalendarIcon size={14} color="#E05646" />
+                  </TouchableOpacity>
                 </View>
               </View>
             )}
@@ -690,6 +718,22 @@ export default function CalendarScreen() {
           </View>
         </View>
       </Modal>
+
+      <DatePickerModal
+        visible={datePickerVisible}
+        title={datePickerTarget === "START" ? "Select Start / Scheduled Date" : "Select End Date"}
+        initialDate={
+          (datePickerTarget === "START" ? dateInput : endDateInput) || undefined
+        }
+        onSelectDate={(selectedStr: string) => {
+          if (datePickerTarget === "START") {
+            setDateInput(selectedStr);
+          } else {
+            setEndDateInput(selectedStr);
+          }
+        }}
+        onClose={() => setDatePickerVisible(false)}
+      />
     </SafeAreaView>
   );
 }

@@ -11,6 +11,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import {
+  Calendar as CalendarIcon,
   ChevronLeft,
   ChevronRight,
   CheckCircle2,
@@ -22,6 +23,7 @@ import {
   ArrowRight,
   Sparkles,
 } from "lucide-react-native";
+import { DatePickerModal } from "../src/components/common/DatePickerModal";
 import { apiService, WeeklyReport, TaskOccurrence } from "../src/services/api";
 
 type TabType = "COMPLETED" | "INSIGHTS" | "CANCELED" | "BACKLOG";
@@ -37,6 +39,7 @@ export default function WeeklyReviewScreen() {
   const [reschedulingId, setReschedulingId] = useState<string | null>(null);
   const [rescheduleDateInput, setRescheduleDateInput] = useState("");
   const [isSubmittingReschedule, setIsSubmittingReschedule] = useState(false);
+  const [datePickerVisible, setDatePickerVisible] = useState(false);
 
   // Helper date calculators
   const getMonday = (d: Date) => {
@@ -420,26 +423,28 @@ export default function WeeklyReviewScreen() {
 
                         {isReschedulingThis ? (
                           <View style={{ marginTop: 8 }}>
-                            <Text style={{ color: "#64748B", fontSize: 11, marginBottom: 6, fontWeight: "700" }}>Enter New Date (YYYY-MM-DD):</Text>
+                            <Text style={{ color: "#64748B", fontSize: 11, marginBottom: 6, fontWeight: "700" }}>Select New Date:</Text>
                             <View style={{ flexDirection: "row", gap: 8 }}>
-                              <TextInput
-                                value={rescheduleDateInput}
-                                onChangeText={setRescheduleDateInput}
-                                placeholder="YYYY-MM-DD"
-                                placeholderTextColor="#94A3B8"
+                              <TouchableOpacity
+                                onPress={() => setDatePickerVisible(true)}
                                 style={{
                                   flex: 1,
                                   backgroundColor: "#F8FAFC",
                                   borderWidth: 1,
                                   borderColor: "#E2E8F0",
                                   borderRadius: 12,
-                                  color: "#0F172A",
                                   paddingHorizontal: 12,
                                   paddingVertical: 8,
-                                  fontSize: 13,
-                                  textAlign: "left",
+                                  flexDirection: "row",
+                                  justifyContent: "space-between",
+                                  alignItems: "center",
                                 }}
-                              />
+                              >
+                                <Text style={{ fontSize: 12, fontWeight: "600", color: rescheduleDateInput ? "#0F172A" : "#94A3B8" }}>
+                                  {rescheduleDateInput ? `📅 ${rescheduleDateInput}` : "Select Date"}
+                                </Text>
+                                <CalendarIcon size={14} color="#E05646" />
+                              </TouchableOpacity>
                               <TouchableOpacity
                                 onPress={() => handleSaveReschedule(o.id)}
                                 disabled={isSubmittingReschedule}
@@ -531,6 +536,13 @@ export default function WeeklyReviewScreen() {
           </View>
         </ScrollView>
       )}
+      <DatePickerModal
+        visible={datePickerVisible}
+        title="Select Reschedule Date"
+        initialDate={rescheduleDateInput || undefined}
+        onSelectDate={(selectedStr: string) => setRescheduleDateInput(selectedStr)}
+        onClose={() => setDatePickerVisible(false)}
+      />
     </SafeAreaView>
   );
 }
