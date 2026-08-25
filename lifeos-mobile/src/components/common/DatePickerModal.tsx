@@ -43,11 +43,29 @@ export const DatePickerModal: React.FC<DatePickerModalProps> = ({
   const [selectedDay, setSelectedDay] = useState<number>(parsed.day);
   const [viewMode, setViewMode] = useState<"DAYS" | "YEARS">("DAYS");
 
+  React.useEffect(() => {
+    if (visible) {
+      if (initialDate && initialDate.match(/^\d{4}-\d{2}-\d{2}$/)) {
+        const [y, m, d] = initialDate.split("-").map(Number);
+        setSelectedYear(y);
+        setSelectedMonth(m - 1);
+        setSelectedDay(d);
+      } else {
+        const today = new Date();
+        setSelectedYear(1998);
+        setSelectedMonth(today.getMonth());
+        setSelectedDay(today.getDate());
+      }
+      setViewMode("DAYS");
+    }
+  }, [visible, initialDate]);
+
   const daysInMonth = new Date(selectedYear, selectedMonth + 1, 0).getDate();
 
   const handleConfirm = () => {
+    const safeDay = Math.min(selectedDay, daysInMonth);
     const mStr = String(selectedMonth + 1).padStart(2, "0");
-    const dStr = String(selectedDay).padStart(2, "0");
+    const dStr = String(safeDay).padStart(2, "0");
     const formatted = `${selectedYear}-${mStr}-${dStr}`;
     onSelectDate(formatted);
     onClose();
@@ -179,8 +197,16 @@ export const DatePickerModal: React.FC<DatePickerModalProps> = ({
             </ScrollView>
           )}
 
+          {/* Selected Date Preview Banner */}
+          <View className="bg-[#202E4E] border border-slate-700 rounded-2xl px-4 py-2.5 mb-3 flex-row items-center justify-between shadow-sm">
+            <Text className="text-xs font-bold text-slate-300">Selected Date:</Text>
+            <Text className="text-xs font-extrabold text-pink-400">
+              {MONTHS[selectedMonth]} {Math.min(selectedDay, daysInMonth)}, {selectedYear}
+            </Text>
+          </View>
+
           {/* Action Footer */}
-          <View className="flex-row space-x-3 pt-2">
+          <View className="flex-row space-x-3 pt-1">
             <TouchableOpacity
               onPress={onClose}
               className="flex-1 py-3.5 rounded-2xl bg-slate-100 border border-slate-200 items-center justify-center"
