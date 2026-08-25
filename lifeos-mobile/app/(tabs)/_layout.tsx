@@ -5,6 +5,8 @@ import { Plus, Calendar, Inbox, Home, Menu, Mic, Square, Save } from "lucide-rea
 import { useInboxStore } from "../../src/store/inboxStore";
 import { AudioRecordingService } from "../../src/services/audio";
 
+import { OfflineSyncBanner } from "../../src/components/common/OfflineSyncBanner";
+
 const audioService = new AudioRecordingService();
 
 export default function TabLayout() {
@@ -59,6 +61,7 @@ export default function TabLayout() {
 
   return (
     <View style={{ flex: 1, backgroundColor: "#F0F4F8" }}>
+      <OfflineSyncBanner />
       <Tabs
         screenOptions={{
           headerShown: false,
