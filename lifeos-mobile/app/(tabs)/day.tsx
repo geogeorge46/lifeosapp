@@ -25,6 +25,7 @@ import { TaskItem } from "../../src/components/features/tasks/TaskItem";
 import { useRouter } from "expo-router";
 import { apiService, Event } from "../../src/services/api";
 import { useAuthStore } from "../../src/store/authStore";
+import { exportEventToNativeCalendar } from "../../src/services/calendarExport";
 
 export default function DayScreen() {
   const router = useRouter();
@@ -313,6 +314,13 @@ export default function DayScreen() {
                       {new Date(event.startDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - {new Date(event.endDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </Text>
                   </View>
+                  <TouchableOpacity
+                    onPress={() => exportEventToNativeCalendar(event.title, event.startDate, event.endDate, event.description)}
+                    style={{ paddingHorizontal: 10, paddingVertical: 6, backgroundColor: "#ECFDF5", borderWidth: 1, borderColor: "#A7F3D0", borderRadius: 10, flexDirection: "row", alignItems: "center" }}
+                  >
+                    <Calendar size={12} color="#059669" style={{ marginRight: 4 }} />
+                    <Text style={{ color: "#059669", fontSize: 10, fontWeight: "800" }}>Export</Text>
+                  </TouchableOpacity>
                 </View>
               ))
             )}

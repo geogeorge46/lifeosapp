@@ -13,6 +13,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Plus, Calendar as CalendarIcon, Clock, Trash2, ChevronLeft, ChevronRight } from "lucide-react-native";
 import { apiService, TaskOccurrence, Event } from "../../src/services/api";
 import { useTasksStore } from "../../src/store/tasksStore";
+import { exportEventToNativeCalendar } from "../../src/services/calendarExport";
 
 export default function CalendarScreen() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -333,12 +334,20 @@ export default function CalendarScreen() {
                         <Text style={{ color: "#64748B", fontSize: 11, marginTop: 4, fontWeight: "500" }}>{event.description}</Text>
                       )}
                     </View>
-                    <TouchableOpacity
-                      onPress={() => handleDeleteEvent(event.id)}
-                      style={{ padding: 8, backgroundColor: "#FEF2F2", borderWidth: 1, borderColor: "#FEE2E2", borderRadius: 12 }}
-                    >
-                      <Trash2 color="#EF4444" size={13} />
-                    </TouchableOpacity>
+                    <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+                      <TouchableOpacity
+                        onPress={() => exportEventToNativeCalendar(event.title, event.startDate, event.endDate, event.description)}
+                        style={{ padding: 8, backgroundColor: "#ECFDF5", borderWidth: 1, borderColor: "#A7F3D0", borderRadius: 12 }}
+                      >
+                        <CalendarIcon color="#059669" size={13} />
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => handleDeleteEvent(event.id)}
+                        style={{ padding: 8, backgroundColor: "#FEF2F2", borderWidth: 1, borderColor: "#FEE2E2", borderRadius: 12 }}
+                      >
+                        <Trash2 color="#EF4444" size={13} />
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 ))
               )}
