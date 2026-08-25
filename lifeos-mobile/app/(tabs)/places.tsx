@@ -15,6 +15,7 @@ import { usePlacesStore } from "../../src/store/placesStore";
 import { useTasksStore } from "../../src/store/tasksStore";
 import { Task, TaskOccurrence } from "../../src/services/api";
 import { useGeofencing } from "../../src/hooks/useGeofencing";
+import { InteractiveMapModal } from "../../src/components/features/places/InteractiveMapModal";
 
 export default function PlacesScreen() {
   const { places, isLoading, fetchPlaces, addPlace, deletePlace, bindTask, triggerMockEntry } =
@@ -23,6 +24,7 @@ export default function PlacesScreen() {
   const { checkHasBackgroundPermission, requestBackgroundPermission, syncGeofences } = useGeofencing();
 
   const [hasBackgroundPerm, setHasBackgroundPerm] = useState<boolean | null>(null);
+  const [mapModalVisible, setMapModalVisible] = useState(false);
 
   // Add Place form fields
   const [name, setName] = useState("");
@@ -157,9 +159,18 @@ export default function PlacesScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: "#F0F4F8" }} edges={["top", "left", "right"]}>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 140 }} className="flex-1">
         {/* Header */}
-        <View className="mb-6 px-4 pt-4">
-          <Text className="text-3xl font-extrabold text-[#0F172A] tracking-tight">Places</Text>
-          <Text className="text-xs text-[#64748B] mt-1 font-semibold">Configure geofenced location reminders.</Text>
+        <View className="mb-6 px-4 pt-4 flex-row justify-between items-center">
+          <View>
+            <Text className="text-3xl font-extrabold text-[#0F172A] tracking-tight">Places</Text>
+            <Text className="text-xs text-[#64748B] mt-1 font-semibold">Configure geofenced location reminders.</Text>
+          </View>
+          <TouchableOpacity
+            onPress={() => setMapModalVisible(true)}
+            className="flex-row items-center space-x-1.5 bg-orange-50 border border-orange-100 px-3.5 py-2.5 rounded-xl shadow-sm"
+          >
+            <Compass size={16} color="#E05646" />
+            <Text className="text-xs font-bold text-[#E05646]">Map</Text>
+          </TouchableOpacity>
         </View>
 
         {/* Background Location Permission Explanation */}
@@ -438,6 +449,12 @@ export default function PlacesScreen() {
           )}
         </View>
       </ScrollView>
+      <InteractiveMapModal
+        visible={mapModalVisible}
+        places={places}
+        onSimulateCross={(id, name) => handleSimulateCross(id, name)}
+        onClose={() => setMapModalVisible(false)}
+      />
     </SafeAreaView>
   );
 }
