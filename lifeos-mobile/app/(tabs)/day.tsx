@@ -22,7 +22,8 @@ import { usePeopleStore } from "../../src/store/peopleStore";
 import { usePlacesStore } from "../../src/store/placesStore";
 import { useLedgerStore } from "../../src/store/ledgerStore";
 import { TaskItem } from "../../src/components/features/tasks/TaskItem";
-import { useRouter } from "expo-router";
+import { useRouter, useFocusEffect } from "expo-router";
+import { useCallback } from "react";
 import { apiService, Event } from "../../src/services/api";
 import { useAuthStore } from "../../src/store/authStore";
 import { exportEventToNativeCalendar } from "../../src/services/calendarExport";
@@ -76,18 +77,19 @@ export default function DayScreen() {
     }
   };
 
-  const { token } = useAuthStore.getState();
-
-  useEffect(() => {
-    if (!token) return; // Don't make API calls if not authenticated
-    fetchTodayTasks(todayStr);
-    loadTodayRecap();
-    fetchTodayEvents();
-    fetchHabits();
-    fetchPeople().catch(() => {});
-    fetchPlaces().catch(() => {});
-    fetchTransactions().catch(() => {});
-  }, [token]);
+  useFocusEffect(
+    useCallback(() => {
+      const { token } = useAuthStore.getState();
+      if (!token) return;
+      fetchTodayTasks(todayStr);
+      loadTodayRecap();
+      fetchTodayEvents();
+      fetchHabits();
+      fetchPeople().catch(() => {});
+      fetchPlaces().catch(() => {});
+      fetchTransactions().catch(() => {});
+    }, [todayStr])
+  );
 
   const handleGlobalSearch = () => {
     const q = searchQuery.toLowerCase().trim();
