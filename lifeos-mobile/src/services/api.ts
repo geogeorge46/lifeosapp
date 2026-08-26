@@ -6,21 +6,25 @@ const originalFetch = global.fetch || (typeof window !== "undefined" ? window.fe
 if (originalFetch) {
   const authInterceptedFetch = async (input: any, init?: any): Promise<Response> => {
     const token = useAuthStore.getState().token;
-    if (token) {
-      init = init || {};
-      init.headers = init.headers || {};
-      if (init.headers instanceof Headers) {
-        init.headers.set("Authorization", `Bearer ${token}`);
-      } else if (Array.isArray(init.headers)) {
+    init = init || {};
+    init.headers = init.headers || {};
+
+    if (init.headers instanceof Headers) {
+      init.headers.set("Bypass-Tunnel-Reminder", "true");
+      if (token) init.headers.set("Authorization", `Bearer ${token}`);
+    } else if (Array.isArray(init.headers)) {
+      init.headers.push(["Bypass-Tunnel-Reminder", "true"]);
+      if (token) {
         const idx = init.headers.findIndex((h: any) => h[0].toLowerCase() === "authorization");
         if (idx > -1) {
           init.headers[idx][1] = `Bearer ${token}`;
         } else {
           init.headers.push(["Authorization", `Bearer ${token}`]);
         }
-      } else {
-        init.headers["Authorization"] = `Bearer ${token}`;
       }
+    } else {
+      init.headers["Bypass-Tunnel-Reminder"] = "true";
+      if (token) init.headers["Authorization"] = `Bearer ${token}`;
     }
     const response = await originalFetch(input, init);
 
