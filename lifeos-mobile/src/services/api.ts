@@ -1,4 +1,4 @@
-const BASE_URL = "http://10.122.82.165:3000/api";
+const BASE_URL = "https://ready-forks-attack.loca.lt/api";
 
 import { useAuthStore } from "../store/authStore";
 
