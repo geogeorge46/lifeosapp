@@ -1,4 +1,4 @@
-const BASE_URL = "https://full-crews-poke.loca.lt/api";
+const BASE_URL = "https://0e0d8d609f14f8.lhr.life/api";
 
 import { useAuthStore } from "../store/authStore";
 
