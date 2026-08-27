@@ -25,6 +25,8 @@ lifeos-backend/prisma/*.db-journal
 
 # Mobile / Expo specific ignores
 lifeos-mobile/.expo/
+lifeos-mobile/android/
+lifeos-mobile/ios/
 lifeos-mobile/web-build/
 lifeos-mobile/*.apk
 lifeos-mobile/*.aab
