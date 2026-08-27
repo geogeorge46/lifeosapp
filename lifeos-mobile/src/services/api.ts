@@ -87,19 +87,20 @@ export interface Idea {
 
 export const apiService = {
   async fetchInbox(collectionId?: string | null, type?: string | null): Promise<BrainDump[]> {
-    let url = `${BASE_URL}/inbox`;
-    const params: string[] = [];
-    if (collectionId !== undefined && collectionId !== null) params.push(`collectionId=${collectionId}`);
-    if (type !== undefined && type !== null) params.push(`type=${type}`);
-    if (params.length > 0) url += `?${params.join("&")}`;
+    try {
+      let url = `${BASE_URL}/inbox`;
+      const params: string[] = [];
+      if (collectionId !== undefined && collectionId !== null) params.push(`collectionId=${collectionId}`);
+      if (type !== undefined && type !== null) params.push(`type=${type}`);
+      if (params.length > 0) url += `?${params.join("&")}`;
 
-    const response = await fetch(url);
-    if (!response.ok) {
-      const errBody = await response.json().catch(() => ({}));
-      throw new Error(errBody?.error?.message || "Failed to fetch inbox");
+      const response = await fetch(url);
+      if (!response.ok) return [];
+      const result = await response.json();
+      return result.data || [];
+    } catch {
+      return [];
     }
-    const result = await response.json();
-    return result.data;
   },
 
   async captureText(content: string): Promise<InboxItem> {
@@ -235,10 +236,14 @@ export const apiService = {
   },
 
   async fetchIdeas(): Promise<Idea[]> {
-    const response = await fetch(`${BASE_URL}/ideas`);
-    if (!response.ok) throw new Error("Failed to fetch ideas");
-    const result = await response.json();
-    return result.data;
+    try {
+      const response = await fetch(`${BASE_URL}/ideas`);
+      if (!response.ok) return [];
+      const result = await response.json();
+      return result.data || [];
+    } catch {
+      return [];
+    }
   },
 
   async createIdea(data: {

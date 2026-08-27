@@ -61,9 +61,10 @@ export default function IdeasScreen() {
     setIsLoading(true);
     try {
       const data = await apiService.fetchIdeas();
-      setIdeas(data);
+      setIdeas(data || []);
     } catch (err: any) {
-      Alert.alert("Error", "Failed to retrieve ideas index");
+      console.warn("Ideas fallback activated:", err);
+      setIdeas([]);
     } finally {
       setIsLoading(false);
     }
