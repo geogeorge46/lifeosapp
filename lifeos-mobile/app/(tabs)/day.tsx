@@ -793,17 +793,30 @@ export default function DayScreen() {
           <View className="mb-4">
             <TouchableOpacity
               onPress={async () => {
-                const granted = await requestBackgroundPermission();
                 updateSetting("onboardingCompleted", true);
-                if (granted) {
-                  Alert.alert("Success", "Always-Allow location access is enabled! Geofences are active.");
-                } else {
-                  Alert.alert("Permission Denied", "Triggers will only fire in the foreground.");
+                try {
+                  const granted = await requestBackgroundPermission();
+                  if (granted) {
+                    Alert.alert("Success", "Always-Allow location access is enabled! Geofences are active.");
+                  } else {
+                    Alert.alert("Permission Denied", "Triggers will only fire in the foreground.");
+                  }
+                } catch (e) {
+                  console.warn("Location permission error:", e);
                 }
               }}
-              className="bg-[#E05646] p-4 rounded-2xl flex items-center justify-center shadow-lg shadow-[#E05646]/20"
+              className="bg-[#E05646] p-4 rounded-2xl flex items-center justify-center shadow-lg shadow-[#E05646]/20 mb-3"
             >
               <Text className="text-white text-sm font-bold">Accept & Enable Geofencing</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => {
+                updateSetting("onboardingCompleted", true);
+              }}
+              className="bg-white border border-[#E2E8F0] p-3.5 rounded-2xl flex items-center justify-center shadow-sm"
+            >
+              <Text className="text-[#64748B] text-xs font-bold">Skip for Now & Continue to App</Text>
             </TouchableOpacity>
           </View>
         </SafeAreaView>
