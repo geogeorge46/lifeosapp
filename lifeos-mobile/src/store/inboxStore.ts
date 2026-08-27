@@ -47,6 +47,7 @@ interface InboxState {
   processItem: (id: string) => Promise<void>;
   archiveItem: (id: string) => Promise<void>;
   deleteItem: (id: string) => Promise<void>;
+  clearOfflineQueue: () => void;
 }
 
 export const useInboxStore = create<InboxState>()(
@@ -275,14 +276,34 @@ export const useInboxStore = create<InboxState>()(
 
         for (const queued of offlineQueue) {
           try {
+            if (!queued || !queued.content || typeof queued.content !== "string") {
+              continue;
+            }
+
             if (queued.contentType === "TEXT") {
               const serverItem = await apiService.captureText(queued.content);
-              if (queued.collectionId) await apiService.moveToCollection(serverItem.id, queued.collectionId);
-              if (queued.type) await apiService.updateBrainDumpType(serverItem.id, queued.type);
+              if (queued.collectionId) {
+                await apiService.moveToCollection(serverItem.id, queued.collectionId).catch(() => {});
+              }
+              if (queued.type) {
+                await apiService.updateBrainDumpType(serverItem.id, queued.type).catch(() => {});
+              }
             } else {
-              const serverItem = await apiService.captureAudio(queued.content);
-              if (queued.collectionId) await apiService.moveToCollection(serverItem.id, queued.collectionId);
-              if (queued.type) await apiService.updateBrainDumpType(serverItem.id, queued.type);
+              try {
+                const serverItem = await apiService.captureAudio(queued.content);
+                if (queued.collectionId) {
+                  await apiService.moveToCollection(serverItem.id, queued.collectionId).catch(() => {});
+                }
+                if (queued.type) {
+                  await apiService.updateBrainDumpType(serverItem.id, queued.type).catch(() => {});
+                }
+              } catch (audioErr) {
+                console.warn("[InboxStore] Audio upload failed, falling back to text note:", audioErr);
+                const serverItem = await apiService.captureText("[Voice Note Capture]");
+                if (queued.collectionId) {
+                  await apiService.moveToCollection(serverItem.id, queued.collectionId).catch(() => {});
+                }
+              }
             }
           } catch (err) {
             console.error(`[InboxStore] Sync failed for item ${queued.id}:`, err);
@@ -292,6 +313,10 @@ export const useInboxStore = create<InboxState>()(
 
         set({ offlineQueue: failedItems, isSyncing: false });
         get().fetchInbox();
+      },
+
+      clearOfflineQueue: () => {
+        set({ offlineQueue: [] });
       },
 
       processItem: async (id: string) => {

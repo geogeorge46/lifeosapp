@@ -1,10 +1,10 @@
 import React from "react";
 import { View, Text, TouchableOpacity, ActivityIndicator, Alert } from "react-native";
-import { CloudOff, RefreshCw } from "lucide-react-native";
+import { CloudOff, RefreshCw, Trash2 } from "lucide-react-native";
 import { useInboxStore } from "../../store/inboxStore";
 
 export const OfflineSyncBanner = () => {
-  const { offlineQueue, isSyncing, syncOfflineItems } = useInboxStore();
+  const { offlineQueue, isSyncing, syncOfflineItems, clearOfflineQueue } = useInboxStore();
 
   if (offlineQueue.length === 0) return null;
 
@@ -30,20 +30,37 @@ export const OfflineSyncBanner = () => {
           {offlineQueue.length} offline capture{offlineQueue.length > 1 ? "s" : ""} pending sync
         </Text>
       </View>
-      <TouchableOpacity
-        onPress={handleSync}
-        disabled={isSyncing}
-        className="bg-[#E05646] px-3 py-1.5 rounded-xl flex-row items-center space-x-1.5 shadow-sm"
-      >
-        {isSyncing ? (
-          <ActivityIndicator size="small" color="#FFFFFF" />
-        ) : (
-          <>
-            <RefreshCw size={12} color="#FFFFFF" />
-            <Text className="text-xs font-extrabold text-white">Sync Now</Text>
-          </>
-        )}
-      </TouchableOpacity>
+      <View className="flex-row items-center space-x-2">
+        <TouchableOpacity
+          onPress={handleSync}
+          disabled={isSyncing}
+          className="bg-[#E05646] px-3 py-1.5 rounded-xl flex-row items-center space-x-1.5 shadow-sm"
+        >
+          {isSyncing ? (
+            <ActivityIndicator size="small" color="#FFFFFF" />
+          ) : (
+            <>
+              <RefreshCw size={12} color="#FFFFFF" />
+              <Text className="text-xs font-extrabold text-white">Sync Now</Text>
+            </>
+          )}
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            Alert.alert(
+              "Clear Offline Queue",
+              "Are you sure you want to clear pending offline captures?",
+              [
+                { text: "Cancel", style: "cancel" },
+                { text: "Clear", style: "destructive", onPress: clearOfflineQueue },
+              ]
+            );
+          }}
+          className="bg-slate-700/60 p-1.5 rounded-xl flex-row items-center justify-center"
+        >
+          <Trash2 size={14} color="#94A3B8" />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
