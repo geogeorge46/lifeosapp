@@ -353,10 +353,16 @@ export const apiService = {
   },
 
   async fetchWeeklyReport(startStr: string, endStr: string): Promise<WeeklyReport> {
-    const response = await fetch(`${BASE_URL}/tasks/weekly-report?start=${startStr}&end=${endStr}`);
-    if (!response.ok) throw new Error("Failed to fetch weekly insights report");
-    const result = await response.json();
-    return result.data;
+    try {
+      const response = await fetch(`${BASE_URL}/tasks/weekly-report?start=${startStr}&end=${endStr}`);
+      if (!response.ok) {
+        return { completed: [], dropped: [], rescheduled: [], uncompleted: [] };
+      }
+      const result = await response.json();
+      return result.data || { completed: [], dropped: [], rescheduled: [], uncompleted: [] };
+    } catch {
+      return { completed: [], dropped: [], rescheduled: [], uncompleted: [] };
+    }
   },
 
   async fetchCalendarOccurrences(startStr: string, endStr: string): Promise<TaskOccurrence[]> {
