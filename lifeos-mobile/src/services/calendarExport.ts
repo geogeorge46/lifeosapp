@@ -35,7 +35,7 @@ export async function exportEventToNativeCalendar(
       title,
       startDate: start,
       endDate: end,
-      notes: notes || "Exported from LifeOS",
+      notes: notes || "Exported from Synora",
       location,
       timeZone: "default",
     });

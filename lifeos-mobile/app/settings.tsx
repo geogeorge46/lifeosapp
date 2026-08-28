@@ -286,7 +286,7 @@ export default function SettingsScreen() {
             <Info size={14} color="#E05646" style={{ marginTop: 2 }} />
             <View className="flex-1">
               <Text className="text-[10px] text-[#64748B] font-semibold leading-relaxed">
-                Manufacturer Warning: If you run a Xiaomi, Huawei, or OnePlus device, please disable battery optimization for LifeOS to ensure geofences register reliably in background mode.
+                Manufacturer Warning: If you run a Xiaomi, Huawei, or OnePlus device, please disable battery optimization for Synora to ensure geofences register reliably in background mode.
               </Text>
             </View>
           </View>
@@ -384,7 +384,7 @@ export default function SettingsScreen() {
           <View className="flex-row items-center space-x-2">
             <Settings size={18} color="#64748B" />
             <View>
-              <Text className="text-xs font-bold text-[#0F172A]">LifeOS Core Sandbox</Text>
+              <Text className="text-xs font-bold text-[#0F172A]">Synora Core Sandbox</Text>
               <Text className="text-[9px] text-[#64748B] mt-0.5 font-semibold">Locally encrypted data storage | Version 1.2.0</Text>
             </View>
           </View>

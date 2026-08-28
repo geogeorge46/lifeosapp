@@ -1,19 +1,32 @@
 {
   "expo": {
-    "name": "LifeOS",
+    "name": "Synora",
     "slug": "lifeos-mobile",
     "version": "0.1.0",
-    "scheme": "lifeos",
+    "scheme": "synora",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0F172A"
+    },
     "android": {
       "package": "com.geogeorge.lifeos",
       "usesCleartextTraffic": true,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0F172A"
+      },
       "permissions": [
         "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION",
         "ACCESS_BACKGROUND_LOCATION"
       ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-router",
@@ -21,7 +34,7 @@
       [
         "expo-location",
         {
-          "locationAlwaysAndWhenInUsePermission": "Allow LifeOS to access location for geofence reminders.",
+          "locationAlwaysAndWhenInUsePermission": "Allow Synora to access location for geofence reminders.",
           "isAndroidBackgroundPermissionGranted": true
         }
       ]

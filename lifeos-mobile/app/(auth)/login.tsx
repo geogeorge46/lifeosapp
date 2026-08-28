@@ -200,7 +200,7 @@ export default function LoginScreen() {
             <View className="bg-[#E05646] p-4 rounded-3xl mb-4 shadow-md shadow-[#E05646]/20">
               <Shield size={36} color="#FFFFFF" />
             </View>
-            <Text className="text-3xl font-extrabold text-[#0F172A]">LifeOS</Text>
+            <Text className="text-3xl font-extrabold text-[#0F172A]">Synora</Text>
             <Text className="text-sm font-semibold text-[#64748B] mt-1 text-center">
               Your personal multi-tenant life administration portal
             </Text>
@@ -295,7 +295,7 @@ export default function LoginScreen() {
               className="mt-6 align-center items-center font-bold"
             >
               <Text className="text-xs font-bold text-[#64748B]">
-                {isSignUp ? "Already have an account? " : "New to LifeOS? "}
+                {isSignUp ? "Already have an account? " : "New to Synora? "}
                 <Text className="text-[#E05646]">
                   {isSignUp ? "Log In" : "Sign Up"}
                 </Text>

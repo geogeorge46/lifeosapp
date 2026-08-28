@@ -753,7 +753,7 @@ export default function DayScreen() {
               <View className="bg-white border border-[#E2E8F0] w-16 h-16 rounded-3xl items-center justify-center mb-3 shadow-sm shadow-[#0F172A]/5">
                 <Shield size={32} color="#E05646" />
               </View>
-              <Text className="text-2xl font-extrabold text-[#0F172A] tracking-tight">Welcome to LifeOS</Text>
+              <Text className="text-2xl font-extrabold text-[#0F172A] tracking-tight">Welcome to Synora</Text>
               <Text className="text-xs text-[#64748B] mt-1">Your offline-first context engine</Text>
             </View>
 
@@ -761,7 +761,7 @@ export default function DayScreen() {
             <View className="bg-white border border-[#E2E8F0] rounded-3xl p-5 mb-5 shadow-sm shadow-[#0F172A]/5">
               <Text className="text-sm font-bold text-[#0F172A] mb-2">🛡️ Privacy & Data Agreement</Text>
               <Text className="text-xs text-[#334155] leading-relaxed mb-3">
-                LifeOS is built with strict user privacy in mind. When you input task details or link contacts:
+                Synora is built with strict user privacy in mind. When you input task details or link contacts:
               </Text>
               <Text className="text-xs text-[#64748B] leading-relaxed mb-2">
                 • <Text className="font-bold text-[#0F172A]">100% Local-first:</Text> All your databases, ledgers, events, and location profiles remain encrypted locally on this device.
@@ -770,7 +770,7 @@ export default function DayScreen() {
                 • <Text className="font-bold text-[#0F172A]">Full Purge Compliance:</Text> Deleting a contact removes all linked debts, transaction entries, and task mappings completely.
               </Text>
               <Text className="text-xs text-[#64748B] leading-relaxed">
-                • <Text className="font-bold text-[#0F172A]">No Shared Data:</Text> LifeOS never transmits or shares third-party contact data without explicit user actions.
+                • <Text className="font-bold text-[#0F172A]">No Shared Data:</Text> Synora never transmits or shares third-party contact data without explicit user actions.
               </Text>
             </View>
 
@@ -778,13 +778,13 @@ export default function DayScreen() {
             <View className="bg-white border border-[#E2E8F0] rounded-3xl p-5 mb-5 shadow-sm shadow-[#0F172A]/5">
               <Text className="text-sm font-bold text-[#0F172A] mb-2">📍 Location & Geofencing Explainer</Text>
               <Text className="text-xs text-[#334155] leading-relaxed mb-3">
-                LifeOS relies on hardware-level geofencing to send you alerts when you cross boundaries (e.g. reminding you to buy groceries when entering the store):
+                Synora relies on hardware-level geofencing to send you alerts when you cross boundaries (e.g. reminding you to buy groceries when entering the store):
               </Text>
               <Text className="text-xs text-[#64748B] leading-relaxed mb-2">
                 • <Text className="font-bold text-[#0F172A]">Always-Allow Requirement:</Text> To track region crossings efficiently when the app is closed, select "Always Allow" in the OS system prompt.
               </Text>
               <Text className="text-xs text-[#64748B] leading-relaxed mb-2">
-                • <Text className="font-bold text-[#0F172A]">Battery Optimization:</Text> For Xiaomi, OnePlus, or Huawei devices, please ensure battery optimizations are disabled manually for LifeOS in system settings to prevent trigger delays.
+                • <Text className="font-bold text-[#0F172A]">Battery Optimization:</Text> For Xiaomi, OnePlus, or Huawei devices, please ensure battery optimizations are disabled manually for Synora in system settings to prevent trigger delays.
               </Text>
             </View>
           </ScrollView>

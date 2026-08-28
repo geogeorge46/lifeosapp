@@ -180,10 +180,10 @@ export default function PlacesScreen() {
               📍 Background Location Access Needed
             </Text>
             <Text className="text-xs text-amber-700 leading-relaxed mb-3 font-medium">
-              LifeOS uses geofencing to send you alerts when you arrive at a place (e.g. reminding you to buy groceries at the store). To enable this, choose "Always Allow" in the next system prompt.
+              Synora uses geofencing to send you alerts when you arrive at a place (e.g. reminding you to buy groceries at the store). To enable this, choose "Always Allow" in the next system prompt.
             </Text>
             <Text className="text-[10px] text-amber-600 leading-relaxed mb-4 italic font-semibold">
-              Note for Xiaomi, OnePlus, or Huawei users: Please ensure you manually disable battery optimization for LifeOS to prevent delayed geofence notifications.
+              Note for Xiaomi, OnePlus, or Huawei users: Please ensure you manually disable battery optimization for Synora to prevent delayed geofence notifications.
             </Text>
             <TouchableOpacity
               onPress={async () => {

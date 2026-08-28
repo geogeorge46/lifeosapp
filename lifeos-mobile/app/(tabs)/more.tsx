@@ -49,7 +49,7 @@ export default function MoreScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: "#F0F4F8" }}>
       <ScrollView contentContainerStyle={{ padding: 20, paddingBottom: 140 }} showsVerticalScrollIndicator={false}>
         <Text style={{ color: "#0F172A", fontSize: 28, fontWeight: "900", letterSpacing: -1, marginBottom: 4, paddingTop: 16 }}>
-          LifeOS
+          Synora
         </Text>
         <Text style={{ color: "#64748B", fontSize: 13, fontWeight: "600", marginBottom: 28 }}>
           Secondary modules & system preferences
