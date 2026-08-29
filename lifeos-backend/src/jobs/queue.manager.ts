@@ -25,28 +25,26 @@ export class QueueManager {
   }
 
   async initialize(): Promise<void> {
-    try {
-      console.log(`[QueueManager] Initializing BullMQ on Redis: ${REDIS_HOST}:${REDIS_PORT}...`);
-
-      const connection = { host: REDIS_HOST, port: REDIS_PORT };
-
-      // Initialize standard BullMQ queue instances
-      this.notificationQueue = new Queue("notification-queue", { connection });
-
-      // Start BullMQ listening workers
-      this.startWorkers({ connection });
-      this.isRedisConnected = true;
-
-      console.log("[QueueManager] BullMQ system operational.");
-    } catch (err) {
-      console.warn(
-        "[QueueManager] Redis connection unavailable. Falling back to DB-polling worker simulation..."
-      );
+    const hasRedisConfig = Boolean(process.env.REDIS_HOST);
+    if (hasRedisConfig) {
+      try {
+        console.log(`[QueueManager] Initializing BullMQ on Redis: ${REDIS_HOST}:${REDIS_PORT}...`);
+        const connection = { host: REDIS_HOST, port: REDIS_PORT, maxRetriesPerRequest: null };
+        this.notificationQueue = new Queue("notification-queue", { connection });
+        this.startWorkers({ connection });
+        this.isRedisConnected = true;
+        console.log("[QueueManager] BullMQ system operational.");
+      } catch (err) {
+        console.warn("[QueueManager] Redis connection unavailable. Using DB-polling fallback.");
+        this.isRedisConnected = false;
+        this.startFallbackLoop();
+      }
+    } else {
+      console.log("[QueueManager] REDIS_HOST not set. Running in DB-polling fallback mode.");
       this.isRedisConnected = false;
       this.startFallbackLoop();
-    } finally {
-      this.startTriggerEvaluatorLoop();
     }
+    this.startTriggerEvaluatorLoop();
   }
 
   private startWorkers(config: { connection: any }) {
@@ -131,7 +129,11 @@ export class QueueManager {
   private startTriggerEvaluatorLoop() {
     console.log("[QueueManager] Starting Trigger Evaluator polling interval loop.");
     this.triggerEvaluatorTimer = setInterval(async () => {
-      await TriggerEvaluator.evaluate();
+      try {
+        await TriggerEvaluator.evaluate();
+      } catch (err: any) {
+        console.warn("[TriggerEvaluator] Evaluation skipped:", err?.message || err);
+      }
     }, 30000); // Poll every 30 seconds
   }
 
